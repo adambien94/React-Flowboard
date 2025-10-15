@@ -35,7 +35,12 @@ export default function BoardColumn({ column, showDrawer }: BoardColumnProps) {
                 />
               ))
             ) : (
-              <div className="text-muted text-center py-1">List is empty.</div>
+              <div
+                style={{ fontSize: "14px" }}
+                className="text-muted text-center py-1"
+              >
+                List is empty.
+              </div>
             )}
             <div className="mt-3">
               <Button

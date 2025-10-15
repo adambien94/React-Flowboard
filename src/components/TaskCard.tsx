@@ -61,7 +61,7 @@ export default function TaskCard({ card, showDrawer }: TaskCardProps) {
               style={{
                 fontSize: "14px",
                 display: "-webkit-box",
-                WebkitLineClamp: 3,
+                WebkitLineClamp: 2,
                 WebkitBoxOrient: "vertical",
                 overflow: "hidden",
                 textOverflow: "ellipsis",

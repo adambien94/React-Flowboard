@@ -9,6 +9,7 @@ import type {
 } from "./types/board";
 import BoardColumn from "./components/BoardColumn";
 import TaskCard from "./components/TaskCard";
+import AddColumnModal from "./components/AddColumnModal";
 import { BoardProvider } from "./contexts/BoardContext";
 import { useLocalStorage } from "./useLocalStorage";
 import { DndContext, DragOverlay } from "@dnd-kit/core";
@@ -19,6 +20,7 @@ export default function Dashboard() {
   const [showDrawer, setShowDrawer] = useState(false);
   const [activeColId, setActiveColId] = useState<string>();
   const [activeCard, setActiveCard] = useState<BoardColumnCard | null>(null);
+  const [showAddColumnModal, setShowAddColumnModal] = useState(false);
   const [boardCols, setBoardCols] = useLocalStorage<BoardColumnType[]>(
     "BOARD_COLS",
     boardColumns
@@ -76,13 +78,13 @@ export default function Dashboard() {
     });
   };
 
-  const addColumn = () => {
+  const handleAddColumn = (name: string, color: string) => {
     setBoardCols((prev) => [
       ...prev,
       {
         id: uuidV4(),
-        name: "Production",
-        color: "primary",
+        name,
+        color,
         cards: [],
       },
     ]);
@@ -142,94 +144,105 @@ export default function Dashboard() {
   }, []);
 
   return (
-    <BoardProvider
-      value={{ boardCols, setBoardCols, showDrawer, setShowDrawer }}
-    >
-      <DndContext
-        onDragStart={handleCardDragStart}
-        onDragEnd={handleCardDragdEnd}
+    <>
+      <BoardProvider
+        value={{ boardCols, setBoardCols, showDrawer, setShowDrawer }}
       >
-        <TaskDrawer
-          onHide={handleHideDrawer}
-          colId={activeColId!}
-          colName={boardCols.find(({ id }) => id === activeColId)?.name}
-          colColor={boardCols.find(({ id }) => id === activeColId)?.color}
-          createTask={onCreateTaskCard}
-          editTask={onEditTaskCard}
-        />
-        <Container fluid>
-          <div>
-            <div className="d-flex align-items-center justify-content-between">
-              <div className="d-flex align-items-center">
-                <Dropdown>
-                  <Dropdown.Toggle variant="outline-light" id="dropdown-basic">
-                    Boards
-                  </Dropdown.Toggle>
+        <DndContext
+          onDragStart={handleCardDragStart}
+          onDragEnd={handleCardDragdEnd}
+        >
+          <TaskDrawer
+            onHide={handleHideDrawer}
+            colId={activeColId!}
+            colName={boardCols.find(({ id }) => id === activeColId)?.name}
+            colColor={boardCols.find(({ id }) => id === activeColId)?.color}
+            createTask={onCreateTaskCard}
+            editTask={onEditTaskCard}
+          />
+          <Container fluid>
+            <div>
+              <div className="d-flex align-items-center justify-content-between">
+                <div className="d-flex align-items-center">
+                  <Dropdown>
+                    <Dropdown.Toggle
+                      variant="outline-light"
+                      id="dropdown-basic"
+                    >
+                      Boards
+                    </Dropdown.Toggle>
 
-                  <Dropdown.Menu>
-                    <Dropdown.Item href="#/action-1">Action</Dropdown.Item>
-                    <Dropdown.Item href="#/action-2">
-                      Another action
-                    </Dropdown.Item>
-                    <Dropdown.Divider />
-                    <Dropdown.Item href="#/action-3">
-                      Something else
-                    </Dropdown.Item>
-                  </Dropdown.Menu>
-                </Dropdown>
-                <h3 className="fw-bold text-white ms-4 mt-2 fs-4">
-                  Personal Tasks
-                </h3>
+                    <Dropdown.Menu>
+                      <Dropdown.Item href="#/action-1">Action</Dropdown.Item>
+                      <Dropdown.Item href="#/action-2">
+                        Another action
+                      </Dropdown.Item>
+                      <Dropdown.Divider />
+                      <Dropdown.Item href="#/action-3">
+                        Something else
+                      </Dropdown.Item>
+                    </Dropdown.Menu>
+                  </Dropdown>
+                  <h3 className="fw-bold text-white ms-4 mt-2 fs-4">
+                    Personal Tasks
+                  </h3>
+                </div>
+
+                <Button
+                  variant="outline-light"
+                  onClick={() => setShowAddColumnModal(true)}
+                  disabled={boardCols.length >= 4}
+                >
+                  <i className="bi bi-plus-circle"></i> Add column
+                </Button>
               </div>
 
-              <Button
-                variant="outline-light"
-                onClick={addColumn}
-                disabled={boardCols.length >= 4}
-              >
-                <i className="bi bi-plus-circle"></i> Add column
-              </Button>
+              <div className="mt-3">
+                <Stack>
+                  <Row>
+                    {boardCols.map((col) => (
+                      <BoardColumn
+                        key={col.id}
+                        column={col}
+                        showDrawer={handleOpenDrawer}
+                      />
+                    ))}
+                  </Row>
+                </Stack>
+              </div>
             </div>
+          </Container>
 
-            <div className="mt-3">
-              <Stack>
-                <Row>
-                  {boardCols.map((col) => (
-                    <BoardColumn
-                      key={col.id}
-                      column={col}
-                      showDrawer={handleOpenDrawer}
-                    />
-                  ))}
-                </Row>
-              </Stack>
-            </div>
-          </div>
-        </Container>
-
-        <DragOverlay>
-          {activeCard ? (
-            <div
-              style={{
-                opacity: 1,
-                transform: "rotate(0deg) translateY(-8px)",
-                boxShadow: "0px 2px 6px rgba(0,0,0,0.2)",
-                borderRadius: "6px",
-              }}
-            >
-              <TaskCard
-                card={{
-                  id: activeCard.id,
-                  title: activeCard.title,
-                  description: activeCard.description,
-                  priority: activeCard.priority,
+          <DragOverlay>
+            {activeCard ? (
+              <div
+                style={{
+                  opacity: 1,
+                  transform: "rotate(0deg) translateY(-8px)",
+                  boxShadow: "0px 2px 6px rgba(0,0,0,0.2)",
+                  borderRadius: "6px",
                 }}
-                showDrawer={() => {}}
-              />
-            </div>
-          ) : null}
-        </DragOverlay>
-      </DndContext>
-    </BoardProvider>
+              >
+                <TaskCard
+                  card={{
+                    id: activeCard.id,
+                    title: activeCard.title,
+                    description: activeCard.description,
+                    priority: activeCard.priority,
+                  }}
+                  showDrawer={() => {}}
+                />
+              </div>
+            ) : null}
+          </DragOverlay>
+        </DndContext>
+      </BoardProvider>
+
+      <AddColumnModal
+        show={showAddColumnModal}
+        onHide={() => setShowAddColumnModal(false)}
+        onSave={handleAddColumn}
+      />
+    </>
   );
 }

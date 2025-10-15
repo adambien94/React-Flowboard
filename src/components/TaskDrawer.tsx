@@ -138,7 +138,7 @@ export default function Drawer({
     >
       <Offcanvas.Header closeButton className="border-bottom">
         <Offcanvas.Title className="fw-bold text-dark d-flex align-items-center">
-          Add task
+          {getCardIdFromHash() ? "Edit card" : "Add card"}
           <span className="fs-6 mb-1">
             <Badge bg={colColor} className="mx-2">
               {colName}
@@ -166,7 +166,7 @@ export default function Drawer({
               value={form.description}
               onChange={(e) => handleChange("description", e.target.value)}
               as="textarea"
-              rows={4}
+              rows={8}
               placeholder="Add a description"
             />
           </Form.Group>
@@ -185,13 +185,24 @@ export default function Drawer({
             </Form.Select>
           </Form.Group>
 
-          <div className="d-flex gap-2 justify-content-end mt-4">
-            <Button variant="success" type="submit">
-              Save Task
-            </Button>
-            <Button variant="outline-secondary" type="button" onClick={onHide}>
-              Cancel
-            </Button>
+          <div className="d-flex gap-2 justify-content-between mt-4">
+            <div>
+              <Button variant="success" type="submit" className="me-2">
+                Save Card
+              </Button>
+              <Button
+                variant="outline-secondary"
+                type="button"
+                onClick={onHide}
+              >
+                Cancel
+              </Button>
+            </div>
+            {getCardIdFromHash() && (
+              <Button variant="danger">
+                <i className="bi bi-trash" />
+              </Button>
+            )}
           </div>
         </Form>
       </Offcanvas.Body>

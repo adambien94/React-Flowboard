@@ -23,17 +23,8 @@ export default function Navbar({ onToggleDrawer }: NavbarProps) {
 
         <BSNavbar.Collapse id="basic-navbar-nav">
           <Nav className="ms-auto">
-            <Button
-              variant="outline-light"
-              size="sm"
-              onClick={onToggleDrawer}
-              className="me-2"
-            >
-              <i className="bi bi-list"></i> Menu
-            </Button>
-
             <NavDropdown
-              title="Jan Fasola"
+              title="Jan Kowalski"
               id="boards-dropdown"
               className="mx-2"
               drop="down"
@@ -44,6 +35,15 @@ export default function Navbar({ onToggleDrawer }: NavbarProps) {
               <NavDropdown.Divider />
               <NavDropdown.Item href="#action/2">Wyloguj się</NavDropdown.Item>
             </NavDropdown>
+
+            <Button
+              variant="outline-light"
+              size="sm"
+              onClick={onToggleDrawer}
+              className="ms-2"
+            >
+              <i className="bi bi-list"></i> Menu
+            </Button>
           </Nav>
         </BSNavbar.Collapse>
       </Container>
