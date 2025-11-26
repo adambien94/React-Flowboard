@@ -18,12 +18,13 @@ export default function BoardColumn({ column, showDrawer }: BoardColumnProps) {
     transition: "all 0.2s ease",
     border: "none",
     borderTop: `6px solid var(--bs-${column.color})`,
+    boxShadow: "0px 1px 2px  rgba(255,255,255, 0.3)",
   };
 
   return (
     <>
-      <Col className="px-2">
-        <Card bg="light" ref={setNodeRef} style={colStyle}>
+      <Col className="px-2 text-light">
+        <Card ref={setNodeRef} style={colStyle}>
           <Card.Body>
             <Card.Title className="mb-3">{column.name}</Card.Title>
             {column.cards.length > 0 ? (
@@ -37,7 +38,7 @@ export default function BoardColumn({ column, showDrawer }: BoardColumnProps) {
             ) : (
               <div
                 style={{ fontSize: "14px" }}
-                className="text-muted text-center py-1"
+                className="board-column-empty text-center"
               >
                 List is empty.
               </div>

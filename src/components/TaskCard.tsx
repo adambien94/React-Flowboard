@@ -55,9 +55,9 @@ export default function TaskCard({ card, showDrawer }: TaskCardProps) {
             </div>
           </div>
 
-          <div className="flex-grow-1 mt-1 d-flex justify-content-between align-items-end gap-2">
+          <div className="pe-4 pt-1">
             <p
-              className="card-text mb-0 text-secondary"
+              className="card-text mb-0 text-muted"
               style={{
                 fontSize: "14px",
                 display: "-webkit-box",
@@ -70,23 +70,53 @@ export default function TaskCard({ card, showDrawer }: TaskCardProps) {
             >
               {card.description}
             </p>
-            <button
-              onClick={handleEditClick}
+          </div>
+          <div className="flex-grow-1 mt-1 d-flex justify-content-between align-items-end gap-2">
+            <span
+              className="pt-1 text-secondary"
               style={{
-                border: "none",
-                borderRadius: "50%",
-                background: "transparent",
-                paddingRight: "3px",
-                paddingLeft: "3px",
+                fontSize: "14px",
+                lineHeight: "1.4",
               }}
             >
-              <i
-                className="bi bi-pencil text-muted"
+              0h 37min
+            </span>
+
+            <div className="d-flex gap-1" style={{ translate: "0 3px" }}>
+              <button
                 style={{
-                  cursor: "pointer",
+                  border: "none",
+                  borderRadius: "50%",
+                  background: "transparent",
+                  paddingRight: "3px",
+                  paddingLeft: "3px",
                 }}
-              ></i>
-            </button>
+              >
+                <i
+                  className="bi bi-clock text-muted"
+                  style={{
+                    cursor: "pointer",
+                  }}
+                ></i>
+              </button>
+              <button
+                onClick={handleEditClick}
+                style={{
+                  border: "none",
+                  borderRadius: "50%",
+                  background: "transparent",
+                  paddingRight: "3px",
+                  paddingLeft: "3px",
+                }}
+              >
+                <i
+                  className="bi bi-pencil text-muted"
+                  style={{
+                    cursor: "pointer",
+                  }}
+                ></i>
+              </button>
+            </div>
           </div>
         </div>
       </div>

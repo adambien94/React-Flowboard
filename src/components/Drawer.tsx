@@ -14,10 +14,11 @@ export default function Drawer({ show, onHide }: DrawerProps) {
       placement="start"
       backdrop={false}
       scroll={true}
-      className="shadow-lg"
+      className="shadow-none"
+      data-bs-theme="dark"
     >
       <Offcanvas.Header closeButton className="border-bottom">
-        <Offcanvas.Title className="fw-bold text-primary">
+        <Offcanvas.Title className="fw-bold text-light">
           <i className="bi bi-kanban me-2"></i>
           Flowboard
         </Offcanvas.Title>
@@ -51,10 +52,10 @@ export default function Drawer({ show, onHide }: DrawerProps) {
               <ListGroup.Item action className="border-0 py-2">
                 <div className="d-flex justify-content-between align-items-center">
                   <div>
-                    <div className="fw-semibold">Personal Tasks</div>
+                    <div className="fw-semibold">Todo Tasks</div>
                     <small className="text-muted">3 cards updated</small>
                   </div>
-                  <Badge bg="info" pill>
+                  <Badge bg="danger" pill>
                     5
                   </Badge>
                 </div>
@@ -63,7 +64,7 @@ export default function Drawer({ show, onHide }: DrawerProps) {
               <ListGroup.Item action className="border-0 py-2">
                 <div className="d-flex justify-content-between align-items-center">
                   <div>
-                    <div className="fw-semibold">Work Projects</div>
+                    <div className="fw-semibold">In progress Tasks</div>
                     <small className="text-muted">2 cards updated</small>
                   </div>
                   <Badge bg="warning" pill>
@@ -75,7 +76,7 @@ export default function Drawer({ show, onHide }: DrawerProps) {
               <ListGroup.Item action className="border-0 py-2">
                 <div className="d-flex justify-content-between align-items-center">
                   <div>
-                    <div className="fw-semibold">Team Sprint</div>
+                    <div className="fw-semibold">Done Tasks</div>
                     <small className="text-muted">1 card updated</small>
                   </div>
                   <Badge bg="success" pill>

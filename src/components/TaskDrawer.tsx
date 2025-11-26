@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import { type FormEvent } from "react";
 import { Offcanvas, Form, Button, Badge } from "react-bootstrap";
 import type { BoardColumnCard, RawBoardColumnCard } from "../types/board";
@@ -67,7 +67,7 @@ export default function Drawer({
     return null;
   };
 
-  const setCardForEdit = () => {
+  const setCardForEdit = useCallback(() => {
     const cardId = getCardIdFromHash();
     if (cardId) {
       const cardForEdit = boardCols
@@ -82,7 +82,7 @@ export default function Drawer({
         });
       }
     }
-  };
+  }, [boardCols, colId]);
 
   useEffect(() => {
     const hash = window.location.hash;
@@ -100,7 +100,7 @@ export default function Drawer({
         priority: "",
       });
     }
-  }, [showDrawer]);
+  }, [showDrawer, setCardForEdit]);
 
   const handleChange = (key: string, value: string) => {
     setForm((prev) => ({
@@ -135,9 +135,10 @@ export default function Drawer({
       scroll={true}
       className="shadow-lg"
       style={{ width: "560px" }}
+      data-bs-theme="dark"
     >
       <Offcanvas.Header closeButton className="border-bottom">
-        <Offcanvas.Title className="fw-bold text-dark d-flex align-items-center">
+        <Offcanvas.Title className="fw-bold text-light d-flex align-items-center">
           {getCardIdFromHash() ? "Edit card" : "Add card"}
           <span className="fs-6 mb-1">
             <Badge bg={colColor} className="mx-2">
@@ -199,7 +200,7 @@ export default function Drawer({
               </Button>
             </div>
             {getCardIdFromHash() && (
-              <Button variant="danger">
+              <Button variant="outline-secondary">
                 <i className="bi bi-trash" />
               </Button>
             )}

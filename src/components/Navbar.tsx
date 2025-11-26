@@ -12,7 +12,12 @@ interface NavbarProps {
 
 export default function Navbar({ onToggleDrawer }: NavbarProps) {
   return (
-    <BSNavbar bg="primary" variant="dark" expand="lg" className="shadow-sm">
+    <BSNavbar
+      variant="dark"
+      expand="lg"
+      className="shadow-lg"
+      style={{ backgroundColor: "#192445" }}
+    >
       <Container fluid>
         <BSNavbar.Brand href="#" className="fw-bold fs-4">
           <i className="bi bi-kanban me-2"></i>
@@ -37,7 +42,7 @@ export default function Navbar({ onToggleDrawer }: NavbarProps) {
             </NavDropdown>
 
             <Button
-              variant="outline-light"
+              variant="outline-secondary"
               size="sm"
               onClick={onToggleDrawer}
               className="ms-2"

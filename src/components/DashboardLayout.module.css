@@ -2,16 +2,17 @@
   transition: margin-left 0.3s ease-in-out;
   min-height: calc(100vh - 56px);
   padding: 1rem;
-  background: linear-gradient(
-    135deg,
-    #0d6efd 0%,
-    #6610f2 25%,
-    #d63384 50%,
-    #fd7e14 75%,
-    #20c997 100%
-  );
-  background-size: 400% 400%;
-  background-position: 0% 50%;
+  background: radial-gradient(
+      circle at top,
+      rgba(99, 102, 241, 0.18),
+      transparent 55%
+    ),
+    radial-gradient(
+      circle at 20% 20%,
+      rgba(20, 184, 166, 0.12),
+      transparent 45%
+    ),
+    var(--surface-bg, #050b16);
 }
 
 .drawerOpen {

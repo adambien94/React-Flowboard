@@ -166,7 +166,7 @@ export default function Dashboard() {
                 <div className="d-flex align-items-center">
                   <Dropdown>
                     <Dropdown.Toggle
-                      variant="outline-light"
+                      variant="outline-secondary"
                       id="dropdown-basic"
                     >
                       Boards
@@ -189,7 +189,7 @@ export default function Dashboard() {
                 </div>
 
                 <Button
-                  variant="outline-light"
+                  variant="outline-secondary"
                   onClick={() => setShowAddColumnModal(true)}
                   disabled={boardCols.length >= 4}
                 >
