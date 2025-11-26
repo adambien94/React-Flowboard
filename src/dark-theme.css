@@ -52,6 +52,10 @@ body {
   border-color: var(--border-color) !important;
 }
 
+.modal-footer {
+  border: none;
+}
+
 .offcanvas,
 .offcanvas-header,
 .offcanvas-body,

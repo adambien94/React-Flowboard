@@ -1,9 +1,10 @@
 import { useState, useEffect, useRef, useCallback } from "react";
 import { type FormEvent } from "react";
-import { Offcanvas, Form, Button, Badge } from "react-bootstrap";
+import { Offcanvas, Form, Button, Badge, Modal } from "react-bootstrap";
 import type { BoardColumnCard, RawBoardColumnCard } from "../types/board";
 import { v4 as uuidV4 } from "uuid";
 import { useBoardContext } from "../contexts/BoardContext";
+import ConfirmModal from "./ConfirmModal";
 
 type DrawerProps = {
   colId: string;
@@ -58,6 +59,7 @@ export default function Drawer({
     description: "",
     priority: "",
   });
+  const [confirmDeleteShow, setConfirmDeleteShow] = useState(false);
   const titleInputRef = useRef<HTMLInputElement>(null);
   const { boardCols, showDrawer } = useBoardContext();
 
@@ -91,6 +93,7 @@ export default function Drawer({
     if (!cardId) return;
     deleteTask(colId, cardId);
     onHide();
+    setConfirmDeleteShow(false);
   };
 
   useEffect(() => {
@@ -136,86 +139,97 @@ export default function Drawer({
   };
 
   return (
-    <Offcanvas
-      show={showDrawer}
-      onHide={onHide}
-      placement="end"
-      backdrop={true}
-      scroll={true}
-      className="shadow-lg"
-      style={{ width: "560px" }}
-      data-bs-theme="dark"
-    >
-      <Offcanvas.Header closeButton className="border-bottom">
-        <Offcanvas.Title className="fw-bold text-light d-flex align-items-center">
-          {getCardIdFromHash() ? "Edit card" : "Add card"}
-          <span className="fs-6 mb-1">
-            <Badge bg={colColor} className="mx-2">
-              {colName}
-            </Badge>
-          </span>
-        </Offcanvas.Title>
-      </Offcanvas.Header>
+    <>
+      <Offcanvas
+        show={showDrawer}
+        onHide={onHide}
+        placement="end"
+        backdrop={true}
+        scroll={true}
+        className="shadow-lg"
+        style={{ width: "560px" }}
+        data-bs-theme="dark"
+      >
+        <Offcanvas.Header closeButton className="border-bottom">
+          <Offcanvas.Title className="fw-bold text-light d-flex align-items-center">
+            {getCardIdFromHash() ? "Edit card" : "Add card"}
+            <span className="fs-6 mb-1">
+              <Badge bg={colColor} className="mx-2">
+                {colName}
+              </Badge>
+            </span>
+          </Offcanvas.Title>
+        </Offcanvas.Header>
 
-      <Offcanvas.Body className="p-3 mt-3">
-        <Form onSubmit={handleSubmit}>
-          <Form.Group className="mb-4">
-            <Form.Control
-              ref={titleInputRef}
-              required
-              value={form.title}
-              onChange={(e) => handleChange("title", e.target.value)}
-              type="text"
-              placeholder="Task name"
-            />
-          </Form.Group>
+        <Offcanvas.Body className="p-3 mt-3">
+          <Form onSubmit={handleSubmit}>
+            <Form.Group className="mb-4">
+              <Form.Control
+                ref={titleInputRef}
+                required
+                value={form.title}
+                onChange={(e) => handleChange("title", e.target.value)}
+                type="text"
+                placeholder="Task name"
+              />
+            </Form.Group>
 
-          <Form.Group className="mb-4">
-            <Form.Control
-              required
-              value={form.description}
-              onChange={(e) => handleChange("description", e.target.value)}
-              as="textarea"
-              rows={8}
-              placeholder="Add a description"
-            />
-          </Form.Group>
+            <Form.Group className="mb-4">
+              <Form.Control
+                required
+                value={form.description}
+                onChange={(e) => handleChange("description", e.target.value)}
+                as="textarea"
+                rows={8}
+                placeholder="Add a description"
+              />
+            </Form.Group>
 
-          <Form.Group className="mb-4">
-            <Form.Select
-              required
-              value={form.priority}
-              onChange={(e) => handleChange("priority", e.target.value)}
-            >
-              {TASK_PRIORITIES.map((priority) => (
-                <option key={priority.value} value={priority.value}>
-                  {priority.label}
-                </option>
-              ))}
-            </Form.Select>
-          </Form.Group>
-
-          <div className="d-flex gap-2 justify-content-between mt-4">
-            <div>
-              <Button variant="success" type="submit" className="me-2">
-                Save Card
-              </Button>
-              <Button
-                variant="outline-secondary"
-                type="button"
-                onClick={onHide}
+            <Form.Group className="mb-4">
+              <Form.Select
+                required
+                value={form.priority}
+                onChange={(e) => handleChange("priority", e.target.value)}
               >
-                Cancel
-              </Button>
+                {TASK_PRIORITIES.map((priority) => (
+                  <option key={priority.value} value={priority.value}>
+                    {priority.label}
+                  </option>
+                ))}
+              </Form.Select>
+            </Form.Group>
+
+            <div className="d-flex gap-2 justify-content-between mt-4">
+              <div>
+                <Button variant="success" type="submit" className="me-2">
+                  Save Card
+                </Button>
+                <Button
+                  variant="outline-secondary"
+                  type="button"
+                  onClick={onHide}
+                >
+                  Cancel
+                </Button>
+              </div>
+              {getCardIdFromHash() && (
+                <Button
+                  variant="outline-secondary"
+                  onClick={() => setConfirmDeleteShow(true)}
+                >
+                  <i className="bi bi-trash" />
+                </Button>
+              )}
             </div>
-            {getCardIdFromHash() && (
-              <Button variant="outline-secondary" onClick={handleDeleteCard}>
-                <i className="bi bi-trash" />
-              </Button>
-            )}
-          </div>
-        </Form>
-      </Offcanvas.Body>
-    </Offcanvas>
+          </Form>
+        </Offcanvas.Body>
+      </Offcanvas>
+
+      <ConfirmModal
+        show={confirmDeleteShow}
+        setShow={setConfirmDeleteShow}
+        onConfirm={handleDeleteCard}
+      />
+    </>
   );
 }
