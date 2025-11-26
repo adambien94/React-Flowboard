@@ -14,3 +14,9 @@ export type RawBoardColumnCard = {
   description: string;
   priority: string;
 };
+
+export type Board = {
+  id: string;
+  name: string;
+  columns: BoardColumn[];
+};

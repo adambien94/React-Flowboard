@@ -1,6 +1,15 @@
 import { useState, type FormEvent, useRef, useEffect } from "react";
 import { Modal, Button, Form } from "react-bootstrap";
 
+const COL_COLORS = [
+  { value: "primary", label: "Blue" },
+  { value: "success", label: "Green" },
+  { value: "warning", label: "Yellow" },
+  { value: "danger", label: "Red" },
+  { value: "info", label: "Teal" },
+  { value: "secondary", label: "Grey" },
+];
+
 type AddColumnModalProps = {
   show: boolean;
   onHide: () => void;
@@ -57,11 +66,11 @@ export default function AddColumnModal({
               value={color}
               onChange={(e) => setColor(e.target.value)}
             >
-              <option value="primary">Blue</option>
-              <option value="success">Green</option>
-              <option value="warning">Yellow</option>
-              <option value="danger">Red</option>
-              <option value="info">Teal</option>
+              {COL_COLORS.map((col) => (
+                <option key={col.value} value={col.value}>
+                  {col.label}
+                </option>
+              ))}
             </Form.Select>
           </Form.Group>
         </Modal.Body>

@@ -1,7 +1,7 @@
 import { Container, Dropdown, Stack, Row, Button } from "react-bootstrap";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 import TaskDrawer from "./components/TaskDrawer";
-import { mockBoard as boardColumns } from "./mocks/boards.mock";
 import type {
   BoardColumn as BoardColumnType,
   BoardColumnCard,
@@ -11,7 +11,7 @@ import BoardColumn from "./components/BoardColumn";
 import TaskCard from "./components/TaskCard";
 import AddColumnModal from "./components/AddColumnModal";
 import { BoardProvider } from "./contexts/BoardContext";
-import { useLocalStorage } from "./useLocalStorage";
+import { useBoardsContext } from "./contexts/BoardsContext";
 import { DndContext, DragOverlay } from "@dnd-kit/core";
 import type { DragEndEvent, DragStartEvent } from "@dnd-kit/core";
 import { v4 as uuidV4 } from "uuid";
@@ -21,14 +21,60 @@ export default function Dashboard() {
   const [activeColId, setActiveColId] = useState<string>();
   const [activeCard, setActiveCard] = useState<BoardColumnCard | null>(null);
   const [showAddColumnModal, setShowAddColumnModal] = useState(false);
-  const [boardCols, setBoardCols] = useLocalStorage<BoardColumnType[]>(
-    "BOARD_COLS",
-    boardColumns
-  );
+  const { boards, setBoards } = useBoardsContext();
+  const { boardId } = useParams();
+  const navigate = useNavigate();
+
+  const activeBoard = useMemo(() => {
+    return boards.find((board) => board.id === boardId) ?? boards[0];
+  }, [boardId, boards]);
+
+  const activeBoardId = activeBoard?.id;
+  const boardCols = useMemo(() => activeBoard?.columns ?? [], [activeBoard]);
 
   const clearUrlHash = () => {
     window.location.hash = "";
   };
+
+  useEffect(() => {
+    if (!boards.length) return;
+    if (!boardId || !boards.some((board) => board.id === boardId)) {
+      console.log(boards);
+      navigate(`/${boards[0].id}`, { replace: true });
+    }
+  }, [boardId, boards, navigate]);
+
+  useEffect(() => {
+    if (!boardCols.length) {
+      setShowDrawer(false);
+      setActiveColId(undefined);
+      clearUrlHash();
+      return;
+    }
+    const columnExists = boardCols.some(({ id }) => id === activeColId);
+    if (!columnExists) {
+      setActiveColId(boardCols[0].id);
+      setShowDrawer(false);
+      clearUrlHash();
+    }
+  }, [boardCols, activeColId]);
+
+  const setBoardCols = useCallback(
+    (value: React.SetStateAction<BoardColumnType[]>) => {
+      if (!activeBoardId) return;
+      setBoards((prevBoards) =>
+        prevBoards.map((board) => {
+          if (board.id !== activeBoardId) {
+            return board;
+          }
+          const nextColumns =
+            typeof value === "function" ? value(board.columns) : value;
+          return { ...board, columns: nextColumns };
+        })
+      );
+    },
+    [activeBoardId, setBoards]
+  );
 
   const handleHideDrawer = () => {
     clearUrlHash();
@@ -41,6 +87,7 @@ export default function Dashboard() {
   };
 
   const onCreateTaskCard = (colId: string, taskData: BoardColumnCard) => {
+    if (!activeBoardId) return;
     setBoardCols((prev) => {
       return prev.map((col) => {
         if (col.id === colId) {
@@ -60,6 +107,7 @@ export default function Dashboard() {
     cardId: string,
     taskData: RawBoardColumnCard
   ) => {
+    if (!activeBoardId) return;
     setBoardCols((prev) => {
       return prev.map((col) => {
         if (col.id !== colId) {
@@ -79,6 +127,7 @@ export default function Dashboard() {
   };
 
   const onDeleteTaskCard = (colId: string, cardId: string) => {
+    if (!activeBoardId) return;
     setBoardCols((prev) =>
       prev.map((col) => {
         if (col.id !== colId) {
@@ -93,15 +142,18 @@ export default function Dashboard() {
   };
 
   const handleAddColumn = (name: string, color: string) => {
+    if (!activeBoardId) return;
+    const newColumnId = uuidV4();
     setBoardCols((prev) => [
       ...prev,
       {
-        id: uuidV4(),
+        id: newColumnId,
         name,
         color,
         cards: [],
       },
     ]);
+    setActiveColId(newColumnId);
   };
 
   const handleCardDragStart = (event: DragStartEvent) => {
@@ -166,15 +218,17 @@ export default function Dashboard() {
           onDragStart={handleCardDragStart}
           onDragEnd={handleCardDragdEnd}
         >
-          <TaskDrawer
-            onHide={handleHideDrawer}
-            colId={activeColId!}
-            colName={boardCols.find(({ id }) => id === activeColId)?.name}
-            colColor={boardCols.find(({ id }) => id === activeColId)?.color}
-            createTask={onCreateTaskCard}
-            editTask={onEditTaskCard}
-            deleteTask={onDeleteTaskCard}
-          />
+          {activeColId && (
+            <TaskDrawer
+              onHide={handleHideDrawer}
+              colId={activeColId}
+              colName={boardCols.find(({ id }) => id === activeColId)?.name}
+              colColor={boardCols.find(({ id }) => id === activeColId)?.color}
+              createTask={onCreateTaskCard}
+              editTask={onEditTaskCard}
+              deleteTask={onDeleteTaskCard}
+            />
+          )}
           <Container fluid>
             <div>
               <div className="d-flex align-items-center justify-content-between">
@@ -184,22 +238,26 @@ export default function Dashboard() {
                       variant="outline-secondary"
                       id="dropdown-basic"
                     >
-                      Boards
+                      {activeBoard?.name ?? "Boards"}
                     </Dropdown.Toggle>
 
                     <Dropdown.Menu>
-                      <Dropdown.Item href="#/action-1">Action</Dropdown.Item>
-                      <Dropdown.Item href="#/action-2">
-                        Another action
-                      </Dropdown.Item>
-                      <Dropdown.Divider />
-                      <Dropdown.Item href="#/action-3">
-                        Something else
-                      </Dropdown.Item>
+                      {boards.map((board) => (
+                        <Dropdown.Item
+                          key={board.id}
+                          active={board.id === activeBoardId}
+                          onClick={() => {
+                            if (board.id === activeBoardId) return;
+                            navigate(`/${board.id}`);
+                          }}
+                        >
+                          {board.name}
+                        </Dropdown.Item>
+                      ))}
                     </Dropdown.Menu>
                   </Dropdown>
                   <h3 className="fw-bold text-white ms-4 mt-2 fs-4">
-                    Personal Tasks
+                    {activeBoard?.name}
                   </h3>
                 </div>
 

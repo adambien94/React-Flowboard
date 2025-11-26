@@ -68,6 +68,11 @@ body {
   border-color: var(--border-color) !important;
 }
 
+.list-group {
+  border: none;
+  gap: 4px;
+}
+
 .offcanvas,
 .modal-content {
   box-shadow: var(--shadow-soft);
@@ -129,4 +134,15 @@ body {
 
 .board-column-empty {
   color: var(--text-muted);
+}
+
+.list-group-item {
+  border-radius: 13px !important;
+}
+
+.dropdown-item.active,
+.list-group-item.active,
+button.list-group-item:hover,
+button.list-group-item:focus {
+  background: rgba(255, 255, 255, 0.05) !important;
 }

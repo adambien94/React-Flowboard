@@ -1,5 +1,10 @@
-import React from "react";
+import { useMemo, useState } from "react";
 import { Offcanvas, ListGroup, Button, Badge } from "react-bootstrap";
+import { useNavigate, useParams } from "react-router-dom";
+import type { Board } from "../types/board";
+import AddBoardModal from "./AddBoardModal";
+import { v4 as uuidV4 } from "uuid";
+import { useBoardsContext } from "../contexts/BoardsContext";
 
 interface DrawerProps {
   show: boolean;
@@ -7,6 +12,53 @@ interface DrawerProps {
 }
 
 export default function Drawer({ show, onHide }: DrawerProps) {
+  const navigate = useNavigate();
+  const { boardId } = useParams();
+  const { boards, setBoards } = useBoardsContext();
+  const [showCreateBoardModal, setShowCreateBoardModal] = useState(false);
+
+  const recentBoards = useMemo(() => {
+    return boards.map((board) => {
+      const totalCards = board.columns.reduce(
+        (sum, column) => sum + column.cards.length,
+        0
+      );
+      return { ...board, totalCards };
+    });
+  }, [boards]);
+
+  const handleBoardSelect = (targetBoardId: string) => {
+    if (targetBoardId === boardId) {
+      return;
+    }
+    navigate(`/${targetBoardId}`);
+  };
+
+  const buildBoardId = (name: string) => {
+    const baseId = name
+      .trim()
+      .toLowerCase()
+      .replace(/[^a-z0-9\s-]/g, "")
+      .replace(/\s+/g, "-");
+    if (!baseId) {
+      return `board-${uuidV4()}`;
+    }
+    const exists = boards.some((board) => board.id === baseId);
+    return exists ? `${baseId}-${Date.now()}` : baseId;
+  };
+
+  const handleCreateBoard = (name: string) => {
+    const newBoardId = buildBoardId(name);
+    const newBoard: Board = {
+      id: newBoardId,
+      name,
+      columns: [],
+    };
+    setBoards((prev) => [...prev, newBoard]);
+    setShowCreateBoardModal(false);
+    navigate(`/${newBoardId}`);
+  };
+
   return (
     <Offcanvas
       show={show}
@@ -26,13 +78,17 @@ export default function Drawer({ show, onHide }: DrawerProps) {
 
       <Offcanvas.Body className="p-0">
         <div className="p-3">
-          {/* Quick Actions */}
           <div className="mb-4">
             <h6 className="text-muted mb-3">
               <i className="bi bi-lightning me-2"></i>
               Quick Actions
             </h6>
-            <Button variant="primary" size="sm" className="w-100 mb-2">
+            <Button
+              variant="primary"
+              size="sm"
+              className="w-100 mb-2"
+              onClick={() => setShowCreateBoardModal(true)}
+            >
               <i className="bi bi-plus-circle me-2"></i>
               Create Board
             </Button>
@@ -42,52 +98,37 @@ export default function Drawer({ show, onHide }: DrawerProps) {
             </Button>
           </div>
 
-          {/* Recent Boards */}
           <div className="mb-4">
             <h6 className="text-muted mb-3">
               <i className="bi bi-clock me-2"></i>
               Recent Boards
             </h6>
             <ListGroup variant="flush">
-              <ListGroup.Item action className="border-0 py-2">
-                <div className="d-flex justify-content-between align-items-center">
-                  <div>
-                    <div className="fw-semibold">Todo Tasks</div>
-                    <small className="text-muted">3 cards updated</small>
+              {recentBoards.map((board) => (
+                <ListGroup.Item
+                  action
+                  className="border-0 py-2"
+                  key={board.id}
+                  active={board.id === boardId}
+                  onClick={() => handleBoardSelect(board.id)}
+                >
+                  <div className="d-flex justify-content-between align-items-center">
+                    <div>
+                      <div className="fw-semibold">{board.name}</div>
+                      <small className="text-muted">
+                        {board.totalCards}{" "}
+                        {board.totalCards === 1 ? "card" : "cards"}
+                      </small>
+                    </div>
+                    <Badge bg="secondary" pill>
+                      {board.columns.length}
+                    </Badge>
                   </div>
-                  <Badge bg="danger" pill>
-                    5
-                  </Badge>
-                </div>
-              </ListGroup.Item>
-
-              <ListGroup.Item action className="border-0 py-2">
-                <div className="d-flex justify-content-between align-items-center">
-                  <div>
-                    <div className="fw-semibold">In progress Tasks</div>
-                    <small className="text-muted">2 cards updated</small>
-                  </div>
-                  <Badge bg="warning" pill>
-                    8
-                  </Badge>
-                </div>
-              </ListGroup.Item>
-
-              <ListGroup.Item action className="border-0 py-2">
-                <div className="d-flex justify-content-between align-items-center">
-                  <div>
-                    <div className="fw-semibold">Done Tasks</div>
-                    <small className="text-muted">1 card updated</small>
-                  </div>
-                  <Badge bg="success" pill>
-                    12
-                  </Badge>
-                </div>
-              </ListGroup.Item>
+                </ListGroup.Item>
+              ))}
             </ListGroup>
           </div>
 
-          {/* Navigation Menu */}
           <div className="mb-4">
             <h6 className="text-muted mb-3">
               <i className="bi bi-grid me-2"></i>
@@ -116,7 +157,6 @@ export default function Drawer({ show, onHide }: DrawerProps) {
             </ListGroup>
           </div>
 
-          {/* Settings */}
           <div className="border-top pt-3">
             <ListGroup variant="flush">
               <ListGroup.Item action className="border-0 py-2">
@@ -127,6 +167,11 @@ export default function Drawer({ show, onHide }: DrawerProps) {
           </div>
         </div>
       </Offcanvas.Body>
+      <AddBoardModal
+        show={showCreateBoardModal}
+        onHide={() => setShowCreateBoardModal(false)}
+        onSave={handleCreateBoard}
+      />
     </Offcanvas>
   );
 }

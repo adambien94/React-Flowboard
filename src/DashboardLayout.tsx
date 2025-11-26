@@ -3,6 +3,7 @@ import { Outlet } from "react-router-dom";
 import Navbar from "./components/Navbar";
 import Drawer from "./components/Drawer";
 import styles from "./components/DashboardLayout.module.css";
+import { BoardsProvider } from "./contexts/BoardsContext";
 
 export default function DashboardLayout() {
   const [showDrawer, setShowDrawer] = useState(true);
@@ -16,7 +17,7 @@ export default function DashboardLayout() {
   };
 
   return (
-    <>
+    <BoardsProvider>
       <Navbar onToggleDrawer={handleToggleDrawer} />
       <Drawer show={showDrawer} onHide={handleHideDrawer} />
       <div
@@ -26,6 +27,6 @@ export default function DashboardLayout() {
       >
         <Outlet />
       </div>
-    </>
+    </BoardsProvider>
   );
 }

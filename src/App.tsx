@@ -8,6 +8,7 @@ export default function App() {
     <Routes>
       <Route path="/" element={<DashboardLayout />}>
         <Route index element={<Dashboard />} />
+        <Route path=":boardId" element={<Dashboard />} />
         <Route path="*" element={<h2>Page not found</h2>} />
       </Route>
     </Routes>
