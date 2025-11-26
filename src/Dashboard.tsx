@@ -78,6 +78,20 @@ export default function Dashboard() {
     });
   };
 
+  const onDeleteTaskCard = (colId: string, cardId: string) => {
+    setBoardCols((prev) =>
+      prev.map((col) => {
+        if (col.id !== colId) {
+          return col;
+        }
+        return {
+          ...col,
+          cards: col.cards.filter((card) => card.id !== cardId),
+        };
+      })
+    );
+  };
+
   const handleAddColumn = (name: string, color: string) => {
     setBoardCols((prev) => [
       ...prev,
@@ -159,6 +173,7 @@ export default function Dashboard() {
             colColor={boardCols.find(({ id }) => id === activeColId)?.color}
             createTask={onCreateTaskCard}
             editTask={onEditTaskCard}
+            deleteTask={onDeleteTaskCard}
           />
           <Container fluid>
             <div>

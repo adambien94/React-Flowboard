@@ -5,7 +5,7 @@ import type { BoardColumnCard, RawBoardColumnCard } from "../types/board";
 import { v4 as uuidV4 } from "uuid";
 import { useBoardContext } from "../contexts/BoardContext";
 
-interface DrawerProps {
+type DrawerProps = {
   colId: string;
   colName?: string;
   colColor?: string;
@@ -16,13 +16,14 @@ interface DrawerProps {
     cardId: string,
     taskData: RawBoardColumnCard
   ) => void;
-}
+  deleteTask: (colId: string, cardId: string) => void;
+};
 
-interface TaskForm {
+type TaskForm = {
   title: string;
   description: string;
   priority: string;
-}
+};
 
 const TASK_PRIORITIES = [
   {
@@ -50,6 +51,7 @@ export default function Drawer({
   colColor,
   createTask,
   editTask,
+  deleteTask,
 }: DrawerProps) {
   const [form, setForm] = useState<TaskForm>({
     title: "",
@@ -83,6 +85,13 @@ export default function Drawer({
       }
     }
   }, [boardCols, colId]);
+
+  const handleDeleteCard = () => {
+    const cardId = getCardIdFromHash();
+    if (!cardId) return;
+    deleteTask(colId, cardId);
+    onHide();
+  };
 
   useEffect(() => {
     const hash = window.location.hash;
@@ -200,7 +209,7 @@ export default function Drawer({
               </Button>
             </div>
             {getCardIdFromHash() && (
-              <Button variant="outline-secondary">
+              <Button variant="outline-secondary" onClick={handleDeleteCard}>
                 <i className="bi bi-trash" />
               </Button>
             )}
