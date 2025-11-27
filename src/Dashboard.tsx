@@ -212,21 +212,23 @@ export default function Dashboard() {
     });
   };
 
+  // Timer
   const handleLogTime = () => {
     console.log(timeToLog);
     setConfirmLogTimeShow(false);
   };
+
+  const handleStopTimer = (taskId: string, time: string) => {
+    setTimeToLog(taskId, time);
+    setConfirmLogTimeShow(true);
+  };
+  //
 
   useEffect(() => {
     return () => {
       clearUrlHash();
     };
   }, []);
-
-  const handleStopTimer = (taskId: string, time: string) => {
-    setTimeToLog(taskId, time);
-    setConfirmLogTimeShow(true);
-  };
 
   return (
     <>
@@ -304,7 +306,7 @@ export default function Dashboard() {
               </div>
             </div>
           </Container>
-          {timeToLog?.time}
+
           <DragOverlay>
             {activeCard ? (
               <div

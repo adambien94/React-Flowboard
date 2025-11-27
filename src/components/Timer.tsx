@@ -23,15 +23,11 @@ const formatTime = (ms: number) => {
 const Timer: React.FC<TimerProps> = ({ show, onFinish }) => {
   const [elapsed, setElapsed] = useState(0);
   const [running, setRunning] = useState(false);
-
   const startTimeRef = useRef<number | null>(null);
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
-
   const { stopTimer, activeTaskId: activeTimerTaskId } = useTimerStore(
     (state) => state
   );
-
-  const { timeToLog, setTimeToLog } = useTimerStore();
 
   useEffect(() => {
     if (!show) return;
@@ -58,11 +54,15 @@ const Timer: React.FC<TimerProps> = ({ show, onFinish }) => {
   const handleStop = () => {
     if (intervalRef.current) clearInterval(intervalRef.current);
     setRunning(false);
-
     onFinish?.(activeTimerTaskId as string, elapsed.toString());
-
     stopTimer();
   };
+
+  useEffect(() => {
+    if (!show && running) {
+      handleStop();
+    }
+  }, [show]);
 
   return (
     <Toast
@@ -75,10 +75,6 @@ const Timer: React.FC<TimerProps> = ({ show, onFinish }) => {
         width: "280px",
       }}
     >
-      {/* <Toast.Header closeButton={false}>
-        <strong className="me-auto text-muted">Timer</strong>
-      </Toast.Header> */}
-
       <Toast.Body className="d-flex justify-content-between items-center">
         <strong className="mt-1  fs-6">{formatTime(elapsed)}</strong>
 
