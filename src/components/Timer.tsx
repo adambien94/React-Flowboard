@@ -1,11 +1,11 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState, useCallback } from "react";
 import Toast from "react-bootstrap/Toast";
 import Button from "react-bootstrap/Button";
 import { useTimerStore } from "../store/timerStore";
 
 interface TimerProps {
   show: boolean;
-  onFinish?: (taskId: string, totalMs: string) => void;
+  onFinish?: (taskId: string, totalMs: number) => void;
 }
 
 const formatTime = (ms: number) => {
@@ -32,6 +32,7 @@ const Timer: React.FC<TimerProps> = ({ show, onFinish }) => {
   useEffect(() => {
     if (!show) return;
 
+    setElapsed(0);
     startTimeRef.current = Date.now();
     setRunning(true);
 
@@ -44,25 +45,22 @@ const Timer: React.FC<TimerProps> = ({ show, onFinish }) => {
     return () => {
       if (intervalRef.current) {
         clearInterval(intervalRef.current);
-        setTimeout(() => {
-          setElapsed(0);
-        }, 200);
       }
     };
   }, [show, running]);
 
-  const handleStop = () => {
+  const handleStop = useCallback(() => {
     if (intervalRef.current) clearInterval(intervalRef.current);
     setRunning(false);
-    onFinish?.(activeTimerTaskId as string, elapsed.toString());
     stopTimer();
-  };
+    onFinish?.(activeTimerTaskId as string, elapsed);
+  }, [activeTimerTaskId, elapsed, onFinish, stopTimer]);
 
   useEffect(() => {
     if (!show && running) {
       handleStop();
     }
-  }, [show]);
+  }, [show, running, handleStop]);
 
   return (
     <Toast
@@ -77,7 +75,6 @@ const Timer: React.FC<TimerProps> = ({ show, onFinish }) => {
     >
       <Toast.Body className="d-flex justify-content-between items-center">
         <strong className="mt-1  fs-6">{formatTime(elapsed)}</strong>
-
         <Button
           variant="dark"
           size="sm"

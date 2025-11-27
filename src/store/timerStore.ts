@@ -10,7 +10,7 @@ export type TimerState = {
 
   startTimer: (taskId: string) => void;
   stopTimer: () => void;
-  setTimeToLog: (taskId: string, time: string) => void;
+  setTimeToLog: (taskId: string, time: number) => void;
 };
 
 export const useTimerStore = create<TimerState>((set) => ({

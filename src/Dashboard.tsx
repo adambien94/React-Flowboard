@@ -218,7 +218,7 @@ export default function Dashboard() {
     setConfirmLogTimeShow(false);
   };
 
-  const handleStopTimer = (taskId: string, time: string) => {
+  const handleStopTimer = (taskId: string, time: number) => {
     setTimeToLog(taskId, time);
     setConfirmLogTimeShow(true);
   };
