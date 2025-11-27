@@ -92,7 +92,12 @@ export default function Drawer({ show, onHide }: DrawerProps) {
               <i className="bi bi-plus-circle me-2"></i>
               Create Board
             </Button>
-            <Button variant="outline-secondary" size="sm" className="w-100">
+            <Button
+              variant="outline-secondary"
+              size="sm"
+              className="w-100"
+              disabled
+            >
               <i className="bi bi-search me-2"></i>
               Search Cards
             </Button>

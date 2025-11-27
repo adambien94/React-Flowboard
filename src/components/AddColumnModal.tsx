@@ -48,7 +48,7 @@ export default function AddColumnModal({
       </Modal.Header>
 
       <Form onSubmit={handleSubmit}>
-        <Modal.Body className="py-4">
+        <Modal.Body className="pt-4">
           <Form.Group className="mb-3">
             <Form.Control
               ref={titleInputRef}

@@ -23,7 +23,7 @@ export default function BoardColumn({ column, showDrawer }: BoardColumnProps) {
 
   return (
     <>
-      <Col className="px-2 text-light">
+      <Col className="px-2 text-light" style={{ maxWidth: "calc(100%/3)" }}>
         <Card ref={setNodeRef} style={colStyle}>
           <Card.Body>
             <Card.Title className="mb-3">{column.name}</Card.Title>

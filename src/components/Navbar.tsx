@@ -1,10 +1,4 @@
-import {
-  Navbar as BSNavbar,
-  Nav,
-  NavDropdown,
-  Button,
-  Container,
-} from "react-bootstrap";
+import { Navbar as BSNavbar, Nav, Button, Container } from "react-bootstrap";
 
 interface NavbarProps {
   onToggleDrawer: () => void;
@@ -28,19 +22,6 @@ export default function Navbar({ onToggleDrawer }: NavbarProps) {
 
         <BSNavbar.Collapse id="basic-navbar-nav">
           <Nav className="ms-auto">
-            <NavDropdown
-              title="Jan Kowalski"
-              id="boards-dropdown"
-              className="mx-2"
-              drop="down"
-              align="end"
-            >
-              <NavDropdown.Item href="#action/1">Mój profil</NavDropdown.Item>
-              <NavDropdown.Item href="#action/1">Yolo</NavDropdown.Item>
-              <NavDropdown.Divider />
-              <NavDropdown.Item href="#action/2">Wyloguj się</NavDropdown.Item>
-            </NavDropdown>
-
             <Button
               variant="outline-secondary"
               size="sm"

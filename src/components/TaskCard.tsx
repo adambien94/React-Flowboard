@@ -2,6 +2,7 @@ import { Badge } from "react-bootstrap";
 import type { BoardColumnCard } from "../types/board";
 import { useDraggable } from "@dnd-kit/core";
 import { CSS } from "@dnd-kit/utilities";
+import { useTimerStore } from "../store/timerStore";
 
 interface TaskCardProps {
   card: BoardColumnCard;
@@ -30,6 +31,8 @@ export default function TaskCard({ card, showDrawer }: TaskCardProps) {
     window.location.hash = `#edit=${card.id}`;
     showDrawer();
   };
+
+  const startTimer = useTimerStore((state) => state.startTimer);
 
   return (
     <div key={card.id} className="mt-2">
@@ -91,6 +94,7 @@ export default function TaskCard({ card, showDrawer }: TaskCardProps) {
                   paddingRight: "3px",
                   paddingLeft: "3px",
                 }}
+                onClick={() => startTimer(card.id)}
               >
                 <i
                   className="bi bi-clock text-muted"

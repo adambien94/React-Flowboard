@@ -38,7 +38,7 @@ export default function AddBoardModal({
           <Modal.Title>Create board</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <Form.Group>
+          <Form.Group className="pt-2">
             <Form.Control
               ref={inputRef}
               value={boardName}

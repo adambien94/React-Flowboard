@@ -9,12 +9,14 @@ import type {
 } from "./types/board";
 import BoardColumn from "./components/BoardColumn";
 import TaskCard from "./components/TaskCard";
+import Timer from "./components/Timer";
 import AddColumnModal from "./components/AddColumnModal";
 import { BoardProvider } from "./contexts/BoardContext";
 import { useBoardsContext } from "./contexts/BoardsContext";
 import { DndContext, DragOverlay } from "@dnd-kit/core";
 import type { DragEndEvent, DragStartEvent } from "@dnd-kit/core";
 import { v4 as uuidV4 } from "uuid";
+import { useTimerStore } from "./store/timerStore";
 
 export default function Dashboard() {
   const [showDrawer, setShowDrawer] = useState(false);
@@ -24,6 +26,7 @@ export default function Dashboard() {
   const { boards, setBoards } = useBoardsContext();
   const { boardId } = useParams();
   const navigate = useNavigate();
+  const activeTimerTaskId = useTimerStore((state) => state.activeTaskId);
 
   const activeBoard = useMemo(() => {
     return boards.find((board) => board.id === boardId) ?? boards[0];
@@ -310,7 +313,7 @@ export default function Dashboard() {
           </DragOverlay>
         </DndContext>
       </BoardProvider>
-
+      <Timer show={!!activeTimerTaskId} />
       <AddColumnModal
         show={showAddColumnModal}
         onHide={() => setShowAddColumnModal(false)}

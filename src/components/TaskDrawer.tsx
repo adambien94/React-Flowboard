@@ -152,12 +152,12 @@ export default function Drawer({
       >
         <Offcanvas.Header closeButton className="border-bottom">
           <Offcanvas.Title className="fw-bold text-light d-flex align-items-center">
-            {getCardIdFromHash() ? "Edit card" : "Add card"}
-            <span className="fs-6 mb-1">
+            {getCardIdFromHash() ? "Edit card" : "Add card"} - {colName}
+            {/* <span className="fs-6 mb-1">
               <Badge bg={colColor} className="mx-2">
                 {colName}
               </Badge>
-            </span>
+            </span> */}
           </Offcanvas.Title>
         </Offcanvas.Header>
 
@@ -176,7 +176,6 @@ export default function Drawer({
 
             <Form.Group className="mb-4">
               <Form.Control
-                required
                 value={form.description}
                 onChange={(e) => handleChange("description", e.target.value)}
                 as="textarea"
