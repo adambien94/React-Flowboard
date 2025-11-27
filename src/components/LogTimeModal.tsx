@@ -1,23 +1,13 @@
 import React from "react";
 import { Button, Modal } from "react-bootstrap";
 
-type ConfirmModalProps = {
+type LogTimeModalProps = {
   show: boolean;
   setShow: (show: boolean) => void;
   onConfirm: () => void;
-  title: string;
-  message: string;
-  confirmBtnText: string;
 };
 
-const ConfirmModal = ({
-  show,
-  setShow,
-  onConfirm,
-  title,
-  message,
-  confirmBtnText,
-}: ConfirmModalProps) => {
+const LogTimeModal = ({ show, setShow, onConfirm }: LogTimeModalProps) => {
   return (
     <Modal
       show={show}
@@ -26,19 +16,21 @@ const ConfirmModal = ({
       data-bs-theme="dark"
     >
       <Modal.Header closeButton>
-        <Modal.Title>{title}</Modal.Title>
+        <Modal.Title>Log time</Modal.Title>
       </Modal.Header>
-      <Modal.Body className="text-muted">{message}</Modal.Body>
+      <Modal.Body className="text-muted">
+        Do yout want to log time in 'Testowy task yolo'?
+      </Modal.Body>
       <Modal.Footer>
         <Button variant="outline-secondary" onClick={() => setShow(false)}>
           Cancel
         </Button>
-        <Button variant="danger" onClick={onConfirm}>
-          {confirmBtnText}
+        <Button variant="success" onClick={onConfirm}>
+          Log Time
         </Button>
       </Modal.Footer>
     </Modal>
   );
 };
 
-export default ConfirmModal;
+export default LogTimeModal;

@@ -61,7 +61,7 @@ export default function Drawer({
   });
   const [confirmDeleteShow, setConfirmDeleteShow] = useState(false);
   const titleInputRef = useRef<HTMLInputElement>(null);
-  const { boardCols, showDrawer } = useBoardContext();
+  const { boardCols, drawerShow } = useBoardContext();
 
   const getCardIdFromHash = () => {
     const hash = window.location.hash;
@@ -101,7 +101,7 @@ export default function Drawer({
     if (hash.includes("#edit=")) {
       setCardForEdit();
     }
-    if (showDrawer) {
+    if (drawerShow) {
       setTimeout(() => {
         titleInputRef.current?.focus();
       }, 200);
@@ -112,7 +112,7 @@ export default function Drawer({
         priority: "",
       });
     }
-  }, [showDrawer, setCardForEdit]);
+  }, [drawerShow, setCardForEdit]);
 
   const handleChange = (key: string, value: string) => {
     setForm((prev) => ({
@@ -141,7 +141,7 @@ export default function Drawer({
   return (
     <>
       <Offcanvas
-        show={showDrawer}
+        show={drawerShow}
         onHide={onHide}
         placement="end"
         backdrop={true}
@@ -228,6 +228,9 @@ export default function Drawer({
         show={confirmDeleteShow}
         setShow={setConfirmDeleteShow}
         onConfirm={handleDeleteCard}
+        title="Delete this card?"
+        message="This action permanently removes the selected task card. It cannot be undone."
+        confirmBtnText="Delete"
       />
     </>
   );

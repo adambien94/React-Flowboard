@@ -17,16 +17,22 @@ import { DndContext, DragOverlay } from "@dnd-kit/core";
 import type { DragEndEvent, DragStartEvent } from "@dnd-kit/core";
 import { v4 as uuidV4 } from "uuid";
 import { useTimerStore } from "./store/timerStore";
+import ConfirmModal from "./components/ConfirmModal";
 
 export default function Dashboard() {
-  const [showDrawer, setShowDrawer] = useState(false);
+  const [drawerShow, setDrawerShow] = useState(false);
   const [activeColId, setActiveColId] = useState<string>();
   const [activeCard, setActiveCard] = useState<BoardColumnCard | null>(null);
-  const [showAddColumnModal, setShowAddColumnModal] = useState(false);
+  const [addColumnModalShow, setAddColumnModalShow] = useState(false);
+  const [confirmLogTimeShow, setConfirmLogTimeShow] = useState(false);
   const { boards, setBoards } = useBoardsContext();
   const { boardId } = useParams();
   const navigate = useNavigate();
-  const activeTimerTaskId = useTimerStore((state) => state.activeTaskId);
+  const {
+    setTimeToLog,
+    timeToLog,
+    activeTaskId: activeTimerTaskId,
+  } = useTimerStore();
 
   const activeBoard = useMemo(() => {
     return boards.find((board) => board.id === boardId) ?? boards[0];
@@ -49,7 +55,7 @@ export default function Dashboard() {
 
   useEffect(() => {
     if (!boardCols.length) {
-      setShowDrawer(false);
+      setDrawerShow(false);
       setActiveColId(undefined);
       clearUrlHash();
       return;
@@ -57,7 +63,7 @@ export default function Dashboard() {
     const columnExists = boardCols.some(({ id }) => id === activeColId);
     if (!columnExists) {
       setActiveColId(boardCols[0].id);
-      setShowDrawer(false);
+      setDrawerShow(false);
       clearUrlHash();
     }
   }, [boardCols, activeColId]);
@@ -81,12 +87,12 @@ export default function Dashboard() {
 
   const handleHideDrawer = () => {
     clearUrlHash();
-    setShowDrawer(false);
+    setDrawerShow(false);
   };
 
   const handleOpenDrawer = (colId: string) => {
     setActiveColId(colId);
-    setShowDrawer(true);
+    setDrawerShow(true);
   };
 
   const onCreateTaskCard = (colId: string, taskData: BoardColumnCard) => {
@@ -206,16 +212,26 @@ export default function Dashboard() {
     });
   };
 
+  const handleLogTime = () => {
+    console.log(timeToLog);
+    setConfirmLogTimeShow(false);
+  };
+
   useEffect(() => {
     return () => {
       clearUrlHash();
     };
   }, []);
 
+  const handleStopTimer = (taskId: string, time: string) => {
+    setTimeToLog(taskId, time);
+    setConfirmLogTimeShow(true);
+  };
+
   return (
     <>
       <BoardProvider
-        value={{ boardCols, setBoardCols, showDrawer, setShowDrawer }}
+        value={{ boardCols, setBoardCols, drawerShow, setDrawerShow }}
       >
         <DndContext
           onDragStart={handleCardDragStart}
@@ -266,7 +282,7 @@ export default function Dashboard() {
 
                 <Button
                   variant="outline-secondary"
-                  onClick={() => setShowAddColumnModal(true)}
+                  onClick={() => setAddColumnModalShow(true)}
                   disabled={boardCols.length >= 4}
                 >
                   <i className="bi bi-plus-circle"></i> Add column
@@ -280,7 +296,7 @@ export default function Dashboard() {
                       <BoardColumn
                         key={col.id}
                         column={col}
-                        showDrawer={handleOpenDrawer}
+                        drawerShow={handleOpenDrawer}
                       />
                     ))}
                   </Row>
@@ -288,7 +304,7 @@ export default function Dashboard() {
               </div>
             </div>
           </Container>
-
+          {timeToLog?.time}
           <DragOverlay>
             {activeCard ? (
               <div
@@ -313,10 +329,21 @@ export default function Dashboard() {
           </DragOverlay>
         </DndContext>
       </BoardProvider>
-      <Timer show={!!activeTimerTaskId} />
+
+      <Timer show={!!activeTimerTaskId} onFinish={handleStopTimer} />
+
+      <ConfirmModal
+        show={confirmLogTimeShow}
+        setShow={setConfirmLogTimeShow}
+        onConfirm={handleLogTime}
+        title="Log time"
+        message="Do you want to log time?"
+        confirmBtnText="Log Time"
+      />
+
       <AddColumnModal
-        show={showAddColumnModal}
-        onHide={() => setShowAddColumnModal(false)}
+        show={addColumnModalShow}
+        onHide={() => setAddColumnModalShow(false)}
         onSave={handleAddColumn}
       />
     </>

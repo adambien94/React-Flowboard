@@ -6,23 +6,23 @@ import styles from "./components/DashboardLayout.module.css";
 import { BoardsProvider } from "./contexts/BoardsContext";
 
 export default function DashboardLayout() {
-  const [showDrawer, setShowDrawer] = useState(true);
+  const [drawerShow, setDrawerShow] = useState(true);
 
   const handleToggleDrawer = () => {
-    setShowDrawer(!showDrawer);
+    setDrawerShow(!drawerShow);
   };
 
   const handleHideDrawer = () => {
-    setShowDrawer(false);
+    setDrawerShow(false);
   };
 
   return (
     <BoardsProvider>
       <Navbar onToggleDrawer={handleToggleDrawer} />
-      <Drawer show={showDrawer} onHide={handleHideDrawer} />
+      <Drawer show={drawerShow} onHide={handleHideDrawer} />
       <div
         className={`${styles.mainContent} ${
-          showDrawer ? styles.drawerOpen : ""
+          drawerShow ? styles.drawerOpen : ""
         }`}
       >
         <Outlet />

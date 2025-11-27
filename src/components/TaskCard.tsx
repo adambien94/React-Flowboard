@@ -21,6 +21,12 @@ export default function TaskCard({ card, showDrawer }: TaskCardProps) {
       id: card.id,
     });
 
+  const {
+    startTimer,
+    stopTimer,
+    activeTaskId: activeTimerTaskId,
+  } = useTimerStore((state) => state);
+
   const style = {
     transform: CSS.Translate.toString(transform),
     opacity: isDragging ? 0 : 1,
@@ -32,7 +38,13 @@ export default function TaskCard({ card, showDrawer }: TaskCardProps) {
     showDrawer();
   };
 
-  const startTimer = useTimerStore((state) => state.startTimer);
+  const handleTimerClick = () => {
+    if (!!activeTimerTaskId && activeTimerTaskId === card.id) {
+      stopTimer();
+    } else if (!activeTimerTaskId) {
+      startTimer(card.id);
+    }
+  };
 
   return (
     <div key={card.id} className="mt-2">
@@ -94,14 +106,24 @@ export default function TaskCard({ card, showDrawer }: TaskCardProps) {
                   paddingRight: "3px",
                   paddingLeft: "3px",
                 }}
-                onClick={() => startTimer(card.id)}
+                onClick={handleTimerClick}
+                disabled={!!activeTimerTaskId && activeTimerTaskId !== card.id}
               >
-                <i
-                  className="bi bi-clock text-muted"
-                  style={{
-                    cursor: "pointer",
-                  }}
-                ></i>
+                {activeTimerTaskId === card.id ? (
+                  <i
+                    className="bi bi-pause-circle text-muted"
+                    style={{
+                      cursor: "pointer",
+                    }}
+                  ></i>
+                ) : (
+                  <i
+                    className="bi bi-clock text-muted"
+                    style={{
+                      cursor: "pointer",
+                    }}
+                  ></i>
+                )}
               </button>
               <button
                 onClick={handleEditClick}

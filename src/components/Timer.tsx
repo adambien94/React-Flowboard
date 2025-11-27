@@ -1,10 +1,11 @@
 import React, { useEffect, useRef, useState } from "react";
 import Toast from "react-bootstrap/Toast";
 import Button from "react-bootstrap/Button";
+import { useTimerStore } from "../store/timerStore";
 
 interface TimerProps {
   show: boolean;
-  onFinish?: (totalMs: number) => void;
+  onFinish?: (taskId: string, totalMs: string) => void;
 }
 
 const formatTime = (ms: number) => {
@@ -26,6 +27,12 @@ const Timer: React.FC<TimerProps> = ({ show, onFinish }) => {
   const startTimeRef = useRef<number | null>(null);
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
 
+  const { stopTimer, activeTaskId: activeTimerTaskId } = useTimerStore(
+    (state) => state
+  );
+
+  const { timeToLog, setTimeToLog } = useTimerStore();
+
   useEffect(() => {
     if (!show) return;
 
@@ -39,7 +46,12 @@ const Timer: React.FC<TimerProps> = ({ show, onFinish }) => {
     }, 1000);
 
     return () => {
-      if (intervalRef.current) clearInterval(intervalRef.current);
+      if (intervalRef.current) {
+        clearInterval(intervalRef.current);
+        setTimeout(() => {
+          setElapsed(0);
+        }, 200);
+      }
     };
   }, [show, running]);
 
@@ -47,8 +59,9 @@ const Timer: React.FC<TimerProps> = ({ show, onFinish }) => {
     if (intervalRef.current) clearInterval(intervalRef.current);
     setRunning(false);
 
-    console.log(`Logged time: ${formatTime(elapsed)}`);
-    onFinish?.(elapsed);
+    onFinish?.(activeTimerTaskId as string, elapsed.toString());
+
+    stopTimer();
   };
 
   return (

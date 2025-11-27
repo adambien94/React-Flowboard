@@ -5,10 +5,10 @@ import { useDroppable } from "@dnd-kit/core";
 
 interface BoardColumnProps {
   column: BoardColumn;
-  showDrawer: (colId: string) => void;
+  drawerShow: (colId: string) => void;
 }
 
-export default function BoardColumn({ column, showDrawer }: BoardColumnProps) {
+export default function BoardColumn({ column, drawerShow }: BoardColumnProps) {
   const { setNodeRef, isOver } = useDroppable({
     id: column.id,
   });
@@ -32,7 +32,7 @@ export default function BoardColumn({ column, showDrawer }: BoardColumnProps) {
                 <TaskCard
                   key={card.id}
                   card={card}
-                  showDrawer={() => showDrawer(column.id)}
+                  showDrawer={() => drawerShow(column.id)}
                 />
               ))
             ) : (
@@ -47,7 +47,7 @@ export default function BoardColumn({ column, showDrawer }: BoardColumnProps) {
               <Button
                 size="sm"
                 variant="success"
-                onClick={() => showDrawer(column.id)}
+                onClick={() => drawerShow(column.id)}
               >
                 <i className="bi bi-plus-circle"></i> Add Card
               </Button>
