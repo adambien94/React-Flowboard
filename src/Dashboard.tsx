@@ -18,6 +18,7 @@ import type { DragEndEvent, DragStartEvent } from "@dnd-kit/core";
 import { v4 as uuidV4 } from "uuid";
 import { useTimerStore } from "./store/timerStore";
 import ConfirmModal from "./components/ConfirmModal";
+import formatTime from "./utils/formatTime";
 
 export default function Dashboard() {
   const [drawerShow, setDrawerShow] = useState(false);
@@ -28,11 +29,7 @@ export default function Dashboard() {
   const { boards, setBoards } = useBoardsContext();
   const { boardId } = useParams();
   const navigate = useNavigate();
-  const {
-    setTimeToLog,
-    timeToLog,
-    activeTaskId: activeTimerTaskId,
-  } = useTimerStore();
+  const { setTimeToLog, timeToLog, isTimerShow } = useTimerStore();
 
   const activeBoard = useMemo(() => {
     return boards.find((board) => board.id === boardId) ?? boards[0];
@@ -213,8 +210,24 @@ export default function Dashboard() {
   };
 
   // Timer
+  const logTime = (taskId: string, time: number) => {
+    setBoardCols((prev) => {
+      return prev.map((col) => {
+        return {
+          ...col,
+          cards: col.cards.map((card) => {
+            if (card.id === taskId) {
+              return { ...card, loggedTime: (card?.loggedTime || 0) + time };
+            }
+            return card;
+          }),
+        };
+      });
+    });
+  };
+
   const handleLogTime = () => {
-    console.log(timeToLog);
+    if (timeToLog) logTime(timeToLog?.taskId, timeToLog?.time);
     setConfirmLogTimeShow(false);
   };
 
@@ -319,10 +332,7 @@ export default function Dashboard() {
               >
                 <TaskCard
                   card={{
-                    id: activeCard.id,
-                    title: activeCard.title,
-                    description: activeCard.description,
-                    priority: activeCard.priority,
+                    ...activeCard,
                   }}
                   showDrawer={() => {}}
                 />
@@ -332,14 +342,17 @@ export default function Dashboard() {
         </DndContext>
       </BoardProvider>
 
-      <Timer show={!!activeTimerTaskId} onFinish={handleStopTimer} />
+      <Timer show={isTimerShow} onFinish={handleStopTimer} />
 
       <ConfirmModal
         show={confirmLogTimeShow}
         setShow={setConfirmLogTimeShow}
         onConfirm={handleLogTime}
         title="Log time"
-        message="Do you want to log time?"
+        message={`Do you want to log time? (${formatTime(
+          timeToLog?.time as number,
+          true
+        )} )`}
         confirmBtnText="Log Time"
       />
 

@@ -3,6 +3,7 @@ import type { BoardColumnCard } from "../types/board";
 import { useDraggable } from "@dnd-kit/core";
 import { CSS } from "@dnd-kit/utilities";
 import { useTimerStore } from "../store/timerStore";
+import formatTime from "../utils/formatTime";
 
 interface TaskCardProps {
   card: BoardColumnCard;
@@ -94,7 +95,7 @@ export default function TaskCard({ card, showDrawer }: TaskCardProps) {
                 lineHeight: "1.4",
               }}
             >
-              0h 37min
+              {card.loggedTime ? formatTime(card.loggedTime, true) : "0h 0min"}
             </span>
 
             <div className="d-flex gap-1" style={{ translate: "0 3px" }}>

@@ -13,6 +13,7 @@ export type RawBoardColumnCard = {
   title: string;
   description: string;
   priority: string;
+  loggedTime?: number;
 };
 
 export type Board = {

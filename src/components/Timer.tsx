@@ -2,32 +2,23 @@ import React, { useEffect, useRef, useState, useCallback } from "react";
 import Toast from "react-bootstrap/Toast";
 import Button from "react-bootstrap/Button";
 import { useTimerStore } from "../store/timerStore";
+import formatTime from "../utils/formatTime";
 
 interface TimerProps {
   show: boolean;
   onFinish?: (taskId: string, totalMs: number) => void;
 }
 
-const formatTime = (ms: number) => {
-  const totalSeconds = Math.floor(ms / 1000);
-  const hours = Math.floor(totalSeconds / 3600);
-  const minutes = Math.floor((totalSeconds % 3600) / 60);
-  const seconds = totalSeconds % 60;
-
-  return `${String(hours).padStart(2, "0")}:${String(minutes).padStart(
-    2,
-    "0"
-  )}:${String(seconds).padStart(2, "0")}`;
-};
-
 const Timer: React.FC<TimerProps> = ({ show, onFinish }) => {
   const [elapsed, setElapsed] = useState(0);
   const [running, setRunning] = useState(false);
   const startTimeRef = useRef<number | null>(null);
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
-  const { stopTimer, activeTaskId: activeTimerTaskId } = useTimerStore(
-    (state) => state
-  );
+  const {
+    stopTimer,
+    activeTaskId: activeTimerTaskId,
+    clearActiveTaskId,
+  } = useTimerStore();
 
   useEffect(() => {
     if (!show) return;
@@ -52,9 +43,11 @@ const Timer: React.FC<TimerProps> = ({ show, onFinish }) => {
   const handleStop = useCallback(() => {
     if (intervalRef.current) clearInterval(intervalRef.current);
     setRunning(false);
-    stopTimer();
+    console.log("activeTimerTaskId", activeTimerTaskId);
     onFinish?.(activeTimerTaskId as string, elapsed);
-  }, [activeTimerTaskId, elapsed, onFinish, stopTimer]);
+    stopTimer();
+    clearActiveTaskId();
+  }, [activeTimerTaskId, elapsed, onFinish, stopTimer, clearActiveTaskId]);
 
   useEffect(() => {
     if (!show && running) {
@@ -64,7 +57,7 @@ const Timer: React.FC<TimerProps> = ({ show, onFinish }) => {
 
   return (
     <Toast
-      bg="dark"
+      bg="primary"
       show={show}
       style={{
         position: "absolute",
@@ -76,7 +69,7 @@ const Timer: React.FC<TimerProps> = ({ show, onFinish }) => {
       <Toast.Body className="d-flex justify-content-between items-center">
         <strong className="mt-1  fs-6">{formatTime(elapsed)}</strong>
         <Button
-          variant="dark"
+          variant="primary"
           size="sm"
           onClick={handleStop}
           disabled={!running}
