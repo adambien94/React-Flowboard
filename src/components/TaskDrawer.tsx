@@ -2,6 +2,7 @@ import { useState, useEffect, useRef, useCallback } from "react";
 import { type FormEvent } from "react";
 import { Offcanvas, Form, Button, Badge, Modal } from "react-bootstrap";
 import type { BoardColumnCard, RawBoardColumnCard } from "../types/board";
+import type { Card } from "../types/index";
 import { v4 as uuidV4 } from "uuid";
 import { useBoardContext } from "../contexts/BoardContext";
 import ConfirmModal from "./ConfirmModal";
@@ -12,11 +13,7 @@ type DrawerProps = {
   colColor?: string;
   onHide: () => void;
   createTask: (colId: string, taskData: BoardColumnCard) => void;
-  editTask: (
-    colId: string,
-    cardId: string,
-    taskData: RawBoardColumnCard
-  ) => void;
+  editTask: (cardId: string, taskData: Partial<Card>) => void;
   deleteTask: (colId: string, cardId: string) => void;
 };
 
@@ -126,8 +123,8 @@ export default function Drawer({
     const cardId = getCardIdFromHash();
 
     if (cardId) {
-      editTask(colId, cardId, {
-        ...form,
+      editTask(cardId, {
+        ...(form as Partial<Card>),
       });
     } else {
       createTask(colId, {

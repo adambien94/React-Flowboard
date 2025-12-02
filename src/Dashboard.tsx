@@ -7,6 +7,7 @@ import type {
   BoardColumnCard,
   RawBoardColumnCard,
 } from "./types/board";
+import type { Card } from "./types/index";
 import BoardColumn from "./components/BoardColumn";
 import TaskCard from "./components/TaskCard";
 import Timer from "./components/Timer";
@@ -19,11 +20,12 @@ import { v4 as uuidV4 } from "uuid";
 import { useTimerStore } from "./store/timerStore";
 import ConfirmModal from "./components/ConfirmModal";
 import formatTime from "./utils/formatTime";
+import { useBoardStore } from "./hooks/useBoardStore";
 
 export default function Dashboard() {
   const [drawerShow, setDrawerShow] = useState(false);
   const [activeColId, setActiveColId] = useState<string>();
-  const [activeCard, setActiveCard] = useState<BoardColumnCard | null>(null);
+  const [activeCard, setActiveCard] = useState<Card | null>(null);
   const [addColumnModalShow, setAddColumnModalShow] = useState(false);
   const [confirmLogTimeShow, setConfirmLogTimeShow] = useState(false);
   const { boards, setBoards } = useBoardsContext();
@@ -37,7 +39,23 @@ export default function Dashboard() {
   }, [boardId, boards]);
 
   const activeBoardId = activeBoard?.id;
-  const boardCols = useMemo(() => activeBoard?.columns ?? [], [activeBoard]);
+  const {
+    columns,
+    loadBoard,
+    updateCard,
+    addCard,
+    moveCard,
+    loading,
+    subscribeRealtime,
+  } = useBoardStore();
+
+  const boardCols = useMemo(() => columns ?? [], [columns]);
+
+  // AAAAAAAAAAAA
+  useEffect(() => {
+    loadBoard("35c4b553-c8be-4d3f-9c0e-4502a75a3ca6");
+    // subscribeRealtime(boardId);
+  }, [boardId, loadBoard]);
 
   const clearUrlHash = () => {
     window.location.hash = "";
@@ -93,44 +111,16 @@ export default function Dashboard() {
     setDrawerShow(true);
   };
 
-  const onCreateTaskCard = (colId: string, taskData: BoardColumnCard) => {
+  const onCreateTaskCard = (colId: string, taskData: Partial<Card>) => {
     if (!activeBoardId) return;
-    setBoardCols((prev) => {
-      return prev.map((col) => {
-        if (col.id === colId) {
-          return {
-            ...col,
-            cards: [...col.cards, taskData],
-          };
-        } else {
-          return col;
-        }
-      });
-    });
+    addCard(colId, taskData);
+    loadBoard("35c4b553-c8be-4d3f-9c0e-4502a75a3ca6");
   };
 
-  const onEditTaskCard = (
-    colId: string,
-    cardId: string,
-    taskData: RawBoardColumnCard
-  ) => {
+  const onEditTaskCard = (cardId: string, taskData: Partial<Card>) => {
     if (!activeBoardId) return;
-    setBoardCols((prev) => {
-      return prev.map((col) => {
-        if (col.id !== colId) {
-          return col;
-        }
-        return {
-          ...col,
-          cards: col.cards.map((card) => {
-            if (card.id === cardId) {
-              return { ...card, ...taskData };
-            }
-            return card;
-          }),
-        };
-      });
-    });
+    updateCard(cardId, taskData);
+    loadBoard("35c4b553-c8be-4d3f-9c0e-4502a75a3ca6");
   };
 
   const onDeleteTaskCard = (colId: string, cardId: string) => {
@@ -167,47 +157,33 @@ export default function Dashboard() {
     const { active } = event;
     const card = boardCols
       .flatMap((col) => col.cards)
-      .find((card) => card.id === active.id);
+      .find((card) => card?.id === active.id);
     setActiveCard(card || null);
   };
 
-  const handleCardDragdEnd = (event: DragEndEvent) => {
+  const handleCardDragdEnd = async (event: DragEndEvent) => {
     const { active, over } = event;
     setActiveCard(null);
 
     if (!over) return;
+    const activeId = active.id as string;
+    const overId = over.id as string;
 
-    const activeId = active.id;
-    const overId = over.id;
-    const sourceColumn = boardCols.find((col) =>
-      col.cards.some((card) => card.id === activeId)
-    );
-    if (!sourceColumn) return;
+    // const sourceColumn = boardCols.find((col) =>
+    //   col.cards.some((card) => card.id === activeId)
+    // );
+    // if (!sourceColumn) return;
 
-    const sourceCard = sourceColumn.cards.find((card) => card.id === activeId);
-    if (!sourceCard) return;
+    // const sourceCard = sourceColumn.cards.find((card) => card.id === activeId);
+    // if (!sourceCard) return;
 
-    const targetColumn =
-      boardCols.find((col) => col.id === overId) ||
-      boardCols.find((col) => col.cards.some((card) => card.id === overId));
-    if (!targetColumn || sourceColumn.id === targetColumn.id) return;
+    // const targetColumn =
+    //   boardCols.find((col) => col.id === overId) ||
+    //   boardCols.find((col) => col.cards.some((card) => card.id === overId));
+    // if (!targetColumn || sourceColumn.id === targetColumn.id) return;
 
-    setBoardCols((prev) => {
-      return prev.map((col) => {
-        if (col.id === sourceColumn.id) {
-          return {
-            ...col,
-            cards: col.cards.filter((card) => card.id !== activeId),
-          };
-        } else if (col.id === targetColumn.id) {
-          return {
-            ...col,
-            cards: [...col.cards, sourceCard],
-          };
-        }
-        return col;
-      });
-    });
+    await moveCard(activeId, overId, 0);
+    loadBoard("35c4b553-c8be-4d3f-9c0e-4502a75a3ca6");
   };
 
   // Timer
@@ -326,7 +302,6 @@ export default function Dashboard() {
             {activeCard ? (
               <div
                 style={{
-                  opacity: 1,
                   transform: "rotate(0deg) translateY(-8px)",
                   boxShadow: "0px 2px 6px rgba(0,0,0,0.2)",
                   borderRadius: "6px",
