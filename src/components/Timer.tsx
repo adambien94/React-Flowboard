@@ -46,7 +46,6 @@ const Timer: React.FC<TimerProps> = ({ show, onFinish }) => {
     console.log("activeTimerTaskId", activeTimerTaskId);
     onFinish?.(activeTimerTaskId as string, elapsed);
     stopTimer();
-    clearActiveTaskId();
   }, [activeTimerTaskId, elapsed, onFinish, stopTimer, clearActiveTaskId]);
 
   useEffect(() => {

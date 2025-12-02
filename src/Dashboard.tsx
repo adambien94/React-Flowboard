@@ -29,7 +29,8 @@ export default function Dashboard() {
   const { boards, setBoards } = useBoardsContext();
   const { boardId } = useParams();
   const navigate = useNavigate();
-  const { setTimeToLog, timeToLog, isTimerShow } = useTimerStore();
+  const { setTimeToLog, timeToLog, isTimerShow, clearActiveTaskId } =
+    useTimerStore();
 
   const activeBoard = useMemo(() => {
     return boards.find((board) => board.id === boardId) ?? boards[0];
@@ -228,6 +229,7 @@ export default function Dashboard() {
 
   const handleLogTime = () => {
     if (timeToLog) logTime(timeToLog?.taskId, timeToLog?.time);
+    clearActiveTaskId();
     setConfirmLogTimeShow(false);
   };
 

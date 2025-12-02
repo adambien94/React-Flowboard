@@ -32,6 +32,8 @@ export default function TaskCard({ card, showDrawer }: TaskCardProps) {
     transform: CSS.Translate.toString(transform),
     opacity: isDragging ? 0 : 1,
     cursor: "default",
+    transition: "border .2s ease-in-out 0.1s",
+    border: card.id === activeTimerTaskId ? "1px solid var(--bs-primary)" : "",
   };
 
   const handleEditClick = () => {
