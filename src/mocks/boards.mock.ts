@@ -15,14 +15,14 @@ export const mockBoards: Board[] = [
             title: "Collect sprint requirements",
             description:
               "Meet with stakeholders to confirm sprint goals, scope, and success metrics. Document any risks or dependencies that surfaced.",
-            priority: "MEDIUM",
+            priority: "medium",
           },
           {
             id: "task-backlog-2",
             title: "Prepare QA test plan",
             description:
               "Outline test cases for the new automation features, including performance benchmarks and regression scenarios.",
-            priority: "LOW",
+            priority: "low",
           },
         ],
       },
@@ -36,14 +36,14 @@ export const mockBoards: Board[] = [
             title: "Build notifications hub",
             description:
               "Implement server-sent events to dispatch workspace notifications in real time and persist user preferences.",
-            priority: "HIGH",
+            priority: "high",
           },
           {
             id: "task-progress-2",
             title: "Refactor auth middleware",
             description:
               "Split the monolithic middleware into smaller pieces for logging, token validation, and role enforcement.",
-            priority: "MEDIUM",
+            priority: "medium",
           },
         ],
       },
@@ -57,7 +57,7 @@ export const mockBoards: Board[] = [
             title: "Accessibility audit",
             description:
               "Verify keyboard navigation paths, add missing ARIA labels, and run axe-core to capture outstanding issues.",
-            priority: "HIGH",
+            priority: "high",
           },
         ],
       },
@@ -71,14 +71,14 @@ export const mockBoards: Board[] = [
             title: "Deploy infra updates",
             description:
               "Rolled out Terraform changes to add staging environment autoscaling and tightened security groups.",
-            priority: "MEDIUM",
+            priority: "medium",
           },
           {
             id: "task-done-2",
             title: "Ship analytics dashboard",
             description:
               "Delivered the first version of the exec dashboard with cohort charts, revenue projections, and exports.",
-            priority: "HIGH",
+            priority: "high",
           },
         ],
       },
@@ -98,14 +98,14 @@ export const mockBoards: Board[] = [
             title: "Design login page",
             description:
               "Create a responsive login and registration form following the current style guide. Include validation messages and a password visibility toggle. Make sure it works well on both desktop and mobile.",
-            priority: "HIGH",
+            priority: "high",
           },
           {
             id: "12345678-90ab-cdef-1234-567890abcdef",
             title: "Set up API integration",
             description:
               "Integrate frontend with backend endpoints for user authentication and profile data. Handle error responses gracefully and show proper loading states. Use Axios for requests and interceptors for auth tokens.",
-            priority: "LOW",
+            priority: "low",
           },
         ],
       },
@@ -119,14 +119,14 @@ export const mockBoards: Board[] = [
             title: "Implement drag & drop",
             description:
               "Use dnd-kit to allow users to drag cards between columns. Keep card order persistent after drop and animate transitions smoothly. Ensure the feature works on both mouse and touch devices.",
-            priority: "MEDIUM",
+            priority: "medium",
           },
           {
             id: "567890ab-cdef-1234-5678-90abcdef1234",
             title: "Optimize dashboard layout",
             description:
               "Adjust column spacing and layout responsiveness for tablets and smaller screens. Improve vertical alignment of cards and headers. Verify it still looks clean on 4K resolutions.",
-            priority: "HIGH",
+            priority: "high",
           },
         ],
       },
@@ -140,14 +140,14 @@ export const mockBoards: Board[] = [
             title: "Set up project structure",
             description:
               "Organized the project into modules for components, hooks, mocks, and services. Added basic routing and global styling files. The structure now supports scalability and clean imports.",
-            priority: "HIGH",
+            priority: "high",
           },
           {
             id: "01234567-89ab-cdef-0123-456789abcdef",
             title: "Install dependencies",
             description:
               "Installed core libraries like React, Bootstrap, and dnd-kit. Added TypeScript and ESLint for better type safety and code quality. Configured Prettier for consistent formatting.",
-            priority: "LOW",
+            priority: "low",
           },
         ],
       },

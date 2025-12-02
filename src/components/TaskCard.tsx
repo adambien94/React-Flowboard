@@ -1,19 +1,19 @@
 import { Badge } from "react-bootstrap";
-import type { BoardColumnCard } from "../types/board";
+import type { Card } from "../types/index";
 import { useDraggable } from "@dnd-kit/core";
 import { CSS } from "@dnd-kit/utilities";
 import { useTimerStore } from "../store/timerStore";
 import formatTime from "../utils/formatTime";
 
 interface TaskCardProps {
-  card: BoardColumnCard;
+  card: Card;
   showDrawer: () => void;
 }
 
 const PRIORITIES: Record<string, string> = {
-  LOW: "info",
-  MEDIUM: "warning",
-  HIGH: "danger",
+  low: "info",
+  medium: "warning",
+  high: "danger",
 };
 
 export default function TaskCard({ card, showDrawer }: TaskCardProps) {
@@ -60,7 +60,7 @@ export default function TaskCard({ card, showDrawer }: TaskCardProps) {
         <div className="card-body d-flex flex-column">
           <div className="d-flex align-items-center justify-content-between gap-2">
             <h6 className="card-title mb-0 d-flex align-items-center gap-2">
-              <Badge bg={PRIORITIES[card.priority]}> </Badge>
+              <Badge bg={PRIORITIES[card.priority as string]}> </Badge>
               {card.title}
             </h6>
             <div {...listeners}>

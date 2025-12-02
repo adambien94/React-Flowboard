@@ -1,10 +1,10 @@
 import { Col, Card, Button } from "react-bootstrap";
-import type { BoardColumn, BoardColumnCard } from "../types/board";
+import type { Column, Card as CardType } from "../types/index";
 import TaskCard from "./TaskCard";
 import { useDroppable } from "@dnd-kit/core";
 
 interface BoardColumnProps {
-  column: BoardColumn;
+  column: Column;
   drawerShow: (colId: string) => void;
 }
 
@@ -29,7 +29,7 @@ export default function BoardColumn({ column, drawerShow }: BoardColumnProps) {
           <Card.Body>
             <Card.Title className="mb-3">{column.title}</Card.Title>
             {column.cards.length > 0 ? (
-              column.cards.map((card: BoardColumnCard) => (
+              column.cards.map((card: CardType) => (
                 <TaskCard
                   key={card.id}
                   card={card}

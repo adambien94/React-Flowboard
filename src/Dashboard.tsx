@@ -2,11 +2,7 @@ import { Container, Dropdown, Stack, Row, Button } from "react-bootstrap";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import TaskDrawer from "./components/TaskDrawer";
-import type {
-  BoardColumn as BoardColumnType,
-  BoardColumnCard,
-  RawBoardColumnCard,
-} from "./types/board";
+import type { BoardColumn as BoardColumnType } from "./types/board";
 import type { Card } from "./types/index";
 import BoardColumn from "./components/BoardColumn";
 import TaskCard from "./components/TaskCard";
@@ -16,7 +12,6 @@ import { BoardProvider } from "./contexts/BoardContext";
 import { useBoardsContext } from "./contexts/BoardsContext";
 import { DndContext, DragOverlay } from "@dnd-kit/core";
 import type { DragEndEvent, DragStartEvent } from "@dnd-kit/core";
-import { v4 as uuidV4 } from "uuid";
 import { useTimerStore } from "./store/timerStore";
 import ConfirmModal from "./components/ConfirmModal";
 import formatTime from "./utils/formatTime";
@@ -40,22 +35,31 @@ export default function Dashboard() {
 
   const activeBoardId = "35c4b553-c8be-4d3f-9c0e-4502a75a3ca6";
   const {
-    columns,
     loadBoard,
+    boardTitle,
+    columns,
+    addColumn,
     updateCard,
     addCard,
     moveCard,
-    loading,
+    removeCard,
+    // loading,
     subscribeRealtime,
+    unsubscribeRealtime,
   } = useBoardStore();
 
   const boardCols = useMemo(() => columns ?? [], [columns]);
 
-  // AAAAAAAAAAAA
   useEffect(() => {
-    loadBoard(activeBoardId);
-    // subscribeRealtime(boardId);
-  }, [boardId, loadBoard]);
+    const run = async () => {
+      await loadBoard(activeBoardId);
+      subscribeRealtime(activeBoardId);
+    };
+
+    run();
+
+    return () => unsubscribeRealtime();
+  }, [boardId, loadBoard, subscribeRealtime, unsubscribeRealtime]);
 
   const clearUrlHash = () => {
     window.location.hash = "";
@@ -111,45 +115,6 @@ export default function Dashboard() {
     setDrawerShow(true);
   };
 
-  const onCreateTaskCard = (colId: string, taskData: Partial<Card>) => {
-    addCard(colId, taskData);
-    loadBoard(activeBoardId);
-  };
-
-  const onEditTaskCard = (cardId: string, taskData: Partial<Card>) => {
-    updateCard(cardId, taskData);
-    loadBoard(activeBoardId);
-  };
-
-  const onDeleteTaskCard = (colId: string, cardId: string) => {
-    setBoardCols((prev) =>
-      prev.map((col) => {
-        if (col.id !== colId) {
-          return col;
-        }
-        return {
-          ...col,
-          cards: col.cards.filter((card) => card.id !== cardId),
-        };
-      })
-    );
-  };
-
-  const handleAddColumn = (name: string, color: string) => {
-    if (!activeBoardId) return;
-    const newColumnId = uuidV4();
-    setBoardCols((prev) => [
-      ...prev,
-      {
-        id: newColumnId,
-        name,
-        color,
-        cards: [],
-      },
-    ]);
-    setActiveColId(newColumnId);
-  };
-
   const handleCardDragStart = (event: DragStartEvent) => {
     const { active } = event;
     const card = boardCols
@@ -181,10 +146,8 @@ export default function Dashboard() {
     // if (!targetColumn || sourceColumn.id === targetColumn.id) return;
 
     await moveCard(activeId, overId, 0);
-    loadBoard(activeBoardId);
   };
 
-  // Timer
   const logTime = (taskId: string, time: number) => {
     setBoardCols((prev) => {
       return prev.map((col) => {
@@ -232,11 +195,11 @@ export default function Dashboard() {
             <TaskDrawer
               onHide={handleHideDrawer}
               colId={activeColId}
-              colName={boardCols.find(({ id }) => id === activeColId)?.name}
+              colName={boardCols.find(({ id }) => id === activeColId)?.title}
               colColor={boardCols.find(({ id }) => id === activeColId)?.color}
-              createTask={onCreateTaskCard}
-              editTask={onEditTaskCard}
-              deleteTask={onDeleteTaskCard}
+              createTask={addCard}
+              editTask={updateCard}
+              deleteTask={removeCard}
             />
           )}
           <Container fluid>
@@ -267,7 +230,7 @@ export default function Dashboard() {
                     </Dropdown.Menu>
                   </Dropdown>
                   <h3 className="fw-bold text-white ms-4 mt-2 fs-4">
-                    {activeBoard?.name}
+                    {boardTitle}
                   </h3>
                 </div>
 
@@ -334,7 +297,7 @@ export default function Dashboard() {
       <AddColumnModal
         show={addColumnModalShow}
         onHide={() => setAddColumnModalShow(false)}
-        onSave={handleAddColumn}
+        onSave={addColumn}
       />
     </>
   );

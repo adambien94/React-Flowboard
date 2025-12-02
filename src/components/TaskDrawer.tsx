@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef, useCallback } from "react";
 import { type FormEvent } from "react";
-import { Offcanvas, Form, Button, Badge, Modal } from "react-bootstrap";
+import { Offcanvas, Form, Button } from "react-bootstrap";
 import type { BoardColumnCard, RawBoardColumnCard } from "../types/board";
 import type { Card } from "../types/index";
 import { v4 as uuidV4 } from "uuid";
@@ -12,9 +12,9 @@ type DrawerProps = {
   colName?: string;
   colColor?: string;
   onHide: () => void;
-  createTask: (colId: string, taskData: BoardColumnCard) => void;
+  createTask: (colId: string, taskData: Partial<Card>) => void;
   editTask: (cardId: string, taskData: Partial<Card>) => void;
-  deleteTask: (colId: string, cardId: string) => void;
+  deleteTask: (cardId: string) => void;
 };
 
 type TaskForm = {
@@ -30,15 +30,15 @@ const TASK_PRIORITIES = [
   },
   {
     label: "Low",
-    value: "LOW",
+    value: "low",
   },
   {
     label: "Medium",
-    value: "MEDIUM",
+    value: "medium",
   },
   {
     label: "High",
-    value: "HIGH",
+    value: "high",
   },
 ];
 
@@ -88,7 +88,7 @@ export default function Drawer({
   const handleDeleteCard = () => {
     const cardId = getCardIdFromHash();
     if (!cardId) return;
-    deleteTask(colId, cardId);
+    deleteTask(cardId);
     onHide();
     setConfirmDeleteShow(false);
   };

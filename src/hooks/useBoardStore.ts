@@ -5,27 +5,41 @@ import type { Column, Card } from "../types/index";
 type State = {
   columns: Column[];
   loading: boolean;
+  boardTitle: string;
+  channels: any[];
   loadBoard: (boardId: string) => Promise<void>;
   addCard: (columnId: string, body: Partial<Card>) => Promise<void>;
   updateCard: (cardId: string, patch: Partial<Card>) => Promise<void>;
+  addColumn: (boardId: string, title: string, color?: string) => Promise<void>;
   moveCard: (
     cardId: string,
     toColumnId: string,
     newPosition: number
   ) => Promise<void>;
+  removeCard: (cardId: string) => Promise<void>;
   subscribeRealtime: (boardId: string) => void;
+  unsubscribeRealtime: () => void;
 };
 
 export const useBoardStore = create<State>((set, get) => ({
   columns: [],
   loading: true,
+  boardTitle: "",
+  channels: [],
 
   loadBoard: async (boardId) => {
     set({ loading: true });
+
+    const { data: boardData } = await supabase
+      .from("boards")
+      .select("title")
+      .eq("id", boardId)
+      .single();
+
     const { data, error } = await supabase
       .from("columns")
       .select(
-        "id, title, position, cards(id, title, description, priority, position, column_id)"
+        "id, title, color, position, cards(id, title, description, priority, position, column_id)"
       )
       .eq("board_id", boardId)
       .order("position");
@@ -36,7 +50,6 @@ export const useBoardStore = create<State>((set, get) => ({
       return;
     }
 
-    // Supabase returns nested; sort cards by position
     const cols = (data || [])
       .map((c: any) => ({
         ...c,
@@ -46,7 +59,11 @@ export const useBoardStore = create<State>((set, get) => ({
       }))
       .sort((a: Column, b: Column) => a.position - b.position);
 
-    set({ columns: cols, loading: false });
+    set({
+      columns: cols,
+      boardTitle: boardData?.title || "",
+      loading: false,
+    });
   },
 
   addCard: async (columnId, body) => {
@@ -71,7 +88,6 @@ export const useBoardStore = create<State>((set, get) => ({
       return;
     }
 
-    // optimistic update
     set((state) => {
       const updated = state.columns.map((c) => {
         if (c.id === columnId) {
@@ -84,37 +100,127 @@ export const useBoardStore = create<State>((set, get) => ({
   },
 
   updateCard: async (cardId, patch) => {
+    // optimistic update
+    set((state) => ({
+      columns: state.columns.map((col) => ({
+        ...col,
+        cards: col.cards.map((card) =>
+          card.id === cardId ? { ...card, ...patch } : card
+        ),
+      })),
+    }));
+
+    // sync to DB
     const { error } = await supabase
       .from("cards")
       .update(patch)
       .eq("id", cardId);
+
     if (error) console.error(error);
     // realtime subscription will update UI when change happens
   },
 
   moveCard: async (cardId, toColumnId, newPosition) => {
-    // Update card's column_id and position (this is basic; you may want a transaction on server)
+    // save previous state for rollback
+    const prevColumns = structuredClone(get().columns);
+
+    // optimistic UI update
+    set((state) => {
+      const newCols = state.columns.map((col) => ({
+        ...col,
+        cards: col.cards.filter((c) => c.id !== cardId),
+      }));
+
+      const card = prevColumns
+        .flatMap((c) => c.cards)
+        .find((c) => c.id === cardId);
+
+      if (card) {
+        card.column_id = toColumnId;
+        card.position = newPosition;
+
+        const targetCol = newCols.find((c) => c.id === toColumnId);
+        if (targetCol) targetCol.cards.splice(newPosition, 0, card);
+      }
+
+      return { columns: newCols };
+    });
+
+    // sync to DB
     const { error } = await supabase
       .from("cards")
       .update({ column_id: toColumnId, position: newPosition })
       .eq("id", cardId);
 
+    // if DB fails → revert UI
     if (error) {
-      console.error(error);
+      console.error("❌ Couldn't move card:", error);
+      set({ columns: prevColumns });
+    }
+  },
+
+  removeCard: async (cardId: string) => {
+    const prevState = get().columns;
+
+    set((state) => {
+      const updatedColumns = state.columns.map((col) => ({
+        ...col,
+        cards: col.cards.filter((card) => card.id !== cardId),
+      }));
+
+      return { columns: updatedColumns };
+    });
+
+    const { error } = await supabase.from("cards").delete().eq("id", cardId);
+
+    if (error) {
+      console.error("❌ Failed to delete card:", error);
+      set({ columns: prevState });
+    }
+  },
+
+  addColumn: async (boardId: string, title: string, color?: string) => {
+    const { columns } = get();
+    const position = columns.length;
+
+    const { data, error } = await supabase
+      .from("columns")
+      .insert({
+        title,
+        color: color ?? "gray",
+        board_id: boardId,
+        position,
+      })
+      .select()
+      .single();
+
+    if (error) {
+      console.error("❌ Failed to add column:", error);
       return;
     }
 
-    // Optionally reindex other cards client-side or via RPC on server
+    set((state) => ({
+      columns: [...state.columns, { ...data, cards: [] }],
+    }));
   },
 
   subscribeRealtime: (boardId) => {
     // unsubscribe previous channels if needed
     // subscribe to changes in cards and columns for this board
+    get().unsubscribeRealtime();
+
     const cardsChannel = supabase
-      .channel("public:cards")
+      .channel(`board:${boardId}:cards`)
       .on(
         "postgres_changes",
-        { event: "*", schema: "public", table: "cards" },
+        {
+          event: "*",
+          schema: "public",
+          table: "cards",
+          filter: `column_id=in.(${get()
+            .columns.map((c) => c.id)
+            .join(",")})`, // Filter by column IDs
+        },
         (payload) => {
           // handle INSERT / UPDATE / DELETE payload
           const ev = payload.eventType;
@@ -160,7 +266,7 @@ export const useBoardStore = create<State>((set, get) => ({
       .subscribe();
 
     const colsChannel = supabase
-      .channel("public:columns")
+      .channel(`board:${boardId}:columns`)
       .on(
         "postgres_changes",
         { event: "*", schema: "public", table: "columns" },
@@ -186,6 +292,14 @@ export const useBoardStore = create<State>((set, get) => ({
       )
       .subscribe();
 
-    // store channels somewhere if you need to unsub later
+    set({ channels: [cardsChannel, colsChannel] });
+  },
+
+  unsubscribeRealtime: () => {
+    const channels = get().channels;
+    channels.forEach((channel) => {
+      supabase.removeChannel(channel);
+    });
+    set({ channels: [] });
   },
 }));

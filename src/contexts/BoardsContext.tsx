@@ -24,7 +24,7 @@ type BoardsProviderProps = {
 
 export const BoardsProvider = ({ children }: BoardsProviderProps) => {
   const [boards, setBoards] = useLocalStorage<Board[]>(
-    "FLOWBOARD_BOARDS",
+    "FlowBOARD_BOARDS",
     mockBoards
   );
 

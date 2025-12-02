@@ -11,7 +11,8 @@ export type Column = {
   title: string;
   position: number;
   created_at?: string;
-  cards?: Card[];
+  cards: Card[];
+  color: string;
 };
 
 export type Card = {
