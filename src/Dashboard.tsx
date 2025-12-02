@@ -38,7 +38,7 @@ export default function Dashboard() {
     return boards.find((board) => board.id === boardId) ?? boards[0];
   }, [boardId, boards]);
 
-  const activeBoardId = activeBoard?.id;
+  const activeBoardId = "35c4b553-c8be-4d3f-9c0e-4502a75a3ca6";
   const {
     columns,
     loadBoard,
@@ -53,7 +53,7 @@ export default function Dashboard() {
 
   // AAAAAAAAAAAA
   useEffect(() => {
-    loadBoard("35c4b553-c8be-4d3f-9c0e-4502a75a3ca6");
+    loadBoard(activeBoardId);
     // subscribeRealtime(boardId);
   }, [boardId, loadBoard]);
 
@@ -112,19 +112,16 @@ export default function Dashboard() {
   };
 
   const onCreateTaskCard = (colId: string, taskData: Partial<Card>) => {
-    if (!activeBoardId) return;
     addCard(colId, taskData);
-    loadBoard("35c4b553-c8be-4d3f-9c0e-4502a75a3ca6");
+    loadBoard(activeBoardId);
   };
 
   const onEditTaskCard = (cardId: string, taskData: Partial<Card>) => {
-    if (!activeBoardId) return;
     updateCard(cardId, taskData);
-    loadBoard("35c4b553-c8be-4d3f-9c0e-4502a75a3ca6");
+    loadBoard(activeBoardId);
   };
 
   const onDeleteTaskCard = (colId: string, cardId: string) => {
-    if (!activeBoardId) return;
     setBoardCols((prev) =>
       prev.map((col) => {
         if (col.id !== colId) {
@@ -166,6 +163,7 @@ export default function Dashboard() {
     setActiveCard(null);
 
     if (!over) return;
+
     const activeId = active.id as string;
     const overId = over.id as string;
 
@@ -183,7 +181,7 @@ export default function Dashboard() {
     // if (!targetColumn || sourceColumn.id === targetColumn.id) return;
 
     await moveCard(activeId, overId, 0);
-    loadBoard("35c4b553-c8be-4d3f-9c0e-4502a75a3ca6");
+    loadBoard(activeBoardId);
   };
 
   // Timer
