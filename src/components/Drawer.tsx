@@ -14,18 +14,19 @@ interface DrawerProps {
 export default function Drawer({ show, onHide }: DrawerProps) {
   const navigate = useNavigate();
   const { boardId } = useParams();
-  const { boards, setBoards } = useBoardsContext();
+  const { boards } = useBoardsContext();
   const [showCreateBoardModal, setShowCreateBoardModal] = useState(false);
 
-  const recentBoards = useMemo(() => {
-    return boards.map((board) => {
-      const totalCards = board.columns.reduce(
-        (sum, column) => sum + column.cards.length,
-        0
-      );
-      return { ...board, totalCards };
-    });
-  }, [boards]);
+  // const boards = useMemo(() => {
+  //   console.log(boards);
+  //   return boards.map((board) => {
+  //     const totalCards = board.columns.reduce(
+  //       (sum, column) => sum + column.cards.length,
+  //       0
+  //     );
+  //     return { ...board, totalCards };
+  //   });
+  // }, [boards]);
 
   const handleBoardSelect = (targetBoardId: string) => {
     if (targetBoardId === boardId) {
@@ -54,7 +55,7 @@ export default function Drawer({ show, onHide }: DrawerProps) {
       name,
       columns: [],
     };
-    setBoards((prev) => [...prev, newBoard]);
+    // setBoards((prev) => [...prev, newBoard]);
     setShowCreateBoardModal(false);
     navigate(`/${newBoardId}`);
   };
@@ -109,7 +110,7 @@ export default function Drawer({ show, onHide }: DrawerProps) {
               Recent Boards
             </h6>
             <ListGroup variant="flush">
-              {recentBoards.map((board) => (
+              {boards.map((board) => (
                 <ListGroup.Item
                   action
                   className="border-0 py-2"
@@ -119,14 +120,15 @@ export default function Drawer({ show, onHide }: DrawerProps) {
                 >
                   <div className="d-flex justify-content-between align-items-center">
                     <div>
-                      <div className="fw-semibold">{board.name}</div>
+                      <div className="fw-semibold">{board.title}</div>
                       <small className="text-muted">
-                        {board.totalCards}{" "}
-                        {board.totalCards === 1 ? "card" : "cards"}
+                        {/* {board.totalCards}{" "}
+                        {board.totalCards === 1 ? "card" : "cards"} */}
+                        12 cards
                       </small>
                     </div>
                     <Badge bg="secondary" pill>
-                      {board.columns.length}
+                      {/* {board.columns.length} */}4
                     </Badge>
                   </div>
                 </ListGroup.Item>

@@ -1,12 +1,14 @@
 import { create } from "zustand";
 import { supabase } from "../api/supabaseClient";
-import type { Column, Card } from "../types/index";
+import type { Column, Card, Board } from "../types/index";
 
 type State = {
   columns: Column[];
   loading: boolean;
   boardTitle: string;
   channels: any[];
+  boards: Board[];
+  getBoardsList: () => Promise<void>;
   loadBoard: (boardId: string) => Promise<void>;
   addCard: (columnId: string, body: Partial<Card>) => Promise<void>;
   updateCard: (cardId: string, patch: Partial<Card>) => Promise<void>;
@@ -26,6 +28,27 @@ export const useBoardStore = create<State>((set, get) => ({
   loading: true,
   boardTitle: "",
   channels: [],
+  boards: [],
+
+  getBoardsList: async () => {
+    set({ loading: true });
+
+    const { data, error } = await supabase
+      .from("boards")
+      .select("id, title")
+      .order("title", { ascending: true });
+
+    if (error) {
+      console.error("❌ Failed to load boards list:", error);
+      set({ loading: false });
+      return;
+    }
+
+    set({
+      boards: data || [],
+      loading: false,
+    });
+  },
 
   loadBoard: async (boardId) => {
     set({ loading: true });

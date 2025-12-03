@@ -1,21 +1,28 @@
-import { createContext, useContext, type ReactNode } from "react";
-import type { Board } from "../types/board";
-import { useLocalStorage } from "../useLocalStorage";
-import { mockBoards } from "../mocks/boards.mock";
+import {
+  createContext,
+  useContext,
+  type ReactNode,
+  useEffect,
+  useState,
+} from "react";
+import type { Board } from "../types/index";
+import { useBoardStore } from "../hooks/useBoardStore";
 
 type BoardsContextType = {
   boards: Board[];
-  setBoards: React.Dispatch<React.SetStateAction<Board[]>>;
+  loading: boolean;
+  error: string | null;
+  refreshBoards: () => Promise<void>;
 };
 
 const BoardsContext = createContext<BoardsContextType | undefined>(undefined);
 
 export const useBoardsContext = () => {
-  const context = useContext(BoardsContext);
-  if (!context) {
+  const ctx = useContext(BoardsContext);
+  if (!ctx) {
     throw new Error("useBoardsContext must be used within BoardsProvider");
   }
-  return context;
+  return ctx;
 };
 
 type BoardsProviderProps = {
@@ -23,13 +30,37 @@ type BoardsProviderProps = {
 };
 
 export const BoardsProvider = ({ children }: BoardsProviderProps) => {
-  const [boards, setBoards] = useLocalStorage<Board[]>(
-    "FlowBOARD_BOARDS",
-    mockBoards
-  );
+  const { getBoardsList, boards } = useBoardStore();
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  const refreshBoards = async () => {
+    setLoading(true);
+    setError(null);
+
+    try {
+      await getBoardsList();
+    } catch (e: any) {
+      console.error("Failed to load boards:", e);
+      setError(e.message ?? "Unknown error");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    refreshBoards();
+  }, []);
 
   return (
-    <BoardsContext.Provider value={{ boards, setBoards }}>
+    <BoardsContext.Provider
+      value={{
+        boards,
+        loading,
+        error,
+        refreshBoards,
+      }}
+    >
       {children}
     </BoardsContext.Provider>
   );

@@ -1,9 +1,8 @@
 import { createContext, useContext, ReactNode } from "react";
-import type { BoardColumn, BoardColumnCard } from "../types/board";
+import type { Column } from "../types/index";
 
 interface BoardContextType {
-  boardCols: BoardColumn[];
-  setBoardCols: React.Dispatch<React.SetStateAction<BoardColumn[]>>;
+  boardCols: Column[];
   drawerShow: boolean;
   setDrawerShow: React.Dispatch<React.SetStateAction<boolean>>;
 }

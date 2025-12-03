@@ -59,10 +59,10 @@ export default function TaskCard({ card, showDrawer }: TaskCardProps) {
       >
         <div className="card-body d-flex flex-column">
           <div className="d-flex align-items-center justify-content-between gap-2">
-            <h6 className="card-title mb-0 d-flex align-items-center gap-2">
+            <span className="card-title mb-0 d-flex align-items-center gap-2">
               <Badge bg={PRIORITIES[card.priority as string]}> </Badge>
               {card.title}
-            </h6>
+            </span>
             <div {...listeners}>
               <i
                 className="bi bi-grip-vertical me-1 text-muted"

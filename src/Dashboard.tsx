@@ -1,8 +1,7 @@
 import { Container, Dropdown, Stack, Row, Button } from "react-bootstrap";
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import TaskDrawer from "./components/TaskDrawer";
-import type { BoardColumn as BoardColumnType } from "./types/board";
 import type { Card } from "./types/index";
 import BoardColumn from "./components/BoardColumn";
 import TaskCard from "./components/TaskCard";
@@ -23,7 +22,7 @@ export default function Dashboard() {
   const [activeCard, setActiveCard] = useState<Card | null>(null);
   const [addColumnModalShow, setAddColumnModalShow] = useState(false);
   const [confirmLogTimeShow, setConfirmLogTimeShow] = useState(false);
-  const { boards, setBoards } = useBoardsContext();
+  const { boards } = useBoardsContext();
   const { boardId } = useParams();
   const navigate = useNavigate();
   const { setTimeToLog, timeToLog, isTimerShow, clearActiveTaskId } =
@@ -88,22 +87,22 @@ export default function Dashboard() {
     }
   }, [boardCols, activeColId]);
 
-  const setBoardCols = useCallback(
-    (value: React.SetStateAction<BoardColumnType[]>) => {
-      if (!activeBoardId) return;
-      setBoards((prevBoards) =>
-        prevBoards.map((board) => {
-          if (board.id !== activeBoardId) {
-            return board;
-          }
-          const nextColumns =
-            typeof value === "function" ? value(board.columns) : value;
-          return { ...board, columns: nextColumns };
-        })
-      );
-    },
-    [activeBoardId, setBoards]
-  );
+  // const setBoardCols = useCallback(
+  //   (value: React.SetStateAction<BoardColumnType[]>) => {
+  //     if (!activeBoardId) return;
+  //     setBoards((prevBoards) =>
+  //       prevBoards.map((board) => {
+  //         if (board.id !== activeBoardId) {
+  //           return board;
+  //         }
+  //         const nextColumns =
+  //           typeof value === "function" ? value(board.columns) : value;
+  //         return { ...board, columns: nextColumns };
+  //       })
+  //     );
+  //   },
+  //   [activeBoardId, setBoards]
+  // );
 
   const handleHideDrawer = () => {
     clearUrlHash();
@@ -132,40 +131,27 @@ export default function Dashboard() {
     const activeId = active.id as string;
     const overId = over.id as string;
 
-    // const sourceColumn = boardCols.find((col) =>
-    //   col.cards.some((card) => card.id === activeId)
-    // );
-    // if (!sourceColumn) return;
-
-    // const sourceCard = sourceColumn.cards.find((card) => card.id === activeId);
-    // if (!sourceCard) return;
-
-    // const targetColumn =
-    //   boardCols.find((col) => col.id === overId) ||
-    //   boardCols.find((col) => col.cards.some((card) => card.id === overId));
-    // if (!targetColumn || sourceColumn.id === targetColumn.id) return;
-
     await moveCard(activeId, overId, 0);
   };
 
-  const logTime = (taskId: string, time: number) => {
-    setBoardCols((prev) => {
-      return prev.map((col) => {
-        return {
-          ...col,
-          cards: col.cards.map((card) => {
-            if (card.id === taskId) {
-              return { ...card, loggedTime: (card?.loggedTime || 0) + time };
-            }
-            return card;
-          }),
-        };
-      });
-    });
-  };
+  // const logTime = (taskId: string, time: number) => {
+  //   setBoardCols((prev) => {
+  //     return prev.map((col) => {
+  //       return {
+  //         ...col,
+  //         cards: col.cards.map((card) => {
+  //           if (card.id === taskId) {
+  //             return { ...card, loggedTime: (card?.loggedTime || 0) + time };
+  //           }
+  //           return card;
+  //         }),
+  //       };
+  //     });
+  //   });
+  // };
 
   const handleLogTime = () => {
-    if (timeToLog) logTime(timeToLog?.taskId, timeToLog?.time);
+    // if (timeToLog) logTime(timeToLog?.taskId, timeToLog?.time);
     clearActiveTaskId();
     setConfirmLogTimeShow(false);
   };
@@ -184,9 +170,7 @@ export default function Dashboard() {
 
   return (
     <>
-      <BoardProvider
-        value={{ boardCols, setBoardCols, drawerShow, setDrawerShow }}
-      >
+      <BoardProvider value={{ boardCols, drawerShow, setDrawerShow }}>
         <DndContext
           onDragStart={handleCardDragStart}
           onDragEnd={handleCardDragdEnd}
@@ -224,7 +208,7 @@ export default function Dashboard() {
                             navigate(`/${board.id}`);
                           }}
                         >
-                          {board.name}
+                          {board.title}
                         </Dropdown.Item>
                       ))}
                     </Dropdown.Menu>
