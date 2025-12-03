@@ -10,7 +10,7 @@ export default function Navbar({ onToggleDrawer }: NavbarProps) {
       variant="dark"
       expand="lg"
       className="shadow-lg"
-      style={{ backgroundColor: "#192445" }}
+      style={{ backgroundColor: "#1b1b23" }}
     >
       <Container fluid>
         <BSNavbar.Brand href="#" className="fw-bold fs-4">

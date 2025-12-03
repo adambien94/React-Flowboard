@@ -150,7 +150,14 @@ export default function Dashboard() {
   return (
     <>
       {loading ? (
-        <div>Loading</div>
+        <div
+          className="d-flex justify-content-center align-items-center w-100"
+          style={{
+            height: "calc(80vh)",
+          }}
+        >
+          <h3 className="text-center m-0 text-secondary">Loading...</h3>
+        </div>
       ) : (
         <BoardProvider value={{ boardCols, drawerShow, setDrawerShow }}>
           <DndContext

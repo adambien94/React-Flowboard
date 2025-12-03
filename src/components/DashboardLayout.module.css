@@ -1,30 +1,50 @@
 .mainContent {
-  transition: margin-left 0.3s ease-in-out;
+  transition: margin-left 0.3s ease-in-out, opacity 0.25s ease;
   min-height: calc(100vh - 56px);
   padding: 1rem;
+
+  /* React Bits–style gradient background */
   background: radial-gradient(
-      circle at top,
-      rgba(99, 102, 241, 0.18),
-      transparent 55%
+      circle at 25% 0%,
+      rgba(139, 92, 246, 0.18),
+      /* soft purple glow */ transparent 60%
     ),
     radial-gradient(
-      circle at 20% 20%,
-      rgba(20, 184, 166, 0.12),
-      transparent 45%
+      circle at 80% 20%,
+      rgba(20, 184, 166, 0.14),
+      /* soft teal glow */ transparent 55%
     ),
-    var(--surface-bg, #050b16);
+    radial-gradient(
+      circle at 40% 80%,
+      rgba(244, 114, 182, 0.12),
+      /* soft pink glow */ transparent 60%
+    ),
+    var(--surface-bg, #111218); /* updated neutral dark bg */
 }
 
+/* Drawer slide */
 .drawerOpen {
   margin-left: 398px;
 }
 
+/* Mobile */
 @media (max-width: 768px) {
   .drawerOpen {
     margin-left: 0;
   }
 
   .mainContent {
-    padding: 0.5rem;
+    padding: 0.75rem;
+    background: radial-gradient(
+        circle at 20% -10%,
+        rgba(139, 92, 246, 0.16),
+        transparent 55%
+      ),
+      radial-gradient(
+        circle at 90% 10%,
+        rgba(34, 211, 238, 0.12),
+        transparent 55%
+      ),
+      var(--surface-bg, #111218);
   }
 }

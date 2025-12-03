@@ -134,7 +134,7 @@ export default function Drawer({ show, onHide }: DrawerProps) {
             </ListGroup>
           </div>
 
-          <div className="border-top pt-3">
+          <div className="border-top pt-4">
             <ListGroup variant="flush">
               <ListGroup.Item action className="border-0 py-2">
                 <i className="bi bi-box-arrow-right me-3"></i>

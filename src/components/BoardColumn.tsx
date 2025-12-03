@@ -18,8 +18,8 @@ export default function BoardColumn({ column, drawerShow }: BoardColumnProps) {
     background: isOver ? "rgba(255,255,255, 0.139)" : "rgba(255,255,255, 0.1)",
     transition: "all 0.2s ease",
     border: "none",
-    borderTop: `6px solid var(--bs-${column.color})`,
-    boxShadow: "0px 1px 2px  rgba(255,255,255, 0.3)",
+    borderTop: `2px solid var(--bs-${column.color})`,
+    // boxShadow: `0px -2px 1px  var(--bs-${column.color})`,
   };
 
   return (
