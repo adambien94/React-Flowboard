@@ -1,32 +1,21 @@
-import { useMemo, useState } from "react";
+import { useState } from "react";
 import { Offcanvas, ListGroup, Button, Badge } from "react-bootstrap";
 import { useNavigate, useParams } from "react-router-dom";
-import type { Board } from "../types/board";
 import AddBoardModal from "./AddBoardModal";
-import { v4 as uuidV4 } from "uuid";
 import { useBoardsContext } from "../contexts/BoardsContext";
+import { useBoardStore } from "../hooks/useBoardStore";
 
-interface DrawerProps {
+type DrawerProps = {
   show: boolean;
   onHide: () => void;
-}
+};
 
 export default function Drawer({ show, onHide }: DrawerProps) {
   const navigate = useNavigate();
   const { boardId } = useParams();
   const { boards } = useBoardsContext();
   const [showCreateBoardModal, setShowCreateBoardModal] = useState(false);
-
-  // const boards = useMemo(() => {
-  //   console.log(boards);
-  //   return boards.map((board) => {
-  //     const totalCards = board.columns.reduce(
-  //       (sum, column) => sum + column.cards.length,
-  //       0
-  //     );
-  //     return { ...board, totalCards };
-  //   });
-  // }, [boards]);
+  const { addBoard } = useBoardStore();
 
   const handleBoardSelect = (targetBoardId: string) => {
     if (targetBoardId === boardId) {
@@ -35,29 +24,10 @@ export default function Drawer({ show, onHide }: DrawerProps) {
     navigate(`/${targetBoardId}`);
   };
 
-  const buildBoardId = (name: string) => {
-    const baseId = name
-      .trim()
-      .toLowerCase()
-      .replace(/[^a-z0-9\s-]/g, "")
-      .replace(/\s+/g, "-");
-    if (!baseId) {
-      return `board-${uuidV4()}`;
-    }
-    const exists = boards.some((board) => board.id === baseId);
-    return exists ? `${baseId}-${Date.now()}` : baseId;
-  };
-
-  const handleCreateBoard = (name: string) => {
-    const newBoardId = buildBoardId(name);
-    const newBoard: Board = {
-      id: newBoardId,
-      name,
-      columns: [],
-    };
-    // setBoards((prev) => [...prev, newBoard]);
+  const handleCreateBoard = async (title: string) => {
+    await addBoard(title);
     setShowCreateBoardModal(false);
-    navigate(`/${newBoardId}`);
+    // navigate(`/${newBoardId}`);
   };
 
   return (

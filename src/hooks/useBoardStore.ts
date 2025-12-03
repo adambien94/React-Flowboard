@@ -10,6 +10,7 @@ type State = {
   boards: Board[];
   getBoardsList: () => Promise<void>;
   loadBoard: (boardId: string) => Promise<void>;
+  addBoard: (title: string) => Promise<void>;
   addCard: (columnId: string, body: Partial<Card>) => Promise<void>;
   updateCard: (cardId: string, patch: Partial<Card>) => Promise<void>;
   addColumn: (boardId: string, title: string, color?: string) => Promise<void>;
@@ -89,12 +90,33 @@ export const useBoardStore = create<State>((set, get) => ({
     });
   },
 
-  addCard: async (columnId, body) => {
-    // determine position -> append at end
-    const columns = get().columns;
-    const col = columns.find((c) => c.id === columnId);
-    const pos = col ? col.cards?.length ?? 0 : 0;
+  addBoard: async (title: string) => {
+    set({ loading: true });
 
+    const { data, error } = await supabase
+      .from("boards")
+      .insert({ title })
+      .select()
+      .single();
+
+    if (error) {
+      console.error("❌ Failed to add board:", error);
+      set({ loading: false });
+      return;
+    }
+
+    set((state) => ({
+      boards: [...state.boards, data].sort((a, b) =>
+        a.title.localeCompare(b.title)
+      ),
+      loading: false,
+    }));
+  },
+
+  addCard: async (columnId, body) => {
+    // const columns = get().columns;
+    // const col = columns.find((c) => c.id === columnId);
+    // const pos = col ? col.cards?.length ?? 0 : 0;
     const { data, error } = await supabase
       .from("cards")
       .insert({
@@ -123,7 +145,6 @@ export const useBoardStore = create<State>((set, get) => ({
   },
 
   updateCard: async (cardId, patch) => {
-    // optimistic update
     set((state) => ({
       columns: state.columns.map((col) => ({
         ...col,
@@ -133,21 +154,17 @@ export const useBoardStore = create<State>((set, get) => ({
       })),
     }));
 
-    // sync to DB
     const { error } = await supabase
       .from("cards")
       .update(patch)
       .eq("id", cardId);
 
     if (error) console.error(error);
-    // realtime subscription will update UI when change happens
   },
 
   moveCard: async (cardId, toColumnId, newPosition) => {
-    // save previous state for rollback
     const prevColumns = structuredClone(get().columns);
 
-    // optimistic UI update
     set((state) => {
       const newCols = state.columns.map((col) => ({
         ...col,
@@ -169,13 +186,11 @@ export const useBoardStore = create<State>((set, get) => ({
       return { columns: newCols };
     });
 
-    // sync to DB
     const { error } = await supabase
       .from("cards")
       .update({ column_id: toColumnId, position: newPosition })
       .eq("id", cardId);
 
-    // if DB fails → revert UI
     if (error) {
       console.error("❌ Couldn't move card:", error);
       set({ columns: prevColumns });

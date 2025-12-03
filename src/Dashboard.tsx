@@ -28,11 +28,7 @@ export default function Dashboard() {
   const { setTimeToLog, timeToLog, isTimerShow, clearActiveTaskId } =
     useTimerStore();
 
-  const activeBoard = useMemo(() => {
-    return boards.find((board) => board.id === boardId) ?? boards[0];
-  }, [boardId, boards]);
-
-  const activeBoardId = "35c4b553-c8be-4d3f-9c0e-4502a75a3ca6";
+  const activeBoardId = boardId || "";
   const {
     loadBoard,
     boardTitle,
@@ -42,9 +38,9 @@ export default function Dashboard() {
     addCard,
     moveCard,
     removeCard,
-    // loading,
     subscribeRealtime,
     unsubscribeRealtime,
+    loading,
   } = useBoardStore();
 
   const boardCols = useMemo(() => columns ?? [], [columns]);
@@ -54,11 +50,10 @@ export default function Dashboard() {
       await loadBoard(activeBoardId);
       subscribeRealtime(activeBoardId);
     };
-
     run();
 
     return () => unsubscribeRealtime();
-  }, [boardId, loadBoard, subscribeRealtime, unsubscribeRealtime]);
+  }, [activeBoardId, loadBoard, subscribeRealtime, unsubscribeRealtime]);
 
   const clearUrlHash = () => {
     window.location.hash = "";
@@ -66,11 +61,10 @@ export default function Dashboard() {
 
   useEffect(() => {
     if (!boards.length) return;
-    if (!boardId || !boards.some((board) => board.id === boardId)) {
-      console.log(boards);
+    if (!activeBoardId || !boards.some((board) => board.id === activeBoardId)) {
       navigate(`/${boards[0].id}`, { replace: true });
     }
-  }, [boardId, boards, navigate]);
+  }, [activeBoardId, boards, navigate]);
 
   useEffect(() => {
     if (!boardCols.length) {
@@ -86,23 +80,6 @@ export default function Dashboard() {
       clearUrlHash();
     }
   }, [boardCols, activeColId]);
-
-  // const setBoardCols = useCallback(
-  //   (value: React.SetStateAction<BoardColumnType[]>) => {
-  //     if (!activeBoardId) return;
-  //     setBoards((prevBoards) =>
-  //       prevBoards.map((board) => {
-  //         if (board.id !== activeBoardId) {
-  //           return board;
-  //         }
-  //         const nextColumns =
-  //           typeof value === "function" ? value(board.columns) : value;
-  //         return { ...board, columns: nextColumns };
-  //       })
-  //     );
-  //   },
-  //   [activeBoardId, setBoards]
-  // );
 
   const handleHideDrawer = () => {
     clearUrlHash();
@@ -130,7 +107,6 @@ export default function Dashboard() {
 
     const activeId = active.id as string;
     const overId = over.id as string;
-
     await moveCard(activeId, overId, 0);
   };
 
@@ -160,7 +136,10 @@ export default function Dashboard() {
     setTimeToLog(taskId, time);
     setConfirmLogTimeShow(true);
   };
-  //
+
+  const handleAddColumn = (name: string, color: string) => {
+    addColumn(activeBoardId, name, color);
+  };
 
   useEffect(() => {
     return () => {
@@ -170,99 +149,103 @@ export default function Dashboard() {
 
   return (
     <>
-      <BoardProvider value={{ boardCols, drawerShow, setDrawerShow }}>
-        <DndContext
-          onDragStart={handleCardDragStart}
-          onDragEnd={handleCardDragdEnd}
-        >
-          {activeColId && (
-            <TaskDrawer
-              onHide={handleHideDrawer}
-              colId={activeColId}
-              colName={boardCols.find(({ id }) => id === activeColId)?.title}
-              colColor={boardCols.find(({ id }) => id === activeColId)?.color}
-              createTask={addCard}
-              editTask={updateCard}
-              deleteTask={removeCard}
-            />
-          )}
-          <Container fluid>
-            <div>
-              <div className="d-flex align-items-center justify-content-between">
-                <div className="d-flex align-items-center">
-                  <Dropdown>
-                    <Dropdown.Toggle
-                      variant="outline-secondary"
-                      id="dropdown-basic"
-                    >
-                      {activeBoard?.name ?? "Boards"}
-                    </Dropdown.Toggle>
+      {loading ? (
+        <div>Loading</div>
+      ) : (
+        <BoardProvider value={{ boardCols, drawerShow, setDrawerShow }}>
+          <DndContext
+            onDragStart={handleCardDragStart}
+            onDragEnd={handleCardDragdEnd}
+          >
+            {activeColId && (
+              <TaskDrawer
+                onHide={handleHideDrawer}
+                colId={activeColId}
+                colName={boardCols.find(({ id }) => id === activeColId)?.title}
+                colColor={boardCols.find(({ id }) => id === activeColId)?.color}
+                createTask={addCard}
+                editTask={updateCard}
+                deleteTask={removeCard}
+              />
+            )}
+            <Container fluid>
+              <div>
+                <div className="d-flex align-items-center justify-content-between">
+                  <div className="d-flex align-items-center">
+                    <Dropdown>
+                      <Dropdown.Toggle
+                        variant="outline-secondary"
+                        id="dropdown-basic"
+                      >
+                        Boards
+                      </Dropdown.Toggle>
 
-                    <Dropdown.Menu>
-                      {boards.map((board) => (
-                        <Dropdown.Item
-                          key={board.id}
-                          active={board.id === activeBoardId}
-                          onClick={() => {
-                            if (board.id === activeBoardId) return;
-                            navigate(`/${board.id}`);
-                          }}
-                        >
-                          {board.title}
-                        </Dropdown.Item>
-                      ))}
-                    </Dropdown.Menu>
-                  </Dropdown>
-                  <h3 className="fw-bold text-white ms-4 mt-2 fs-4">
-                    {boardTitle}
-                  </h3>
+                      <Dropdown.Menu>
+                        {boards.map((board) => (
+                          <Dropdown.Item
+                            key={board.id}
+                            active={board.id === activeBoardId}
+                            onClick={() => {
+                              if (board.id === activeBoardId) return;
+                              navigate(`/${board.id}`);
+                            }}
+                          >
+                            {board.title}
+                          </Dropdown.Item>
+                        ))}
+                      </Dropdown.Menu>
+                    </Dropdown>
+                    <h3 className="fw-bold text-white ms-4 mt-2 fs-4">
+                      {boardTitle}
+                    </h3>
+                  </div>
+
+                  <Button
+                    variant="outline-secondary"
+                    onClick={() => setAddColumnModalShow(true)}
+                    disabled={boardCols.length >= 4}
+                  >
+                    <i className="bi bi-plus-circle"></i> Add column
+                  </Button>
                 </div>
 
-                <Button
-                  variant="outline-secondary"
-                  onClick={() => setAddColumnModalShow(true)}
-                  disabled={boardCols.length >= 4}
-                >
-                  <i className="bi bi-plus-circle"></i> Add column
-                </Button>
+                <div className="mt-3">
+                  <Stack>
+                    <Row>
+                      {boardCols.map((col) => (
+                        <BoardColumn
+                          key={col.id}
+                          column={col}
+                          drawerShow={handleOpenDrawer}
+                        />
+                      ))}
+                    </Row>
+                  </Stack>
+                </div>
               </div>
+            </Container>
 
-              <div className="mt-3">
-                <Stack>
-                  <Row>
-                    {boardCols.map((col) => (
-                      <BoardColumn
-                        key={col.id}
-                        column={col}
-                        drawerShow={handleOpenDrawer}
-                      />
-                    ))}
-                  </Row>
-                </Stack>
-              </div>
-            </div>
-          </Container>
-
-          <DragOverlay>
-            {activeCard ? (
-              <div
-                style={{
-                  transform: "rotate(0deg) translateY(-8px)",
-                  boxShadow: "0px 2px 6px rgba(0,0,0,0.2)",
-                  borderRadius: "6px",
-                }}
-              >
-                <TaskCard
-                  card={{
-                    ...activeCard,
+            <DragOverlay>
+              {activeCard ? (
+                <div
+                  style={{
+                    transform: "rotate(0deg) translateY(-8px)",
+                    boxShadow: "0px 2px 6px rgba(0,0,0,0.2)",
+                    borderRadius: "6px",
                   }}
-                  showDrawer={() => {}}
-                />
-              </div>
-            ) : null}
-          </DragOverlay>
-        </DndContext>
-      </BoardProvider>
+                >
+                  <TaskCard
+                    card={{
+                      ...activeCard,
+                    }}
+                    showDrawer={() => {}}
+                  />
+                </div>
+              ) : null}
+            </DragOverlay>
+          </DndContext>
+        </BoardProvider>
+      )}
 
       <Timer show={isTimerShow} onFinish={handleStopTimer} />
 
@@ -281,7 +264,7 @@ export default function Dashboard() {
       <AddColumnModal
         show={addColumnModalShow}
         onHide={() => setAddColumnModalShow(false)}
-        onSave={addColumn}
+        onSave={handleAddColumn}
       />
     </>
   );
