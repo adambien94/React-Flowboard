@@ -4,6 +4,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import AddBoardModal from "./AddBoardModal";
 import { useBoardsContext } from "../contexts/BoardsContext";
 import { useBoardStore } from "../hooks/useBoardStore";
+import { useAuth } from "../contexts/AuthContext";
 
 type DrawerProps = {
   show: boolean;
@@ -16,6 +17,7 @@ export default function Drawer({ show, onHide }: DrawerProps) {
   const { boards } = useBoardsContext();
   const [showCreateBoardModal, setShowCreateBoardModal] = useState(false);
   const { addBoard } = useBoardStore();
+  const { logout } = useAuth();
 
   const handleBoardSelect = (targetBoardId: string) => {
     if (targetBoardId === boardId) {
@@ -136,7 +138,7 @@ export default function Drawer({ show, onHide }: DrawerProps) {
 
           <div className="border-top pt-4">
             <ListGroup variant="flush">
-              <ListGroup.Item action className="border-0 py-2">
+              <ListGroup.Item action className="border-0 py-2" onClick={logout}>
                 <i className="bi bi-box-arrow-right me-3"></i>
                 Logout
               </ListGroup.Item>
