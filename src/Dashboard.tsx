@@ -15,6 +15,7 @@ import { useTimerStore } from "./store/timerStore";
 import ConfirmModal from "./components/ConfirmModal";
 import formatTime from "./utils/formatTime";
 import { useBoardStore } from "./hooks/useBoardStore";
+import BoardLoader from "./components/BoardLoader";
 
 export default function Dashboard() {
   const [drawerShow, setDrawerShow] = useState(false);
@@ -150,14 +151,7 @@ export default function Dashboard() {
   return (
     <>
       {loading ? (
-        <div
-          className="d-flex justify-content-center align-items-center w-100"
-          style={{
-            height: "calc(80vh)",
-          }}
-        >
-          <h3 className="text-center m-0 text-secondary">Loading...</h3>
-        </div>
+        <BoardLoader />
       ) : (
         <BoardProvider value={{ boardCols, drawerShow, setDrawerShow }}>
           <DndContext
@@ -236,7 +230,7 @@ export default function Dashboard() {
               {activeCard ? (
                 <div
                   style={{
-                    transform: "rotate(0deg) translateY(-8px)",
+                    transform: "rotate(-7deg) translateY(5px)",
                     boxShadow: "0px 2px 6px rgba(0,0,0,0.2)",
                     borderRadius: "6px",
                   }}

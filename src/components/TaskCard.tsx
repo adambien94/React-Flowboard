@@ -1,4 +1,4 @@
-import { Badge } from "react-bootstrap";
+import { Badge, Button } from "react-bootstrap";
 import type { Card } from "../types/index";
 import { useDraggable } from "@dnd-kit/core";
 import { CSS } from "@dnd-kit/utilities";
@@ -58,14 +58,14 @@ export default function TaskCard({ card, showDrawer }: TaskCardProps) {
         {...attributes}
       >
         <div className="card-body d-flex flex-column">
-          <div className="d-flex align-items-center justify-content-between gap-2">
+          <div className="d-flex align-items-start justify-content-between gap-2">
             <span className="card-title mb-0 d-flex align-items-center gap-2">
               <Badge bg={PRIORITIES[card.priority as string]}> </Badge>
               {card.title}
             </span>
             <div {...listeners}>
               <i
-                className="bi bi-grip-vertical me-1 text-muted"
+                className="bi bi-grip-vertical me-1 text-secondary"
                 style={{
                   cursor: "grab",
                 }}
@@ -75,7 +75,7 @@ export default function TaskCard({ card, showDrawer }: TaskCardProps) {
 
           <div className="pe-4 pt-1">
             <p
-              className="card-text mb-0 text-muted"
+              className="card-text mb-0 text-secondary"
               style={{
                 fontSize: "14px",
                 display: "-webkit-box",
@@ -101,14 +101,9 @@ export default function TaskCard({ card, showDrawer }: TaskCardProps) {
             </span>
 
             <div className="d-flex gap-1" style={{ translate: "0 3px" }}>
-              <button
-                style={{
-                  border: "none",
-                  borderRadius: "50%",
-                  background: "transparent",
-                  paddingRight: "3px",
-                  paddingLeft: "3px",
-                }}
+              <Button
+                variant="dark"
+                size="sm"
                 onClick={handleTimerClick}
                 disabled={!!activeTimerTaskId && activeTimerTaskId !== card.id}
               >
@@ -127,24 +122,15 @@ export default function TaskCard({ card, showDrawer }: TaskCardProps) {
                     }}
                   ></i>
                 )}
-              </button>
-              <button
-                onClick={handleEditClick}
-                style={{
-                  border: "none",
-                  borderRadius: "50%",
-                  background: "transparent",
-                  paddingRight: "3px",
-                  paddingLeft: "3px",
-                }}
-              >
+              </Button>
+              <Button onClick={handleEditClick} variant="dark" size="sm">
                 <i
                   className="bi bi-pencil text-muted"
                   style={{
                     cursor: "pointer",
                   }}
                 ></i>
-              </button>
+              </Button>
             </div>
           </div>
         </div>

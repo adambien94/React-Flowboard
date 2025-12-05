@@ -2,7 +2,6 @@
   transition: margin-left 0.3s ease-in-out, opacity 0.25s ease;
   min-height: calc(100vh - 56px);
   padding: 1rem;
-
   /* React Bits–style gradient background */
   background: radial-gradient(
       circle at 25% 0%,

@@ -2,10 +2,12 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import { Route, Routes } from "react-router-dom";
 import Dashboard from "./Dashboard";
 import DashboardLayout from "./DashboardLayout";
+import Login from "./Login";
 
 export default function App() {
   return (
     <Routes>
+      <Route path="/login" element={<Login />} />
       <Route path="/" element={<DashboardLayout />}>
         <Route index element={<Dashboard />} />
         <Route path=":boardId" element={<Dashboard />} />

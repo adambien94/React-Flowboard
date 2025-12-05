@@ -32,8 +32,6 @@ export const useBoardStore = create<State>((set, get) => ({
   boards: [],
 
   getBoardsList: async () => {
-    set({ loading: true });
-
     const { data, error } = await supabase
       .from("boards")
       .select("id, title")
@@ -47,7 +45,6 @@ export const useBoardStore = create<State>((set, get) => ({
 
     set({
       boards: data || [],
-      loading: false,
     });
   },
 
@@ -91,8 +88,6 @@ export const useBoardStore = create<State>((set, get) => ({
   },
 
   addBoard: async (title: string) => {
-    set({ loading: true });
-
     const { data, error } = await supabase
       .from("boards")
       .insert({ title })
@@ -109,7 +104,6 @@ export const useBoardStore = create<State>((set, get) => ({
       boards: [...state.boards, data].sort((a, b) =>
         a.title.localeCompare(b.title)
       ),
-      loading: false,
     }));
   },
 

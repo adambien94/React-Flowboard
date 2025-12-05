@@ -43,7 +43,6 @@ const Timer: React.FC<TimerProps> = ({ show, onFinish }) => {
   const handleStop = useCallback(() => {
     if (intervalRef.current) clearInterval(intervalRef.current);
     setRunning(false);
-    console.log("activeTimerTaskId", activeTimerTaskId);
     onFinish?.(activeTimerTaskId as string, elapsed);
     stopTimer();
   }, [activeTimerTaskId, elapsed, onFinish, stopTimer, clearActiveTaskId]);
@@ -56,19 +55,19 @@ const Timer: React.FC<TimerProps> = ({ show, onFinish }) => {
 
   return (
     <Toast
-      bg="primary"
       show={show}
       style={{
         position: "absolute",
         bottom: "30px",
         right: "30px",
         width: "280px",
+        borderRadius: "var(--radius-lg)",
       }}
     >
       <Toast.Body className="d-flex justify-content-between items-center">
-        <strong className="mt-1  fs-6">{formatTime(elapsed)}</strong>
+        <strong className="mt-1 fs-6">{formatTime(elapsed)}</strong>
         <Button
-          variant="primary"
+          variant="dark"
           size="sm"
           onClick={handleStop}
           disabled={!running}
