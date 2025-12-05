@@ -1,12 +1,11 @@
 import { useState } from "react";
-import { Container, Card, Form, Button, Alert } from "react-bootstrap";
+import { Form, Button, Card, Spinner } from "react-bootstrap";
+import { supabase } from "./api/supabaseClient";
 import Navbar from "./components/Navbar";
 import styles from "./components/DashboardLayout.module.css";
-// import { useAuthStore } from "./store/authStore";
 import { useNavigate } from "react-router-dom";
 
 export default function Login() {
-  // const { signIn, signUp } = useAuthStore();
   const navigate = useNavigate();
 
   const [email, setEmail] = useState("");
@@ -14,84 +13,74 @@ export default function Login() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const handleLogin = async () => {
-    try {
-      setLoading(true);
-      setError(null);
-      await signIn(email, password);
-      navigate("/"); // po zalogowaniu
-    } catch (err: any) {
-      setError(err.message || "Login failed");
-    } finally {
-      setLoading(false);
-    }
-  };
+  const handleLogin = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setLoading(true);
+    setError(null);
 
-  const handleRegister = async () => {
-    try {
-      setLoading(true);
-      setError(null);
-      await signUp(email, password);
-      navigate("/"); // po rejestracji
-    } catch (err: any) {
-      setError(err.message || "Register failed");
-    } finally {
-      setLoading(false);
+    const { data, error } = await supabase.auth.signInWithPassword({
+      email,
+      password,
+    });
+
+    if (error) {
+      setError(error.message);
+    } else {
+      navigate("/"); // albo np. /dashboard
     }
+
+    setLoading(false);
   };
 
   return (
     <div>
       <Navbar isControlsHidden={true} />
 
-      <div className={styles.mainContent} style={{ display: "flex" }}>
-        <Container className="d-flex justify-content-center align-items-center">
-          <Card style={{ width: 360 }}>
-            <Card.Body>
-              <h4 className="text-center mb-4">Sign in</h4>
+      <div
+        className={`${styles.mainContent} d-flex align-items-center justify-content-center`}
+      >
+        <Card style={{ width: 420 }}>
+          <Card.Body>
+            <h4 className="mb-4 text-center">Sign in</h4>
 
-              {error && <Alert variant="danger">{error}</Alert>}
+            <Form onSubmit={handleLogin}>
+              <Form.Group className="mb-3">
+                <Form.Label>Email</Form.Label>
+                <Form.Control
+                  type="email"
+                  placeholder="Enter email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  required
+                />
+              </Form.Group>
 
-              <Form>
-                <Form.Group className="mb-3">
-                  <Form.Control
-                    type="email"
-                    placeholder="Enter email"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                  />
-                </Form.Group>
+              <Form.Group className="mb-4">
+                <Form.Label>Password</Form.Label>
+                <Form.Control
+                  type="password"
+                  placeholder="Password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  required
+                />
+              </Form.Group>
 
-                <Form.Group className="mb-4">
-                  <Form.Control
-                    type="password"
-                    placeholder="Enter password"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                  />
-                </Form.Group>
+              {error && (
+                <div className="text-danger text-center mb-3">{error}</div>
+              )}
 
-                <Button
-                  className="w-100"
-                  variant="primary"
-                  onClick={handleLogin}
-                  disabled={loading}
-                >
-                  {loading ? "Logging in..." : "Login"}
-                </Button>
-
-                <Button
-                  className="w-100 my-3"
-                  variant="outline-secondary"
-                  onClick={handleRegister}
-                  disabled={loading}
-                >
-                  {loading ? "Creating account..." : "Register"}
-                </Button>
-              </Form>
-            </Card.Body>
-          </Card>
-        </Container>
+              <Button
+                variant="primary"
+                type="submit"
+                className="w-100"
+                disabled={loading}
+              >
+                {loading ? <Spinner size="sm" /> : "Login"}
+              </Button>
+            </Form>
+          </Card.Body>
+        </Card>
       </div>
     </div>
   );

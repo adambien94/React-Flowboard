@@ -13,6 +13,7 @@
   --accent-yellow: #ffe59b;
   --bs-primary: var(--accent-blue);
   --border-color: rgba(255, 255, 255, 0.08);
+  /* --bs-border-color: rgba(255, 255, 255, 0.08); */
   --shadow-soft: 0 6px 20px rgba(0, 0, 0, 0.45);
   --blur-amount: 18px;
   --radius-lg: 18px;
