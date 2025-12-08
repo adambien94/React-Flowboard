@@ -211,7 +211,6 @@ export default function Dashboard() {
                     <Button
                       variant="outline-secondary"
                       onClick={() => setAddColumnModalShow(true)}
-                      disabled={boardCols.length >= 4}
                     >
                       <i className="bi bi-plus-circle"></i> Add column
                     </Button>
@@ -246,8 +245,9 @@ export default function Dashboard() {
               {activeCard ? (
                 <div
                   style={{
-                    transform: "rotate(0deg) translateY(-8px)",
+                    transform: "rotate(0deg) translateY(-4px)",
                     borderRadius: "18px",
+                    // boxShadow: "0px 3px 3px rgba(255,255,255,0.1)",
                   }}
                 >
                   <TaskCard

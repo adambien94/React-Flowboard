@@ -1,9 +1,10 @@
 :root {
   color-scheme: dark;
-  --app-bg: #0b0c10;
+  --app-bg: rgb(18, 19, 26);
   --surface-bg: #111218;
   --panel-bg: rgba(22, 24, 33, 0.9);
-  --panel-elevated-bg: rgba(28, 30, 39, 0.85);
+  --panel-bg-light: rgba(255, 255, 255, 0.03);
+  --panel-elevated-bg: #181a23;
   --text-primary: #f2f4f8;
   --text-muted: #9ea4b8;
   --accent-blue: #6ea8fe;
@@ -66,7 +67,7 @@ body {
 
 .form-control,
 .form-select {
-  background-color: var(--panel-bg);
+  background-color: var(--panel-bg-light) !important;
   border-radius: var(--radius-md);
   border: 1px solid var(--border-color);
   color: var(--text-primary);
@@ -108,8 +109,11 @@ body {
 .offcanvas {
   background: var(--panel-elevated-bg);
   backdrop-filter: blur(var(--blur-amount));
-  border-radius: var(--radius-lg);
   box-shadow: var(--shadow-soft);
+}
+
+.modal-content {
+  border-radius: var(--radius-lg);
 }
 
 .modal-footer {

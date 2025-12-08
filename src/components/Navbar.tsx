@@ -14,7 +14,7 @@ export default function Navbar({
       variant="dark"
       expand="lg"
       className="border-bottom"
-      style={{ backgroundColor: "#1c1d27" }}
+      style={{ backgroundColor: "#181a23" }}
     >
       <Container fluid>
         <BSNavbar.Brand href="#" className="fw-bold fs-4">

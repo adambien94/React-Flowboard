@@ -47,7 +47,7 @@ export default function Login() {
       >
         <Card style={{ width: 380, border: "1px solid var(--border-color)" }}>
           <Card.Body>
-            <h4 className="text-center mb-4">
+            <h4 className="text-center mb-4 py-3">
               {isRegister ? "Create Account" : "Sign in"}
             </h4>
 
@@ -89,7 +89,7 @@ export default function Login() {
 
                 <Button
                   variant="outline-secondary"
-                  className=""
+                  className="mt-2"
                   onClick={() => setIsRegister((prev) => !prev)}
                 >
                   {isRegister

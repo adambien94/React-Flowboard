@@ -101,7 +101,7 @@ export default function Drawer({ show, onHide }: DrawerProps) {
                           12 cards
                         </small>
                       </div>
-                      <Badge bg="white" className="text-dark" pill>
+                      <Badge bg="light" className="text-dark" pill>
                         {/* {board.columns.length} */}4
                       </Badge>
                     </div>
