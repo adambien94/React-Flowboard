@@ -45,7 +45,7 @@ export default function Login() {
       <div
         className={`${styles.mainContent} d-flex align-items-center justify-content-center`}
       >
-        <Card style={{ width: 380 }}>
+        <Card style={{ width: 380, border: "1px solid var(--border-color)" }}>
           <Card.Body>
             <h4 className="text-center mb-4">
               {isRegister ? "Create Account" : "Sign in"}
@@ -88,7 +88,8 @@ export default function Login() {
                 </Button>
 
                 <Button
-                  variant="outline-secondary mt-2"
+                  variant="outline-secondary"
+                  className=""
                   onClick={() => setIsRegister((prev) => !prev)}
                 >
                   {isRegister
