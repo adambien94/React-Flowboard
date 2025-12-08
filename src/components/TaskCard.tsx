@@ -56,7 +56,7 @@ export default function TaskCard({ card, showDrawer }: TaskCardProps) {
   };
 
   return (
-    <div key={card.id} className="mt-2">
+    <div key={card.id} className="mt-1">
       <div
         ref={setNodeRef}
         style={style}

@@ -283,7 +283,10 @@ export default function Dashboard() {
         onSave={handleAddColumn}
       />
 
-      <TaskModal show={taskModalShow} onHide={() => setTaskModalShow(false)} />
+      <TaskModal
+        show={!taskModalShow}
+        onHide={() => setTaskModalShow(!taskModalShow)}
+      />
     </>
   );
 }

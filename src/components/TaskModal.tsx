@@ -6,12 +6,13 @@ type TaskModalProps = {
 };
 
 export default function TaskModal({ show, onHide }: TaskModalProps) {
-  //   const [boardName, setBoardName] = useState("");
-  //   const inputRef = useRef<HTMLInputElement>(null);
-
   return (
     <Modal show={show} onHide={onHide} centered>
-      <Modal.Header closeButton style={{ borderBottom: "none" }}></Modal.Header>
+      <Modal.Header
+        closeButton
+        style={{ borderBottom: "none" }}
+        className="pt-4"
+      ></Modal.Header>
       <Modal.Body className="pt-0 text-muted">
         <h3>Współdzielony stan między przeglądarkami</h3>
 

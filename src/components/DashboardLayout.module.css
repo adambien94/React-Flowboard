@@ -2,36 +2,24 @@
   transition: margin-left 0.3s ease-in-out, opacity 0.25s ease;
   min-height: calc(100vh - 56px);
   padding: 1rem;
-  /* React Bits–style gradient background */
   background: radial-gradient(
       circle at 25% 0%,
-      rgba(139, 92, 246, 0.18),
-      /* soft purple glow */ transparent 60%
+      rgba(92, 61, 165, 0.18),
+      transparent 60%
     ),
-    radial-gradient(
-      circle at 80% 20%,
-      rgba(20, 184, 166, 0.14),
-      /* soft teal glow */ transparent 55%
-    ),
-    radial-gradient(
-      circle at 40% 80%,
-      rgba(244, 114, 182, 0.12),
-      /* soft pink glow */ transparent 60%
-    ),
-    var(--surface-bg, #111218); /* updated neutral dark bg */
+    radial-gradient(circle at 80% 20%, rgba(30, 87, 147, 0.18), transparent 55%),
+    radial-gradient(circle at 40% 80%, rgba(101, 54, 86, 0.12), transparent 60%),
+    var(--surface-bg, rgb(24, 17, 20));
 }
 
-/* Drawer slide */
 .drawerOpen {
   margin-left: 398px;
 }
 
-/* Mobile */
 @media (max-width: 768px) {
   .drawerOpen {
     margin-left: 0;
   }
-
   .mainContent {
     padding: 0.75rem;
     background: radial-gradient(
