@@ -65,23 +65,11 @@ export default function TaskCard({ card, showDrawer }: TaskCardProps) {
         onClick={onCardClick}
       >
         <div className="card-body d-flex flex-column">
-          <Badge
-            bg={PRIORITIES[card.priority as string]}
-            style={{
-              width: "7px",
-              position: "absolute",
-              left: "15px",
-              top: "-3px",
-            }}
-            className="mb-2"
-          >
-            {" "}
-          </Badge>
-
-          <div className="d-flex align-items-start justify-content-between gap-2">
+          <div className="d-flex  align-items-center justify-content-between gap-2">
+            <Badge bg={PRIORITIES[card.priority as string]}> </Badge>
             <span
               style={{ fontSize: "14px" }}
-              className="card-title  mb-0 d-flex gap-2"
+              className="card-title w-100 mb-0 d-flex gap-2"
             >
               {card.title}
             </span>

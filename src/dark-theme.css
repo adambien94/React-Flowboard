@@ -14,7 +14,7 @@
   --bs-primary: var(--accent-blue);
   --border-color: rgba(255, 255, 255, 0.08);
   /* --bs-border-color: rgba(255, 255, 255, 0.08); */
-  --shadow-soft: 0 5px 10px rgba(0, 0, 0, 0.43);
+  --shadow-soft: 0 5px 10px rgba(0, 0, 0, 0.39);
   --blur-amount: 18px;
   --radius-lg: 18px;
   --radius-md: 14px;
@@ -41,10 +41,10 @@ body {
 .card {
   background-color: var(--panel-bg);
   backdrop-filter: blur(var(--blur-amount));
-  border: 1px solid var(--border-color);
+  border: 0px solid var(--border-color);
   border-radius: var(--radius-lg);
   color: var(--text-primary);
-  box-shadow: var(--shadow-soft);
+  /* box-shadow: var(--shadow-soft); */
 }
 
 .list-group,

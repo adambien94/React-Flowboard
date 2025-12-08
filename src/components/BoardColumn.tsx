@@ -15,7 +15,7 @@ export default function BoardColumn({ column, drawerShow }: BoardColumnProps) {
 
   const colStyle = {
     // filter: isOver ? "brightness(1.2)" : undefined,
-    background: isOver ? "rgba(255,255,255, 0.15)" : "rgba(255,255,255, 0.1)",
+    background: isOver ? "rgba(255,255,255, 0.15)" : "#1e1f29",
     transition: "all 0.2s ease",
     border: "none",
     borderTop: `2px solid var(--bs-${column.color})`,
