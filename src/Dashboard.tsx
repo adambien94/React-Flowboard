@@ -7,6 +7,7 @@ import BoardColumn from "./components/BoardColumn";
 import TaskCard from "./components/TaskCard";
 import Timer from "./components/Timer";
 import AddColumnModal from "./components/AddColumnModal";
+import TaskModal from "./components/TaskModal";
 import { BoardProvider } from "./contexts/BoardContext";
 import { useBoardsContext } from "./contexts/BoardsContext";
 import { DndContext, DragOverlay } from "@dnd-kit/core";
@@ -22,6 +23,7 @@ export default function Dashboard() {
   const [activeColId, setActiveColId] = useState<string>();
   const [activeCard, setActiveCard] = useState<Card | null>(null);
   const [addColumnModalShow, setAddColumnModalShow] = useState(false);
+  const [taskModalShow, setTaskModalShow] = useState(false);
   const [confirmLogTimeShow, setConfirmLogTimeShow] = useState(false);
   const { boards } = useBoardsContext();
   const { boardId } = useParams();
@@ -280,6 +282,8 @@ export default function Dashboard() {
         onHide={() => setAddColumnModalShow(false)}
         onSave={handleAddColumn}
       />
+
+      <TaskModal show={taskModalShow} onHide={() => setTaskModalShow(false)} />
     </>
   );
 }

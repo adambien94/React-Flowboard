@@ -14,7 +14,7 @@
   --bs-primary: var(--accent-blue);
   --border-color: rgba(255, 255, 255, 0.08);
   /* --bs-border-color: rgba(255, 255, 255, 0.08); */
-  --shadow-soft: 0 5px 10px rgba(0, 0, 0, 0.45);
+  --shadow-soft: 0 5px 10px rgba(0, 0, 0, 0.43);
   --blur-amount: 18px;
   --radius-lg: 18px;
   --radius-md: 14px;

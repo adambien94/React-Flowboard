@@ -31,22 +31,28 @@ export default function TaskCard({ card, showDrawer }: TaskCardProps) {
   const style = {
     transform: CSS.Translate.toString(transform),
     opacity: isDragging ? 0 : 1,
-    cursor: "default",
+    cursor: "pointer",
     transition: "border .2s ease-in-out 0.1s",
     border: card.id === activeTimerTaskId ? "1px solid var(--bs-primary)" : "",
   };
 
-  const handleEditClick = () => {
+  const handleEditClick = (e: React.MouseEvent) => {
+    e.stopPropagation();
     window.location.hash = `#edit=${card.id}`;
     showDrawer();
   };
 
-  const handleTimerClick = () => {
+  const handleTimerClick = (e: React.MouseEvent) => {
+    e.stopPropagation();
     if (!!activeTimerTaskId && activeTimerTaskId === card.id) {
       stopTimer();
     } else if (!activeTimerTaskId) {
       startTimer(card.id);
     }
+  };
+
+  const onCardClick = () => {
+    alert(1);
   };
 
   return (
@@ -56,12 +62,27 @@ export default function TaskCard({ card, showDrawer }: TaskCardProps) {
         style={style}
         className="card h-100"
         {...attributes}
+        onClick={onCardClick}
       >
         <div className="card-body d-flex flex-column">
-          <div className="d-flex align-items-start justify-content-between gap-2">
-            <span className="card-title mb-0 d-flex align-items-center gap-2">
-              <Badge bg={PRIORITIES[card.priority as string]}> </Badge>
+          <Badge
+            bg={PRIORITIES[card.priority as string]}
+            style={{
+              width: "7px",
+              position: "absolute",
+              left: "15px",
+              top: "-3px",
+            }}
+            className="mb-2"
+          >
+            {" "}
+          </Badge>
 
+          <div className="d-flex align-items-start justify-content-between gap-2">
+            <span
+              style={{ fontSize: "14px" }}
+              className="card-title  mb-0 d-flex gap-2"
+            >
               {card.title}
             </span>
             <div {...listeners}>
@@ -110,28 +131,13 @@ export default function TaskCard({ card, showDrawer }: TaskCardProps) {
                 disabled={!!activeTimerTaskId && activeTimerTaskId !== card.id}
               >
                 {activeTimerTaskId === card.id ? (
-                  <i
-                    className="bi bi-pause-circle text-muted"
-                    style={{
-                      cursor: "pointer",
-                    }}
-                  ></i>
+                  <i className="bi bi-pause-circle text-muted"></i>
                 ) : (
-                  <i
-                    className="bi bi-clock text-muted"
-                    style={{
-                      cursor: "pointer",
-                    }}
-                  ></i>
+                  <i className="bi bi-clock text-muted"></i>
                 )}
               </Button>
               <Button onClick={handleEditClick} variant="dark" size="sm">
-                <i
-                  className="bi bi-pencil text-muted"
-                  style={{
-                    cursor: "pointer",
-                  }}
-                ></i>
+                <i className="bi bi-pencil text-muted"></i>
               </Button>
             </div>
           </div>
