@@ -11,7 +11,7 @@ export default function ProtectedRoute({
   if (loading) {
     return (
       <div className="d-flex justify-content-center align-items-center vh-100">
-        <span>Loading...</span>
+        {/* <span>Loading...</span> */}
       </div>
     );
   }

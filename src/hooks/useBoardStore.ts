@@ -7,7 +7,7 @@ type State = {
   loading: boolean;
   boardTitle: string;
   channels: any[];
-  boards: Board[];
+  boards: Board[] | null;
   getBoardsList: () => Promise<void>;
   loadBoard: (boardId: string) => Promise<void>;
   addBoard: (title: string) => Promise<void>;
@@ -22,6 +22,8 @@ type State = {
   removeCard: (cardId: string) => Promise<void>;
   subscribeRealtime: (boardId: string) => void;
   unsubscribeRealtime: () => void;
+  clearBoardStore: () => void;
+  setLoader: (isShow: boolean) => void;
 };
 
 export const useBoardStore = create<State>((set, get) => ({
@@ -41,6 +43,10 @@ export const useBoardStore = create<State>((set, get) => ({
       console.error("❌ Failed to load boards list:", error);
       set({ loading: false });
       return;
+    }
+
+    if (!data.length) {
+      set({ loading: false });
     }
 
     set({
@@ -333,5 +339,23 @@ export const useBoardStore = create<State>((set, get) => ({
       supabase.removeChannel(channel);
     });
     set({ channels: [] });
+  },
+
+  clearBoardStore: () => {
+    get().unsubscribeRealtime();
+
+    set({
+      columns: [],
+      boardTitle: "",
+      boards: [],
+      loading: true,
+      channels: [],
+    });
+  },
+
+  setLoader: (isShow) => {
+    set({
+      loading: isShow,
+    });
   },
 }));

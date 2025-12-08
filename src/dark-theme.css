@@ -14,7 +14,7 @@
   --bs-primary: var(--accent-blue);
   --border-color: rgba(255, 255, 255, 0.08);
   /* --bs-border-color: rgba(255, 255, 255, 0.08); */
-  --shadow-soft: 0 6px 20px rgba(0, 0, 0, 0.45);
+  --shadow-soft: 0 5px 10px rgba(0, 0, 0, 0.45);
   --blur-amount: 18px;
   --radius-lg: 18px;
   --radius-md: 14px;
@@ -31,13 +31,20 @@ body {
   background: linear-gradient(145deg, #0d0e12 0%, #13141c 65%, #161823 100%);
 }
 
+.offcanvas.offcanvas-end,
+.offcanvas.offcanvas-start,
+.border-top,
+.border-bottom {
+  border-color: var(--border-color) !important;
+}
+
 .card {
   background-color: var(--panel-bg);
   backdrop-filter: blur(var(--blur-amount));
   border: 1px solid var(--border-color);
   border-radius: var(--radius-lg);
   color: var(--text-primary);
-  /* box-shadow: var(--shadow-soft); */
+  box-shadow: var(--shadow-soft);
 }
 
 .list-group,
@@ -82,8 +89,8 @@ body {
 .btn-outline-secondary,
 .btn-outline-light {
   border-radius: var(--radius-md);
-  border: 1px solid rgba(255, 255, 255, 0.83);
-  color: rgba(255, 255, 255, 0.83);
+  border: 1px solid rgba(255, 255, 255, 0.73);
+  color: rgba(255, 255, 255, 0.73);
   transition: all 0.2s ease;
 }
 

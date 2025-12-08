@@ -13,7 +13,7 @@ export default function Navbar({
     <BSNavbar
       variant="dark"
       expand="lg"
-      className="shadow-lg border-bottom"
+      className="border-bottom"
       style={{ backgroundColor: "#1c1d27" }}
     >
       <Container fluid>

@@ -42,19 +42,23 @@ export default function Dashboard() {
     subscribeRealtime,
     unsubscribeRealtime,
     loading,
+    // setLoader,
   } = useBoardStore();
 
   const boardCols = useMemo(() => columns ?? [], [columns]);
 
   useEffect(() => {
-    const run = async () => {
-      await loadBoard(activeBoardId);
-      subscribeRealtime(activeBoardId);
-    };
-    run();
+    if (!activeBoardId) {
+      // setLoader(false);
+      return;
+    }
+
+    loadBoard(activeBoardId);
+    subscribeRealtime(activeBoardId);
 
     return () => unsubscribeRealtime();
-  }, [activeBoardId, loadBoard, subscribeRealtime, unsubscribeRealtime]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [activeBoardId]);
 
   const clearUrlHash = () => {
     window.location.hash = "";
@@ -170,69 +174,78 @@ export default function Dashboard() {
               />
             )}
             <Container fluid>
-              <div>
-                <div className="d-flex align-items-center justify-content-between">
-                  <div className="d-flex align-items-center">
-                    <Dropdown>
-                      <Dropdown.Toggle
-                        variant="outline-secondary"
-                        id="dropdown-basic"
-                      >
-                        Boards
-                      </Dropdown.Toggle>
+              {boards.length ? (
+                <div>
+                  <div className="d-flex align-items-center justify-content-between">
+                    <div className="d-flex align-items-center">
+                      <Dropdown>
+                        <Dropdown.Toggle
+                          variant="outline-secondary"
+                          id="dropdown-basic"
+                        >
+                          Boards
+                        </Dropdown.Toggle>
 
-                      <Dropdown.Menu>
-                        {boards.map((board) => (
-                          <Dropdown.Item
-                            key={board.id}
-                            active={board.id === activeBoardId}
-                            onClick={() => {
-                              if (board.id === activeBoardId) return;
-                              navigate(`/${board.id}`);
-                            }}
-                          >
-                            {board.title}
-                          </Dropdown.Item>
-                        ))}
-                      </Dropdown.Menu>
-                    </Dropdown>
-                    <h3 className="fw-bold text-white ms-4 mt-2 fs-4">
-                      {boardTitle}
-                    </h3>
+                        <Dropdown.Menu>
+                          {boards.map((board) => (
+                            <Dropdown.Item
+                              key={board.id}
+                              active={board.id === activeBoardId}
+                              onClick={() => {
+                                if (board.id === activeBoardId) return;
+                                navigate(`/${board.id}`);
+                              }}
+                            >
+                              {board.title}
+                            </Dropdown.Item>
+                          ))}
+                        </Dropdown.Menu>
+                      </Dropdown>
+                      <h3 className="fw-bold text-white ms-4 mt-2 fs-4">
+                        {boardTitle}
+                      </h3>
+                    </div>
+
+                    <Button
+                      variant="outline-secondary"
+                      onClick={() => setAddColumnModalShow(true)}
+                      disabled={boardCols.length >= 4}
+                    >
+                      <i className="bi bi-plus-circle"></i> Add column
+                    </Button>
                   </div>
 
-                  <Button
-                    variant="outline-secondary"
-                    onClick={() => setAddColumnModalShow(true)}
-                    disabled={boardCols.length >= 4}
-                  >
-                    <i className="bi bi-plus-circle"></i> Add column
+                  <div className="mt-3">
+                    <Stack>
+                      <Row>
+                        {boardCols.map((col) => (
+                          <BoardColumn
+                            key={col.id}
+                            column={col}
+                            drawerShow={handleOpenDrawer}
+                          />
+                        ))}
+                      </Row>
+                    </Stack>
+                  </div>
+                </div>
+              ) : (
+                <div className="text-center">
+                  <h1 className="mt-5 mb-4">Create your first Board !</h1>
+                  <Button size="lg" variant="outline-secondary">
+                    <i className="bi bi-plus-circle me-3"></i>
+                    Create Board
                   </Button>
                 </div>
-
-                <div className="mt-3">
-                  <Stack>
-                    <Row>
-                      {boardCols.map((col) => (
-                        <BoardColumn
-                          key={col.id}
-                          column={col}
-                          drawerShow={handleOpenDrawer}
-                        />
-                      ))}
-                    </Row>
-                  </Stack>
-                </div>
-              </div>
+              )}
             </Container>
 
             <DragOverlay>
               {activeCard ? (
                 <div
                   style={{
-                    transform: "rotate(-7deg) translateY(5px)",
-                    boxShadow: "0px 2px 6px rgba(0,0,0,0.2)",
-                    borderRadius: "6px",
+                    transform: "rotate(0deg) translateY(-8px)",
+                    borderRadius: "18px",
                   }}
                 >
                   <TaskCard

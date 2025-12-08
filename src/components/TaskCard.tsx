@@ -61,6 +61,7 @@ export default function TaskCard({ card, showDrawer }: TaskCardProps) {
           <div className="d-flex align-items-start justify-content-between gap-2">
             <span className="card-title mb-0 d-flex align-items-center gap-2">
               <Badge bg={PRIORITIES[card.priority as string]}> </Badge>
+
               {card.title}
             </span>
             <div {...listeners}>

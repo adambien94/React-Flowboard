@@ -1,6 +1,7 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import { supabase } from "../api/supabaseClient";
 import type { User } from "@supabase/supabase-js";
+import { useBoardStore } from "../hooks/useBoardStore";
 
 type AuthContextType = {
   user: User | null;
@@ -19,6 +20,7 @@ export const useAuth = () => {
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
+  const { clearBoardStore } = useBoardStore();
 
   useEffect(() => {
     // 1. Sprawdź sesję na starcie
@@ -39,6 +41,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
   const logout = async () => {
     await supabase.auth.signOut();
+    clearBoardStore();
   };
 
   return (

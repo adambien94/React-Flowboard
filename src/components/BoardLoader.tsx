@@ -7,9 +7,10 @@ const BoardLoader = () => {
             <div
               className="skeleton-box"
               style={{
-                width: "100px",
-                height: "38px",
-                borderRadius: "6px",
+                width: "90px",
+                height: "40px",
+                borderRadius: "14px",
+                marginTop: "1px",
               }}
             />
             <div
@@ -18,6 +19,7 @@ const BoardLoader = () => {
                 width: "200px",
                 height: "32px",
                 borderRadius: "6px",
+                marginTop: "3px",
               }}
             />
           </div>
@@ -26,21 +28,22 @@ const BoardLoader = () => {
             className="skeleton-box"
             style={{
               width: "130px",
-              height: "38px",
-              borderRadius: "6px",
+              height: "40px",
+              borderRadius: "14px",
+              marginTop: "1px",
             }}
           />
         </div>
 
         <div className="mt-3">
           <div className="row">
-            {[1, 2, 3, 4].map((i) => (
+            {[5, 3, 2, 4].map((i) => (
               <div key={i} className="col-12 col-sm-6 col-md-3">
                 <div
                   className="skeleton-column p-3"
                   style={{
                     backgroundColor: "rgba(255, 255, 255, 0.05)",
-                    borderRadius: "8px",
+                    borderRadius: "18px",
                     marginBottom: "1rem",
                   }}
                 >
@@ -49,18 +52,18 @@ const BoardLoader = () => {
                     style={{
                       width: "70%",
                       height: "24px",
-                      borderRadius: "4px",
+                      borderRadius: "6px",
                     }}
                   />
 
-                  {[1, 2, 3].map((j) => (
+                  {[...Array(i).keys()].map((j) => (
                     <div
                       key={j}
                       className="skeleton-box mb-2"
                       style={{
                         width: "100%",
                         height: `${80 + j * 10}px`,
-                        borderRadius: "6px",
+                        borderRadius: "16px",
                         animationDelay: `${i * 0.1 + j * 0.05}s`,
                       }}
                     />
@@ -100,11 +103,11 @@ const BoardLoader = () => {
           @keyframes fadeIn {
             from {
               opacity: 0;
-              transform: translateY(10px);
+              transform: translateY(12px);
             }
             to {
               opacity: 1;
-              transform: translateY(0);
+              transform: translateY(2px);
             }
           }
         `}</style>

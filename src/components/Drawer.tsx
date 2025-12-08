@@ -76,37 +76,40 @@ export default function Drawer({ show, onHide }: DrawerProps) {
             </Button>
           </div>
 
-          <div className="mb-4">
-            <h6 className="text-muted mb-3">
-              <i className="bi bi-clock me-2"></i>
-              Recent Boards
-            </h6>
-            <ListGroup variant="flush">
-              {boards.map((board) => (
-                <ListGroup.Item
-                  action
-                  className="border-0 py-2"
-                  key={board.id}
-                  active={board.id === boardId}
-                  onClick={() => handleBoardSelect(board.id)}
-                >
-                  <div className="d-flex justify-content-between align-items-center">
-                    <div>
-                      <div className="fw-semibold">{board.title}</div>
-                      <small className="text-muted">
-                        {/* {board.totalCards}{" "}
+          {!!boards.length && (
+            <div className="mb-4">
+              <h6 className="text-muted mb-3">
+                <i className="bi bi-clock me-2"></i>
+                Recent Boards
+              </h6>
+
+              <ListGroup variant="flush">
+                {boards.map((board) => (
+                  <ListGroup.Item
+                    action
+                    className="border-0 py-2"
+                    key={board.id}
+                    active={board.id === boardId}
+                    onClick={() => handleBoardSelect(board.id)}
+                  >
+                    <div className="d-flex justify-content-between align-items-center">
+                      <div>
+                        <div className="fw-semibold">{board.title}</div>
+                        <small className="text-muted">
+                          {/* {board.totalCards}{" "}
                         {board.totalCards === 1 ? "card" : "cards"} */}
-                        12 cards
-                      </small>
+                          12 cards
+                        </small>
+                      </div>
+                      <Badge bg="primary" pill>
+                        {/* {board.columns.length} */}4
+                      </Badge>
                     </div>
-                    <Badge bg="secondary" pill>
-                      {/* {board.columns.length} */}4
-                    </Badge>
-                  </div>
-                </ListGroup.Item>
-              ))}
-            </ListGroup>
-          </div>
+                  </ListGroup.Item>
+                ))}
+              </ListGroup>
+            </div>
+          )}
 
           <div className="mb-4">
             <h6 className="text-muted mb-3">
