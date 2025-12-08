@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, type FormEvent } from "react";
 import { Button, Card, Form, Spinner } from "react-bootstrap";
 import Navbar from "./components/Navbar";
 import styles from "./components/DashboardLayout.module.css";
@@ -6,15 +6,15 @@ import { supabase } from "./api/supabaseClient";
 import { useNavigate } from "react-router-dom";
 
 export default function Login() {
-  const navigate = useNavigate();
-
   const [isRegister, setIsRegister] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const navigate = useNavigate();
 
-  const handleAuth = async () => {
+  const handleAuth = async (event: FormEvent) => {
+    event.preventDefault();
     setLoading(true);
     setError(null);
 
@@ -51,13 +51,13 @@ export default function Login() {
               {isRegister ? "Create Account" : "Sign in"}
             </h4>
 
-            <Form>
+            <Form onSubmit={handleAuth}>
               <Form.Group className="mb-3">
                 <Form.Control
                   type="email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  placeholder="Enter email"
+                  placeholder="Enter e-mail"
                 />
               </Form.Group>
 
@@ -74,8 +74,8 @@ export default function Login() {
                 <div className="text-danger text-center mb-3">{error}</div>
               )}
 
-              <div className="d-grid gap-2">
-                <Button onClick={handleAuth} disabled={loading}>
+              <div className="d-grid gap-2 mb-2">
+                <Button type="submit" disabled={loading}>
                   {loading ? (
                     <>
                       <Spinner size="sm" /> Loading...
@@ -88,7 +88,7 @@ export default function Login() {
                 </Button>
 
                 <Button
-                  variant="outline-secondary"
+                  variant="outline-secondary mt-2"
                   onClick={() => setIsRegister((prev) => !prev)}
                 >
                   {isRegister

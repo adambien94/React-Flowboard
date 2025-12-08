@@ -55,7 +55,7 @@ export const BoardsProvider = ({ children }: BoardsProviderProps) => {
   return (
     <BoardsContext.Provider
       value={{
-        boards,
+        boards: boards || [],
         loading,
         error,
         refreshBoards,

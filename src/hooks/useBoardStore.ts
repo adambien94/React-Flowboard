@@ -7,7 +7,7 @@ type State = {
   loading: boolean;
   boardTitle: string;
   channels: any[];
-  boards: Board[] | null;
+  boards: Board[];
   getBoardsList: () => Promise<void>;
   loadBoard: (boardId: string) => Promise<void>;
   addBoard: (title: string) => Promise<void>;

@@ -98,7 +98,8 @@ export default function TaskCard({ card, showDrawer }: TaskCardProps) {
                 lineHeight: "1.4",
               }}
             >
-              {card.loggedTime ? formatTime(card.loggedTime, true) : "0h 0min"}
+              {/* {card.loggedTime ? formatTime(card.loggedTime, true) : "0h 0min"} */}
+              0h 0min
             </span>
 
             <div className="d-flex gap-1" style={{ translate: "0 3px" }}>

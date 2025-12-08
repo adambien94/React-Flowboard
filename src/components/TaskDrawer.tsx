@@ -1,9 +1,7 @@
 import { useState, useEffect, useRef, useCallback } from "react";
 import { type FormEvent } from "react";
 import { Offcanvas, Form, Button } from "react-bootstrap";
-import type { BoardColumnCard, RawBoardColumnCard } from "../types/board";
 import type { Card } from "../types/index";
-import { v4 as uuidV4 } from "uuid";
 import { useBoardContext } from "../contexts/BoardContext";
 import ConfirmModal from "./ConfirmModal";
 
@@ -46,7 +44,6 @@ export default function Drawer({
   onHide,
   colId,
   colName,
-  colColor,
   createTask,
   editTask,
   deleteTask,
@@ -78,8 +75,8 @@ export default function Drawer({
       if (cardForEdit) {
         setForm({
           title: cardForEdit.title,
-          description: cardForEdit.description,
-          priority: cardForEdit.priority,
+          description: cardForEdit.description || "",
+          priority: cardForEdit.priority || "",
         });
       }
     }
@@ -128,8 +125,7 @@ export default function Drawer({
       });
     } else {
       createTask(colId, {
-        id: uuidV4(),
-        ...form,
+        ...(form as Partial<Card>),
       });
     }
     onHide();
