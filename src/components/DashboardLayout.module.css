@@ -2,14 +2,6 @@
   transition: margin-left 0.3s ease-in-out, opacity 0.25s ease;
   min-height: calc(100vh - 56px);
   padding: 1rem;
-  /* background: radial-gradient(
-      circle at 25% 0%,
-      rgba(78, 61, 165, 0.18),
-      transparent 60%
-    ),
-    radial-gradient(circle at 80% 20%, rgba(30, 85, 147, 0.18), transparent 55%),
-    radial-gradient(circle at 40% 80%, rgba(49, 85, 70, 0.12), transparent 60%),
-    var(--surface-bg, rgb(24, 17, 20)); */
   background-image: radial-gradient(
     rgba(255, 255, 255, 0.07) 1px,
     transparent 1px

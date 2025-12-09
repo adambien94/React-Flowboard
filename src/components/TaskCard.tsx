@@ -3,11 +3,12 @@ import type { Card } from "../types/index";
 import { useDraggable } from "@dnd-kit/core";
 import { CSS } from "@dnd-kit/utilities";
 import { useTimerStore } from "../store/timerStore";
-import formatTime from "../utils/formatTime";
+import { useTaskModalStore } from "../store/taskModalStore";
+// import formatTime from "../utils/formatTime";
 
 interface TaskCardProps {
   card: Card;
-  showDrawer: () => void;
+  showDrawer: () => void; // Opcjonalne, bo już nie używamy
 }
 
 const PRIORITIES: Record<string, string> = {
@@ -26,7 +27,9 @@ export default function TaskCard({ card, showDrawer }: TaskCardProps) {
     startTimer,
     stopTimer,
     activeTaskId: activeTimerTaskId,
-  } = useTimerStore((state) => state);
+  } = useTimerStore();
+
+  const { openModal } = useTaskModalStore();
 
   const style = {
     transform: CSS.Translate.toString(transform),
@@ -51,8 +54,9 @@ export default function TaskCard({ card, showDrawer }: TaskCardProps) {
     }
   };
 
-  const onCardClick = () => {
-    alert(1);
+  const onCardClick = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    openModal(card.id);
   };
 
   return (
@@ -65,7 +69,7 @@ export default function TaskCard({ card, showDrawer }: TaskCardProps) {
         onClick={onCardClick}
       >
         <div className="card-body d-flex flex-column">
-          <div className="d-flex  align-items-center justify-content-between gap-2">
+          <div className="d-flex align-items-center justify-content-between gap-2">
             <Badge bg={PRIORITIES[card.priority as string]}> </Badge>
             <span
               style={{ fontSize: "14px" }}
@@ -107,7 +111,6 @@ export default function TaskCard({ card, showDrawer }: TaskCardProps) {
                 lineHeight: "1.4",
               }}
             >
-              {/* {card.loggedTime ? formatTime(card.loggedTime, true) : "0h 0min"} */}
               0h 0min
             </span>
 

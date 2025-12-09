@@ -17,20 +17,21 @@ import ConfirmModal from "./components/ConfirmModal";
 import formatTime from "./utils/formatTime";
 import { useBoardStore } from "./hooks/useBoardStore";
 import BoardLoader from "./components/BoardLoader";
+import { useTaskModalStore } from "./store/taskModalStore";
+import { syncTaskModalWithUrl } from "./store/taskModalStore";
 
 export default function Dashboard() {
   const [drawerShow, setDrawerShow] = useState(false);
   const [activeColId, setActiveColId] = useState<string>();
   const [activeCard, setActiveCard] = useState<Card | null>(null);
   const [addColumnModalShow, setAddColumnModalShow] = useState(false);
-  const [taskModalShow, setTaskModalShow] = useState(false);
   const [confirmLogTimeShow, setConfirmLogTimeShow] = useState(false);
   const { boards } = useBoardsContext();
   const { boardId } = useParams();
   const navigate = useNavigate();
   const { setTimeToLog, timeToLog, isTimerShow, clearActiveTaskId } =
     useTimerStore();
-
+  const { isOpen, closeModal } = useTaskModalStore();
   const activeBoardId = boardId || "";
   const {
     loadBoard,
@@ -65,6 +66,19 @@ export default function Dashboard() {
   const clearUrlHash = () => {
     window.location.hash = "";
   };
+
+  useEffect(() => {
+    syncTaskModalWithUrl();
+
+    const handleHashChange = () => {
+      syncTaskModalWithUrl();
+    };
+
+    window.addEventListener("hashchange", handleHashChange);
+    return () => {
+      window.removeEventListener("hashchange", handleHashChange);
+    };
+  }, []);
 
   useEffect(() => {
     if (!boards.length) return;
@@ -283,10 +297,7 @@ export default function Dashboard() {
         onSave={handleAddColumn}
       />
 
-      <TaskModal
-        show={!taskModalShow}
-        onHide={() => setTaskModalShow(!taskModalShow)}
-      />
+      <TaskModal show={isOpen} onHide={closeModal} />
     </>
   );
 }

@@ -8,6 +8,7 @@ type State = {
   boardTitle: string;
   channels: any[];
   boards: Board[];
+  cardDetails: Card | null;
   getBoardsList: () => Promise<void>;
   loadBoard: (boardId: string) => Promise<void>;
   addBoard: (title: string) => Promise<void>;
@@ -24,6 +25,8 @@ type State = {
   unsubscribeRealtime: () => void;
   clearBoardStore: () => void;
   setLoader: (isShow: boolean) => void;
+  setCardDetails: (card: Card | null) => void;
+  fetchCardDetails: (cardId: string) => Promise<void>;
 };
 
 export const useBoardStore = create<State>((set, get) => ({
@@ -32,6 +35,7 @@ export const useBoardStore = create<State>((set, get) => ({
   boardTitle: "",
   channels: [],
   boards: [],
+  cardDetails: null,
 
   getBoardsList: async () => {
     const { data, error } = await supabase
@@ -215,6 +219,23 @@ export const useBoardStore = create<State>((set, get) => ({
       console.error("❌ Failed to delete card:", error);
       set({ columns: prevState });
     }
+  },
+
+  setCardDetails: (card: Card | null) => set({ cardDetails: card }),
+
+  fetchCardDetails: async (cardId: string) => {
+    const { data, error } = await supabase
+      .from("cards")
+      .select("id, title, description, priority, position, column_id")
+      .eq("id", cardId)
+      .single();
+
+    if (error) {
+      console.error("❌ Failed to fetch card details", error);
+      return;
+    }
+
+    set({ cardDetails: data });
   },
 
   addColumn: async (boardId: string, title: string, color?: string) => {

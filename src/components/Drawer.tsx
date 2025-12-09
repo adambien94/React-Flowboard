@@ -41,6 +41,7 @@ export default function Drawer({ show, onHide }: DrawerProps) {
       scroll={true}
       className="shadow-none"
       data-bs-theme="dark"
+      keyboard={false}
     >
       <Offcanvas.Header closeButton className="border-bottom">
         <Offcanvas.Title className="fw-bold text-light">
@@ -101,7 +102,7 @@ export default function Drawer({ show, onHide }: DrawerProps) {
                           12 cards
                         </small>
                       </div>
-                      <Badge bg="light" className="text-dark" pill>
+                      <Badge bg="primary" pill>
                         {/* {board.columns.length} */}4
                       </Badge>
                     </div>
