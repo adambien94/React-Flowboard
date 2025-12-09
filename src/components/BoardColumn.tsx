@@ -2,7 +2,7 @@ import { Col, Card, Button } from "react-bootstrap";
 import type { Column, Card as CardType } from "../types/index";
 import TaskCard from "./TaskCard";
 import { useDroppable } from "@dnd-kit/core";
-
+// import GlassSurface from "./GlassSurface";
 interface BoardColumnProps {
   column: Column;
   drawerShow: (colId: string) => void;
@@ -14,7 +14,7 @@ export default function BoardColumn({ column, drawerShow }: BoardColumnProps) {
   });
 
   const colStyle = {
-    background: isOver ? "#343545" : "#292a37",
+    background: isOver ? "rgba(255,255,255,0.1)" : "rgba(255,255,255,0.05)",
     transition: "all 0.2s ease",
     border: "none",
     borderTop: `2px solid var(--bs-${column.color})`,
@@ -28,11 +28,7 @@ export default function BoardColumn({ column, drawerShow }: BoardColumnProps) {
             <Card.Title className="mb-3 ps-2">{column.title}</Card.Title>
             {column.cards.length > 0 ? (
               column.cards.map((card: CardType) => (
-                <TaskCard
-                  key={card.id}
-                  card={card}
-                  showDrawer={() => drawerShow(column.id)}
-                />
+                <TaskCard key={card.id} card={card} />
               ))
             ) : (
               <div
