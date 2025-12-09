@@ -134,3 +134,16 @@ body {
 .modal-footer {
   border: none;
 }
+
+.custom-badge-color {
+  background-color: var(--text-muted) !important;
+  color: black !important;
+}
+/* 
+.test {
+  position: absolute;
+  top: 0px;
+  left: 17px;
+  padding: 3px 13px !important;
+  opacity: 0.5;
+} */

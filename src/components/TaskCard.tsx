@@ -4,6 +4,7 @@ import { useDraggable } from "@dnd-kit/core";
 import { CSS } from "@dnd-kit/utilities";
 import { useTimerStore } from "../store/timerStore";
 import { useTaskModalStore } from "../store/taskModalStore";
+import { useTaskDrawerStore } from "../store/taskDrawerStore";
 // import formatTime from "../utils/formatTime";
 
 interface TaskCardProps {
@@ -22,14 +23,13 @@ export default function TaskCard({ card, showDrawer }: TaskCardProps) {
     useDraggable({
       id: card.id,
     });
-
   const {
     startTimer,
     stopTimer,
     activeTaskId: activeTimerTaskId,
   } = useTimerStore();
-
-  const { openModal } = useTaskModalStore();
+  const { openTaskModal } = useTaskModalStore();
+  const { openTaskDrawer } = useTaskDrawerStore();
 
   const style = {
     transform: CSS.Translate.toString(transform),
@@ -41,8 +41,7 @@ export default function TaskCard({ card, showDrawer }: TaskCardProps) {
 
   const handleEditClick = (e: React.MouseEvent) => {
     e.stopPropagation();
-    window.location.hash = `#edit=${card.id}`;
-    showDrawer();
+    openTaskDrawer(card.id);
   };
 
   const handleTimerClick = (e: React.MouseEvent) => {
@@ -56,7 +55,7 @@ export default function TaskCard({ card, showDrawer }: TaskCardProps) {
 
   const onCardClick = (e: React.MouseEvent) => {
     e.stopPropagation();
-    openModal(card.id);
+    openTaskModal(card.id);
   };
 
   return (

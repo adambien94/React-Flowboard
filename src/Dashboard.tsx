@@ -8,8 +8,6 @@ import TaskCard from "./components/TaskCard";
 import Timer from "./components/Timer";
 import AddColumnModal from "./components/AddColumnModal";
 import TaskModal from "./components/TaskModal";
-import { BoardProvider } from "./contexts/BoardContext";
-import { useBoardsContext } from "./contexts/BoardsContext";
 import { DndContext, DragOverlay } from "@dnd-kit/core";
 import type { DragEndEvent, DragStartEvent } from "@dnd-kit/core";
 import { useTimerStore } from "./store/timerStore";
@@ -19,21 +17,23 @@ import { useBoardStore } from "./hooks/useBoardStore";
 import BoardLoader from "./components/BoardLoader";
 import { useTaskModalStore } from "./store/taskModalStore";
 import { syncTaskModalWithUrl } from "./store/taskModalStore";
+import { useTaskDrawerStore } from "./store/taskDrawerStore";
+// import { syncTaskDrawerWithUrl } from "./store/TaskDrawerStore";
 
 export default function Dashboard() {
-  const [drawerShow, setDrawerShow] = useState(false);
   const [activeColId, setActiveColId] = useState<string>();
   const [activeCard, setActiveCard] = useState<Card | null>(null);
   const [addColumnModalShow, setAddColumnModalShow] = useState(false);
   const [confirmLogTimeShow, setConfirmLogTimeShow] = useState(false);
-  const { boards } = useBoardsContext();
   const { boardId } = useParams();
   const navigate = useNavigate();
   const { setTimeToLog, timeToLog, isTimerShow, clearActiveTaskId } =
     useTimerStore();
-  const { isOpen, closeModal } = useTaskModalStore();
+  const { isTaskModalOpen, closeTaskModal } = useTaskModalStore();
+  const { openTaskDrawer } = useTaskDrawerStore();
   const activeBoardId = boardId || "";
   const {
+    boards,
     loadBoard,
     boardTitle,
     columns,
@@ -45,14 +45,12 @@ export default function Dashboard() {
     subscribeRealtime,
     unsubscribeRealtime,
     loading,
-    // setLoader,
   } = useBoardStore();
 
   const boardCols = useMemo(() => columns ?? [], [columns]);
 
   useEffect(() => {
     if (!activeBoardId) {
-      // setLoader(false);
       return;
     }
 
@@ -89,7 +87,6 @@ export default function Dashboard() {
 
   useEffect(() => {
     if (!boardCols.length) {
-      setDrawerShow(false);
       setActiveColId(undefined);
       clearUrlHash();
       return;
@@ -97,19 +94,13 @@ export default function Dashboard() {
     const columnExists = boardCols.some(({ id }) => id === activeColId);
     if (!columnExists) {
       setActiveColId(boardCols[0].id);
-      setDrawerShow(false);
       clearUrlHash();
     }
   }, [boardCols, activeColId]);
 
-  const handleHideDrawer = () => {
-    clearUrlHash();
-    setDrawerShow(false);
-  };
-
   const handleOpenDrawer = (colId: string) => {
     setActiveColId(colId);
-    setDrawerShow(true);
+    openTaskDrawer();
   };
 
   const handleCardDragStart = (event: DragStartEvent) => {
@@ -173,108 +164,101 @@ export default function Dashboard() {
       {loading ? (
         <BoardLoader />
       ) : (
-        <BoardProvider value={{ boardCols, drawerShow, setDrawerShow }}>
-          <DndContext
-            onDragStart={handleCardDragStart}
-            onDragEnd={handleCardDragdEnd}
-          >
-            {activeColId && (
-              <TaskDrawer
-                onHide={handleHideDrawer}
-                colId={activeColId}
-                colName={boardCols.find(({ id }) => id === activeColId)?.title}
-                colColor={boardCols.find(({ id }) => id === activeColId)?.color}
-                createTask={addCard}
-                editTask={updateCard}
-                deleteTask={removeCard}
-              />
-            )}
-            <Container fluid>
-              {boards.length ? (
-                <div>
-                  <div className="d-flex align-items-center justify-content-between">
-                    <div className="d-flex align-items-center">
-                      <Dropdown>
-                        <Dropdown.Toggle
-                          variant="outline-secondary"
-                          id="dropdown-basic"
-                        >
-                          Boards
-                        </Dropdown.Toggle>
+        <DndContext
+          onDragStart={handleCardDragStart}
+          onDragEnd={handleCardDragdEnd}
+        >
+          <TaskDrawer
+            colId={activeColId}
+            colName={columns.find(({ id }) => id === activeColId)?.title}
+            colColor={columns.find(({ id }) => id === activeColId)?.color}
+            createTask={addCard}
+            editTask={updateCard}
+            deleteTask={removeCard}
+          />
+          <Container fluid>
+            {boards.length ? (
+              <div>
+                <div className="d-flex align-items-center justify-content-between">
+                  <div className="d-flex align-items-center">
+                    <Dropdown>
+                      <Dropdown.Toggle
+                        variant="outline-secondary"
+                        id="dropdown-basic"
+                      >
+                        Boards
+                      </Dropdown.Toggle>
 
-                        <Dropdown.Menu>
-                          {boards.map((board) => (
-                            <Dropdown.Item
-                              key={board.id}
-                              active={board.id === activeBoardId}
-                              onClick={() => {
-                                if (board.id === activeBoardId) return;
-                                navigate(`/${board.id}`);
-                              }}
-                            >
-                              {board.title}
-                            </Dropdown.Item>
-                          ))}
-                        </Dropdown.Menu>
-                      </Dropdown>
-                      <h3 className="fw-bold text-white ms-4 mt-2 fs-4">
-                        {boardTitle}
-                      </h3>
-                    </div>
-
-                    <Button
-                      variant="outline-secondary"
-                      onClick={() => setAddColumnModalShow(true)}
-                    >
-                      <i className="bi bi-plus-circle"></i> Add column
-                    </Button>
-                  </div>
-
-                  <div className="mt-3">
-                    <Stack>
-                      <Row>
-                        {boardCols.map((col) => (
-                          <BoardColumn
-                            key={col.id}
-                            column={col}
-                            drawerShow={handleOpenDrawer}
-                          />
+                      <Dropdown.Menu>
+                        {boards.map((board) => (
+                          <Dropdown.Item
+                            key={board.id}
+                            active={board.id === activeBoardId}
+                            onClick={() => {
+                              if (board.id === activeBoardId) return;
+                              navigate(`/${board.id}`);
+                            }}
+                          >
+                            {board.title}
+                          </Dropdown.Item>
                         ))}
-                      </Row>
-                    </Stack>
+                      </Dropdown.Menu>
+                    </Dropdown>
+                    <h3 className="fw-bold text-white ms-4 mt-2 fs-4">
+                      {boardTitle}
+                    </h3>
                   </div>
-                </div>
-              ) : (
-                <div className="text-center">
-                  <h1 className="mt-5 mb-4">Create your first Board !</h1>
-                  <Button size="lg" variant="outline-secondary">
-                    <i className="bi bi-plus-circle me-3"></i>
-                    Create Board
+
+                  <Button
+                    variant="outline-secondary"
+                    onClick={() => setAddColumnModalShow(true)}
+                  >
+                    <i className="bi bi-plus-circle"></i> Add column
                   </Button>
                 </div>
-              )}
-            </Container>
 
-            <DragOverlay>
-              {activeCard ? (
-                <div
-                  style={{
-                    transform: "rotate(0deg) translateY(-4px)",
-                    borderRadius: "18px",
-                    // boxShadow: "0px 3px 3px rgba(255,255,255,0.1)",
-                  }}
-                >
-                  <TaskCard
-                    card={{
-                      ...activeCard,
-                    }}
-                    showDrawer={() => {}}
-                  />
+                <div className="mt-3">
+                  <Stack>
+                    <Row>
+                      {columns.map((col) => (
+                        <BoardColumn
+                          key={col.id}
+                          column={col}
+                          drawerShow={handleOpenDrawer}
+                        />
+                      ))}
+                    </Row>
+                  </Stack>
                 </div>
-              ) : null}
-            </DragOverlay>
-          </DndContext>
-        </BoardProvider>
+              </div>
+            ) : (
+              <div className="text-center">
+                <h1 className="mt-5 mb-4">Create your first Board !</h1>
+                <Button size="lg" variant="outline-secondary">
+                  <i className="bi bi-plus-circle me-3"></i>
+                  Create Board
+                </Button>
+              </div>
+            )}
+          </Container>
+          <DragOverlay>
+            {activeCard ? (
+              <div
+                style={{
+                  transform: "rotate(0deg) translateY(-4px)",
+                  borderRadius: "18px",
+                }}
+              >
+                <TaskCard
+                  card={{
+                    ...activeCard,
+                  }}
+                  showDrawer={() => {}}
+                />
+              </div>
+            ) : null}
+          </DragOverlay>
+        </DndContext>
       )}
 
       <Timer show={isTimerShow} onFinish={handleStopTimer} />
@@ -297,7 +281,7 @@ export default function Dashboard() {
         onSave={handleAddColumn}
       />
 
-      <TaskModal show={isOpen} onHide={closeModal} />
+      <TaskModal show={isTaskModalOpen} onHide={closeTaskModal} />
     </>
   );
 }

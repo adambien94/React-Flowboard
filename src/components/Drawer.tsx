@@ -2,7 +2,6 @@ import { useState } from "react";
 import { Offcanvas, ListGroup, Button, Badge } from "react-bootstrap";
 import { useNavigate, useParams } from "react-router-dom";
 import AddBoardModal from "./AddBoardModal";
-import { useBoardsContext } from "../contexts/BoardsContext";
 import { useBoardStore } from "../hooks/useBoardStore";
 import { useAuth } from "../contexts/AuthContext";
 
@@ -14,9 +13,8 @@ type DrawerProps = {
 export default function Drawer({ show, onHide }: DrawerProps) {
   const navigate = useNavigate();
   const { boardId } = useParams();
-  const { boards } = useBoardsContext();
   const [showCreateBoardModal, setShowCreateBoardModal] = useState(false);
-  const { addBoard } = useBoardStore();
+  const { boards, addBoard } = useBoardStore();
   const { logout } = useAuth();
 
   const handleBoardSelect = (targetBoardId: string) => {
@@ -102,7 +100,7 @@ export default function Drawer({ show, onHide }: DrawerProps) {
                           12 cards
                         </small>
                       </div>
-                      <Badge bg="primary" pill>
+                      <Badge className="custom-badge-color" pill>
                         {/* {board.columns.length} */}4
                       </Badge>
                     </div>

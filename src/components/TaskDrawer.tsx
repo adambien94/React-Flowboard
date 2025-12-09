@@ -1,15 +1,15 @@
-import { useState, useEffect, useRef, useCallback } from "react";
+import { useState, useEffect, useRef } from "react";
 import { type FormEvent } from "react";
 import { Offcanvas, Form, Button } from "react-bootstrap";
 import type { Card } from "../types/index";
-import { useBoardContext } from "../contexts/BoardContext";
 import ConfirmModal from "./ConfirmModal";
+import { useBoardStore } from "../hooks/useBoardStore";
+import { useTaskDrawerStore } from "../store/taskDrawerStore";
 
 type DrawerProps = {
   colId: string;
   colName?: string;
   colColor?: string;
-  onHide: () => void;
   createTask: (colId: string, taskData: Partial<Card>) => void;
   editTask: (cardId: string, taskData: Partial<Card>) => void;
   deleteTask: (cardId: string) => void;
@@ -41,7 +41,6 @@ const TASK_PRIORITIES = [
 ];
 
 export default function Drawer({
-  onHide,
   colId,
   colName,
   createTask,
@@ -55,7 +54,34 @@ export default function Drawer({
   });
   const [confirmDeleteShow, setConfirmDeleteShow] = useState(false);
   const titleInputRef = useRef<HTMLInputElement>(null);
-  const { boardCols, drawerShow } = useBoardContext();
+  const { fetchCardDetails, cardDetails, setCardDetails } = useBoardStore();
+  const { isTaskDrawerOpen, closeTaskDrawer, activeCardId } =
+    useTaskDrawerStore();
+
+  useEffect(() => {
+    if (activeCardId) fetchCardDetails(activeCardId);
+  }, [activeCardId, fetchCardDetails, setCardDetails]);
+
+  useEffect(() => {
+    const setCardForEdit = () => {
+      setForm({
+        title: cardDetails?.title || "",
+        description: cardDetails?.description || "",
+        priority: cardDetails?.priority || "",
+      });
+    };
+    setCardForEdit();
+  }, [cardDetails]);
+
+  useEffect(() => {
+    if (!isTaskDrawerOpen) {
+      const timeout = setTimeout(() => {
+        setCardDetails(null);
+      }, 250);
+
+      return () => clearTimeout(timeout);
+    }
+  }, [isTaskDrawerOpen, setCardDetails]);
 
   const getCardIdFromHash = () => {
     const hash = window.location.hash;
@@ -65,37 +91,16 @@ export default function Drawer({
     return null;
   };
 
-  const setCardForEdit = useCallback(() => {
-    const cardId = getCardIdFromHash();
-    if (cardId) {
-      const cardForEdit = boardCols
-        .find(({ id }) => id === colId)
-        ?.cards.find(({ id }) => id === cardId);
-
-      if (cardForEdit) {
-        setForm({
-          title: cardForEdit.title,
-          description: cardForEdit.description || "",
-          priority: cardForEdit.priority || "",
-        });
-      }
-    }
-  }, [boardCols, colId]);
-
   const handleDeleteCard = () => {
     const cardId = getCardIdFromHash();
     if (!cardId) return;
     deleteTask(cardId);
-    onHide();
+    closeTaskDrawer();
     setConfirmDeleteShow(false);
   };
 
   useEffect(() => {
-    const hash = window.location.hash;
-    if (hash.includes("#edit=")) {
-      setCardForEdit();
-    }
-    if (drawerShow) {
+    if (isTaskDrawerOpen) {
       setTimeout(() => {
         titleInputRef.current?.focus();
       }, 200);
@@ -106,7 +111,7 @@ export default function Drawer({
         priority: "",
       });
     }
-  }, [drawerShow, setCardForEdit]);
+  }, [isTaskDrawerOpen]);
 
   const handleChange = (key: string, value: string) => {
     setForm((prev) => ({
@@ -124,18 +129,19 @@ export default function Drawer({
         ...(form as Partial<Card>),
       });
     } else {
+      console.log(123, colId);
       createTask(colId, {
         ...(form as Partial<Card>),
       });
     }
-    onHide();
+    closeTaskDrawer();
   };
 
   return (
     <>
       <Offcanvas
-        show={drawerShow}
-        onHide={onHide}
+        show={isTaskDrawerOpen}
+        onHide={closeTaskDrawer}
         placement="end"
         backdrop={true}
         scroll={true}
@@ -199,7 +205,7 @@ export default function Drawer({
                 <Button
                   variant="outline-secondary"
                   type="button"
-                  onClick={onHide}
+                  onClick={closeTaskDrawer}
                 >
                   Cancel
                 </Button>

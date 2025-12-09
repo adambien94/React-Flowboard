@@ -38,7 +38,7 @@ export default function TaskModal({ show, onHide }: TaskModalProps) {
           <>
             <h3>{cardDetails?.title}</h3>
 
-            <p className="mt-4">{cardDetails?.description}</p>
+            <p className="my-4">{cardDetails?.description}</p>
 
             <div>
               <span className="text-secondary">
