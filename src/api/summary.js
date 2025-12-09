@@ -31,6 +31,8 @@ export default async function handler(req, res) {
 
     const data = await response.json();
 
+    console.log("summary", data);
+
     return res.status(200).json({
       summary: data.choices?.[0]?.message?.content ?? "Brak podsumowania",
     });
