@@ -9,7 +9,6 @@ import { useTaskDrawerStore } from "../store/taskDrawerStore";
 
 interface TaskCardProps {
   card: Card;
-  showDrawer: () => void; // Opcjonalne, bo już nie używamy
 }
 
 const PRIORITIES: Record<string, string> = {
@@ -18,7 +17,7 @@ const PRIORITIES: Record<string, string> = {
   high: "danger",
 };
 
-export default function TaskCard({ card, showDrawer }: TaskCardProps) {
+export default function TaskCard({ card }: TaskCardProps) {
   const { attributes, listeners, setNodeRef, transform, isDragging } =
     useDraggable({
       id: card.id,
@@ -36,7 +35,7 @@ export default function TaskCard({ card, showDrawer }: TaskCardProps) {
     opacity: isDragging ? 0 : 1,
     cursor: "pointer",
     transition: "border .2s ease-in-out 0.1s",
-    border: card.id === activeTimerTaskId ? "1px solid var(--bs-primary)" : "",
+    outline: card.id === activeTimerTaskId ? "1px solid var(--bs-primary)" : "",
   };
 
   const handleEditClick = (e: React.MouseEvent) => {

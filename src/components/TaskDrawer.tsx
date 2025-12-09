@@ -83,18 +83,9 @@ export default function Drawer({
     }
   }, [isTaskDrawerOpen, setCardDetails]);
 
-  const getCardIdFromHash = () => {
-    const hash = window.location.hash;
-    if (hash.includes("#edit=")) {
-      return hash.split("#edit=")[1];
-    }
-    return null;
-  };
-
   const handleDeleteCard = () => {
-    const cardId = getCardIdFromHash();
-    if (!cardId) return;
-    deleteTask(cardId);
+    if (!activeCardId) return;
+    deleteTask(activeCardId);
     closeTaskDrawer();
     setConfirmDeleteShow(false);
   };
@@ -122,14 +113,12 @@ export default function Drawer({
 
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
-    const cardId = getCardIdFromHash();
 
-    if (cardId) {
-      editTask(cardId, {
+    if (activeCardId) {
+      editTask(activeCardId, {
         ...(form as Partial<Card>),
       });
     } else {
-      console.log(123, colId);
       createTask(colId, {
         ...(form as Partial<Card>),
       });
@@ -151,12 +140,7 @@ export default function Drawer({
       >
         <Offcanvas.Header closeButton className="border-bottom">
           <Offcanvas.Title className="fw-bold text-light d-flex align-items-center">
-            {getCardIdFromHash() ? "Edit card" : "Add card"} - {colName}
-            {/* <span className="fs-6 mb-1">
-              <Badge bg={colColor} className="mx-2">
-                {colName}
-              </Badge>
-            </span> */}
+            {activeCardId ? "Edit card" : "Add card"} - {colName}
           </Offcanvas.Title>
         </Offcanvas.Header>
 
@@ -210,7 +194,7 @@ export default function Drawer({
                   Cancel
                 </Button>
               </div>
-              {getCardIdFromHash() && (
+              {activeCardId && (
                 <Button
                   variant="outline-secondary"
                   onClick={() => setConfirmDeleteShow(true)}

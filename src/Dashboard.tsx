@@ -253,7 +253,6 @@ export default function Dashboard() {
                   card={{
                     ...activeCard,
                   }}
-                  showDrawer={() => {}}
                 />
               </div>
             ) : null}
