@@ -26,6 +26,24 @@ export default function TaskModal({ show, onHide }: TaskModalProps) {
     }
   }, [show, setCardDetails]);
 
+  const getTaskSummary = async (title: string, description: string) => {
+    const res = await fetch("/api/summary", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ title, description }),
+    });
+
+    const data = await res.json();
+    console.log(data);
+    return data.summary;
+  };
+
+  useEffect(() => {
+    if (cardDetails) {
+      getTaskSummary(cardDetails.title, cardDetails?.description || "");
+    }
+  }, [cardDetails]);
+
   return (
     <Modal show={show} onHide={onHide} centered>
       <Modal.Header
