@@ -74,7 +74,6 @@ export default function Dashboard() {
   }, []);
 
   const handleLogTime = () => {
-    // if (timeToLog) logTime(timeToLog?.taskId, timeToLog?.time);
     clearActiveTaskId();
     setConfirmLogTimeShow(false);
   };
@@ -102,7 +101,7 @@ export default function Dashboard() {
 
           <Container fluid>
             {boards.length ? (
-              <div>
+              <>
                 <DashboardTopBar
                   openAddColumnModal={() => setAddColumnModalShow(true)}
                 />
@@ -110,7 +109,7 @@ export default function Dashboard() {
                 <div className="mt-3">
                   <DashboardColumns />
                 </div>
-              </div>
+              </>
             ) : (
               <DashboardInitHeader />
             )}
