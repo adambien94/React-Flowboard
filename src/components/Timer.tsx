@@ -4,10 +4,10 @@ import Button from "react-bootstrap/Button";
 import { useTimerStore } from "../store/timerStore";
 import formatTime from "../utils/formatTime";
 
-interface TimerProps {
+type TimerProps = {
   show: boolean;
   onFinish?: (taskId: string, totalMs: number) => void;
-}
+};
 
 const Timer: React.FC<TimerProps> = ({ show, onFinish }) => {
   const [elapsed, setElapsed] = useState(0);

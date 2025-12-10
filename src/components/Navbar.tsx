@@ -1,9 +1,9 @@
 import { Navbar as BSNavbar, Nav, Button, Container } from "react-bootstrap";
 
-interface NavbarProps {
+type NavbarProps = {
   onToggleDrawer?: () => void;
   isControlsHidden?: boolean;
-}
+};
 
 export default function Navbar({
   onToggleDrawer,

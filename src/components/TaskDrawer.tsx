@@ -7,9 +7,6 @@ import { useBoardStore } from "../hooks/useBoardStore";
 import { useTaskDrawerStore } from "../store/taskDrawerStore";
 
 type DrawerProps = {
-  colId: string;
-  colName?: string;
-  colColor?: string;
   createTask: (colId: string, taskData: Partial<Card>) => void;
   editTask: (cardId: string, taskData: Partial<Card>) => void;
   deleteTask: (cardId: string) => void;
@@ -41,8 +38,6 @@ const TASK_PRIORITIES = [
 ];
 
 export default function Drawer({
-  colId,
-  colName,
   createTask,
   editTask,
   deleteTask,
@@ -53,9 +48,11 @@ export default function Drawer({
     priority: "",
   });
   const [confirmDeleteShow, setConfirmDeleteShow] = useState(false);
+  const [colName, setColName] = useState<string | undefined>("");
   const titleInputRef = useRef<HTMLInputElement>(null);
-  const { fetchCardDetails, cardDetails, setCardDetails } = useBoardStore();
-  const { isTaskDrawerOpen, closeTaskDrawer, activeCardId } =
+  const { columns, fetchCardDetails, cardDetails, setCardDetails } =
+    useBoardStore();
+  const { isTaskDrawerOpen, closeTaskDrawer, activeCardId, activeColId } =
     useTaskDrawerStore();
 
   useEffect(() => {
@@ -63,15 +60,21 @@ export default function Drawer({
   }, [activeCardId, fetchCardDetails, setCardDetails]);
 
   useEffect(() => {
-    const setCardForEdit = () => {
-      setForm({
-        title: cardDetails?.title || "",
-        description: cardDetails?.description || "",
-        priority: cardDetails?.priority || "",
-      });
-    };
     setCardForEdit();
-  }, [cardDetails]);
+    setColName(columns.find(({ id }) => id === cardDetails?.column_id)?.title);
+  }, [cardDetails, columns]);
+
+  useEffect(() => {
+    setColName(columns.find(({ id }) => id === activeColId)?.title);
+  }, [activeColId, columns]);
+
+  const setCardForEdit = () => {
+    setForm({
+      title: cardDetails?.title || "",
+      description: cardDetails?.description || "",
+      priority: cardDetails?.priority || "",
+    });
+  };
 
   const handleDeleteCard = () => {
     if (!activeCardId) return;
@@ -136,7 +139,7 @@ export default function Drawer({
 
         <Offcanvas.Body className="p-3 mt-3">
           <Form onSubmit={handleSubmit}>
-            <Form.Group className="mb-4">
+            <Form.Group className="mb-3">
               <Form.Control
                 ref={titleInputRef}
                 required
@@ -147,7 +150,7 @@ export default function Drawer({
               />
             </Form.Group>
 
-            <Form.Group className="mb-4">
+            <Form.Group className="mb-3">
               <Form.Control
                 value={form.description}
                 onChange={(e) => handleChange("description", e.target.value)}
@@ -199,7 +202,7 @@ export default function Drawer({
 
       <ConfirmModal
         show={confirmDeleteShow}
-        setShow={setConfirmDeleteShow}
+        onHide={() => setConfirmDeleteShow(false)}
         onConfirm={handleDeleteCard}
         title="Delete this card?"
         message="This action permanently removes the selected task card. It cannot be undone."

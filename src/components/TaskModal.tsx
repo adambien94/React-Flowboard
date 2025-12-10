@@ -3,10 +3,10 @@ import { Modal, Button, Spinner } from "react-bootstrap";
 import { useTaskModalStore } from "../store/taskModalStore";
 import { useBoardStore } from "../hooks/useBoardStore";
 
-interface TaskModalProps {
+type TaskModalProps = {
   show: boolean;
   onHide: () => void;
-}
+};
 
 export default function TaskModal({ show, onHide }: TaskModalProps) {
   const { activeCardId } = useTaskModalStore();

@@ -3,13 +3,15 @@ import { create } from "zustand";
 type TaskDrawerStore = {
   isTaskDrawerOpen: boolean;
   activeCardId: string | null;
+  activeColId: string | null;
   openTaskDrawer: (cardId?: string) => void;
+  setActiveColId: (colId: string) => void;
   closeTaskDrawer: () => void;
 };
 
 const parseHash = () => {
   const hash = window.location.hash;
-  if (!hash) return { isTaskDrawerOpen: false, activeCardId: null, mode: null };
+  if (!hash) return { isTaskDrawerOpen: false, activeCardId: null };
 
   const editMatch = hash.match(/#edit=(.+)/);
 
@@ -22,6 +24,11 @@ const parseHash = () => {
 export const useTaskDrawerStore = create<TaskDrawerStore>((set) => ({
   isTaskDrawerOpen: false,
   activeCardId: null,
+  activeColId: null,
+
+  setActiveColId: (colId) => {
+    set({ activeColId: colId });
+  },
 
   openTaskDrawer: (cardId?) => {
     if (cardId) {

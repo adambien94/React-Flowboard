@@ -6,11 +6,10 @@ import { useTimerStore } from "../store/timerStore";
 import { useTaskModalStore } from "../store/taskModalStore";
 import { useTaskDrawerStore } from "../store/taskDrawerStore";
 // import formatTime from "../utils/formatTime";
-import GlassSurface from "./GlassSurface";
 
-interface TaskCardProps {
+type TaskCardProps = {
   card: Card;
-}
+};
 
 const PRIORITIES: Record<string, string> = {
   low: "info",

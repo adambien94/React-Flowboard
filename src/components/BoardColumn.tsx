@@ -2,22 +2,28 @@ import { Col, Card, Button } from "react-bootstrap";
 import type { Column, Card as CardType } from "../types/index";
 import TaskCard from "./TaskCard";
 import { useDroppable } from "@dnd-kit/core";
-// import GlassSurface from "./GlassSurface";
-interface BoardColumnProps {
-  column: Column;
-  drawerShow: (colId: string) => void;
-}
+import { useTaskDrawerStore } from "../store/taskDrawerStore";
 
-export default function BoardColumn({ column, drawerShow }: BoardColumnProps) {
+type BoardColumnProps = {
+  column: Column;
+};
+
+export default function BoardColumn({ column }: BoardColumnProps) {
   const { setNodeRef, isOver } = useDroppable({
     id: column.id,
   });
+  const { openTaskDrawer, setActiveColId } = useTaskDrawerStore();
 
   const colStyle = {
     background: isOver ? "rgba(255,255,255,0.1)" : "rgba(255,255,255,0.05)",
     transition: "all 0.2s ease",
     border: "1px solid rgba(255,255,255,0.1)",
     borderTop: `2px solid var(--bs-${column.color})`,
+  };
+
+  const handleOpenDrawer = () => {
+    setActiveColId(column.id);
+    openTaskDrawer();
   };
 
   return (
@@ -39,11 +45,7 @@ export default function BoardColumn({ column, drawerShow }: BoardColumnProps) {
               </div>
             )}
             <div className="mt-3 ps-2">
-              <Button
-                size="sm"
-                variant="success"
-                onClick={() => drawerShow(column.id)}
-              >
+              <Button size="sm" variant="success" onClick={handleOpenDrawer}>
                 <i className="bi bi-plus-circle"></i> Add Card
               </Button>
             </div>
