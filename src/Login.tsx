@@ -45,7 +45,10 @@ export default function Login() {
       <div
         className={`${styles.mainContent} d-flex align-items-center justify-content-center`}
       >
-        <Card style={{ width: 380, border: "1px solid var(--border-color)" }}>
+        <Card
+          className="login-card"
+          style={{ width: 380, border: "1px solid var(--border-color)" }}
+        >
           <Card.Body>
             <h4 className="text-center mb-4 py-3">
               {isRegister ? "Create Account" : "Sign in"}
@@ -75,7 +78,12 @@ export default function Login() {
               )}
 
               <div className="d-grid gap-2 mb-2">
-                <Button type="submit" disabled={loading}>
+                <Button
+                  variant="light"
+                  type="submit"
+                  className="fw-semibold"
+                  disabled={loading}
+                >
                   {loading ? (
                     <>
                       <Spinner size="sm" /> Loading...
@@ -89,7 +97,7 @@ export default function Login() {
 
                 <Button
                   variant="outline-secondary"
-                  className="mt-2"
+                  className="mt-1 fw-semibold"
                   onClick={() => setIsRegister((prev) => !prev)}
                 >
                   {isRegister

@@ -120,11 +120,12 @@ body {
   color: var(--text-muted);
 }
 
+.login-card,
 .modal-content,
 .offcanvas {
   background: transparent;
   backdrop-filter: blur(var(--blur-amount));
-  box-shadow: var(--shadow-soft);
+  /* box-shadow: var(--shadow-soft); */
 }
 
 /* .offcanvas-end {
@@ -151,14 +152,12 @@ body {
   background-color: var(--text-muted) !important;
   color: black !important;
 }
-/* 
-.test {
-  position: absolute;
-  top: 0px;
-  left: 17px;
-  padding: 3px 13px !important;
+
+/* .modal-backdrop.show,
+.offcanvas-backdrop.show {
   opacity: 0.5;
 } */
+/* 
 
 /* GLASS */
 .glass-surface {

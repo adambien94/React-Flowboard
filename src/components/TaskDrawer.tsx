@@ -73,16 +73,6 @@ export default function Drawer({
     setCardForEdit();
   }, [cardDetails]);
 
-  useEffect(() => {
-    if (!isTaskDrawerOpen) {
-      const timeout = setTimeout(() => {
-        setCardDetails(null);
-      }, 250);
-
-      return () => clearTimeout(timeout);
-    }
-  }, [isTaskDrawerOpen, setCardDetails]);
-
   const handleDeleteCard = () => {
     if (!activeCardId) return;
     deleteTask(activeCardId);

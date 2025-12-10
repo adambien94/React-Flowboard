@@ -17,8 +17,11 @@ import { useBoardStore } from "./hooks/useBoardStore";
 import BoardLoader from "./components/BoardLoader";
 import { useTaskModalStore } from "./store/taskModalStore";
 import { syncTaskModalWithUrl } from "./store/taskModalStore";
-import { useTaskDrawerStore } from "./store/taskDrawerStore";
-// import { syncTaskDrawerWithUrl } from "./store/TaskDrawerStore";
+import {
+  useTaskDrawerStore,
+  syncTaskDrawerWithUrl,
+} from "./store/taskDrawerStore";
+// import GlassSurface from "./components/GlassSurface";
 
 export default function Dashboard() {
   const [activeColId, setActiveColId] = useState<string>();
@@ -42,7 +45,7 @@ export default function Dashboard() {
     addCard,
     moveCard,
     removeCard,
-    subscribeRealtime,
+    // subscribeRealtime,
     unsubscribeRealtime,
     loading,
   } = useBoardStore();
@@ -55,21 +58,21 @@ export default function Dashboard() {
     }
 
     loadBoard(activeBoardId);
-    subscribeRealtime(activeBoardId);
+    // subscribeRealtime(activeBoardId);
 
     return () => unsubscribeRealtime();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [activeBoardId]);
 
-  const clearUrlHash = () => {
-    window.location.hash = "";
-  };
+  // console.log("dashboard");
 
   useEffect(() => {
     syncTaskModalWithUrl();
+    syncTaskDrawerWithUrl();
 
     const handleHashChange = () => {
       syncTaskModalWithUrl();
+      syncTaskDrawerWithUrl();
     };
 
     window.addEventListener("hashchange", handleHashChange);
@@ -83,18 +86,16 @@ export default function Dashboard() {
     if (!activeBoardId || !boards.some((board) => board.id === activeBoardId)) {
       navigate(`/${boards[0].id}`, { replace: true });
     }
-  }, [activeBoardId, boards, navigate]);
+  }, []);
 
   useEffect(() => {
     if (!boardCols.length) {
       setActiveColId(undefined);
-      clearUrlHash();
       return;
     }
     const columnExists = boardCols.some(({ id }) => id === activeColId);
     if (!columnExists) {
       setActiveColId(boardCols[0].id);
-      clearUrlHash();
     }
   }, [boardCols, activeColId]);
 
@@ -152,12 +153,6 @@ export default function Dashboard() {
   const handleAddColumn = (name: string, color: string) => {
     addColumn(activeBoardId, name, color);
   };
-
-  useEffect(() => {
-    return () => {
-      clearUrlHash();
-    };
-  }, []);
 
   return (
     <>
@@ -255,7 +250,15 @@ export default function Dashboard() {
                   }}
                 />
               </div>
-            ) : null}
+            ) : // <GlassSurface
+            //   width={300}
+            //   height={200}
+            //   borderRadius={24}
+            //   className="my-custom-class"
+            // >
+            //   hehe
+            // </GlassSurface>
+            null}
           </DragOverlay>
         </DndContext>
       )}

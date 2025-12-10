@@ -58,7 +58,7 @@ export default function Drawer({ show, onHide }: DrawerProps) {
             <Button
               variant="primary"
               size="sm"
-              className="w-100 mb-2"
+              className="w-100 mb-2 fw-semibold"
               onClick={() => setShowCreateBoardModal(true)}
             >
               <i className="bi bi-plus-circle me-2"></i>
@@ -67,7 +67,7 @@ export default function Drawer({ show, onHide }: DrawerProps) {
             <Button
               variant="outline-secondary"
               size="sm"
-              className="w-100"
+              className="w-100 fw-semibold"
               disabled
             >
               <i className="bi bi-search me-2"></i>
