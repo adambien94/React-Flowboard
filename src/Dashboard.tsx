@@ -71,7 +71,7 @@ export default function Dashboard() {
     if (!activeBoardId || !boards.some((board) => board.id === activeBoardId)) {
       navigate(`/${boards[0].id}`, { replace: true });
     }
-  }, []);
+  }, [activeBoardId, boards, navigate]);
 
   const handleLogTime = () => {
     clearActiveTaskId();
