@@ -5,17 +5,19 @@ import TaskDrawer from "./components/TaskDrawer";
 import Timer from "./components/Timer";
 import AddColumnModal from "./components/AddColumnModal";
 import TaskModal from "./components/TaskModal";
-import DashboardTopBar from "./components/DashboardTopBar";
-import DashboardInitHeader from "./components/DashboardInitHeader";
-import DashboardColumns from "./components/DashboardColumns";
+import DashboardTopBar from "./components/dashboard/DashboardTopBar";
+import DashboardInitHeader from "./components/dashboard/DashboardInitHeader";
+import DashboardColumns from "./components/dashboard/DashboardColumns";
 import { useTimerStore } from "./store/timerStore";
 import ConfirmModal from "./components/ConfirmModal";
 import formatTime from "./utils/formatTime";
 import { useBoardStore } from "./hooks/useBoardStore";
-import BoardLoader from "./components/BoardLoader";
+import BoardLoader from "./components/dashboard/BoardLoader";
 import { useTaskModalStore } from "./store/taskModalStore";
 import { syncTaskModalWithUrl } from "./store/taskModalStore";
 import { syncTaskDrawerWithUrl } from "./store/taskDrawerStore";
+
+// 4669171143
 
 export default function Dashboard() {
   const [addColumnModalShow, setAddColumnModalShow] = useState(false);

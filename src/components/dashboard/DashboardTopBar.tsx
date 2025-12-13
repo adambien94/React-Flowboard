@@ -1,5 +1,5 @@
 import { Dropdown, Button } from "react-bootstrap";
-import { useBoardStore } from "../hooks/useBoardStore";
+import { useBoardStore } from "../../hooks/useBoardStore";
 import { useNavigate, useParams } from "react-router-dom";
 
 type DashboardTopBarParams = {

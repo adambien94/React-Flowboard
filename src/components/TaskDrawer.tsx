@@ -79,7 +79,7 @@ export default function Drawer({
   const handleDeleteCard = () => {
     if (!activeCardId) return;
     deleteTask(activeCardId);
-    closeTaskDrawer();
+    onCloseTaskDrawer();
     setConfirmDeleteShow(false);
   };
 
@@ -88,14 +88,8 @@ export default function Drawer({
       setTimeout(() => {
         titleInputRef.current?.focus();
       }, 200);
-    } else {
-      setForm({
-        title: "",
-        description: "",
-        priority: "",
-      });
     }
-  }, [isTaskDrawerOpen]);
+  }, [isTaskDrawerOpen, setCardDetails]);
 
   const handleChange = (key: string, value: string) => {
     setForm((prev) => ({
@@ -116,14 +110,21 @@ export default function Drawer({
         ...(form as Partial<Card>),
       });
     }
+    onCloseTaskDrawer();
+  };
+
+  const onCloseTaskDrawer = () => {
     closeTaskDrawer();
+    setTimeout(() => {
+      setCardDetails(null);
+    }, 250);
   };
 
   return (
     <>
       <Offcanvas
         show={isTaskDrawerOpen}
-        onHide={closeTaskDrawer}
+        onHide={onCloseTaskDrawer}
         placement="end"
         backdrop={true}
         scroll={true}
@@ -133,7 +134,9 @@ export default function Drawer({
       >
         <Offcanvas.Header closeButton className="border-bottom">
           <Offcanvas.Title className="fw-bold text-light d-flex align-items-center">
-            {activeCardId ? "Edit card" : "Add card"} - {colName}
+            {activeCardId ? "Edit card" : "Add card"}
+            <span className="mx-2">{"→"}</span>
+            <span>{colName}</span>
           </Offcanvas.Title>
         </Offcanvas.Header>
 
@@ -182,7 +185,7 @@ export default function Drawer({
                 <Button
                   variant="outline-secondary"
                   type="button"
-                  onClick={closeTaskDrawer}
+                  onClick={onCloseTaskDrawer}
                 >
                   Cancel
                 </Button>

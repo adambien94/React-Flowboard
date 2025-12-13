@@ -1,11 +1,11 @@
 import { useMemo, useState } from "react";
-import type { Card } from "../types/index";
+import type { Card } from "../../types/index";
 import { Stack, Row } from "react-bootstrap";
 import { DndContext, DragOverlay } from "@dnd-kit/core";
 import type { DragEndEvent, DragStartEvent } from "@dnd-kit/core";
-import BoardColumn from "../components/BoardColumn";
-import TaskCard from "../components/TaskCard";
-import { useBoardStore } from "../hooks/useBoardStore";
+import BoardColumn from "./BoardColumn";
+import TaskCard from "../TaskCard";
+import { useBoardStore } from "../../hooks/useBoardStore";
 
 const DashboardColumns = () => {
   const [activeCard, setActiveCard] = useState<Card | null>(null);

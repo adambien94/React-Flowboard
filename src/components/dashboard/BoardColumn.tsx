@@ -1,8 +1,8 @@
 import { Col, Card, Button } from "react-bootstrap";
-import type { Column, Card as CardType } from "../types/index";
-import TaskCard from "./TaskCard";
+import type { Column, Card as CardType } from "../../types/index";
+import TaskCard from "../TaskCard";
 import { useDroppable } from "@dnd-kit/core";
-import { useTaskDrawerStore } from "../store/taskDrawerStore";
+import { useTaskDrawerStore } from "../../store/taskDrawerStore";
 
 type BoardColumnProps = {
   column: Column;
@@ -19,6 +19,8 @@ export default function BoardColumn({ column }: BoardColumnProps) {
     transition: "all 0.2s ease",
     border: "1px solid rgba(255,255,255,0.1)",
     borderTop: `2px solid var(--bs-${column.color})`,
+    maxHeight: "calc(100vh - 160px)",
+    overflow: "hidden",
   };
 
   const handleOpenDrawer = () => {
@@ -32,6 +34,7 @@ export default function BoardColumn({ column }: BoardColumnProps) {
         <Card ref={setNodeRef} style={colStyle}>
           <Card.Body className="px-2">
             <Card.Title className="mb-3 ps-2">{column.title}</Card.Title>
+
             {column.cards.length > 0 ? (
               column.cards.map((card: CardType) => (
                 <TaskCard key={card.id} card={card} />
@@ -44,6 +47,7 @@ export default function BoardColumn({ column }: BoardColumnProps) {
                 List is empty.
               </div>
             )}
+
             <div className="mt-3 ps-2">
               <Button size="sm" variant="success" onClick={handleOpenDrawer}>
                 <i className="bi bi-plus-circle"></i> Add Card

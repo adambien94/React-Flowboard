@@ -1,7 +1,7 @@
 import { useState, type FormEvent } from "react";
 import { Button, Card, Form, Spinner } from "react-bootstrap";
 import Navbar from "./components/Navbar";
-import styles from "./components/DashboardLayout.module.css";
+import styles from "./components/dashboard/DashboardLayout.module.css";
 import { supabase } from "./api/supabaseClient";
 import { useNavigate } from "react-router-dom";
 

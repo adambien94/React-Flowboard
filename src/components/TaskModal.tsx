@@ -1,11 +1,17 @@
 import { useEffect } from "react";
-import { Modal, Button, Spinner } from "react-bootstrap";
+import { Modal, Button, Spinner, Badge } from "react-bootstrap";
 import { useTaskModalStore } from "../store/taskModalStore";
 import { useBoardStore } from "../hooks/useBoardStore";
 
 type TaskModalProps = {
   show: boolean;
   onHide: () => void;
+};
+
+const PRIORITIES: Record<string, string> = {
+  low: "info",
+  medium: "warning",
+  high: "danger",
 };
 
 export default function TaskModal({ show, onHide }: TaskModalProps) {
@@ -33,18 +39,26 @@ export default function TaskModal({ show, onHide }: TaskModalProps) {
         style={{ borderBottom: "none" }}
         className="pt-4 px-4"
       ></Modal.Header>
-      <Modal.Body className="pt-0 text-muted px-4">
+      <Modal.Body className="pt-0 px-4">
         {cardDetails ? (
           <>
-            <h3>{cardDetails?.title}</h3>
+            <div className="d-flex align-items-center gap-3">
+              <div>
+                {cardDetails && (
+                  <Badge
+                    bg={PRIORITIES[cardDetails.priority as string]}
+                    className="fs-6"
+                  >
+                    {" "}
+                  </Badge>
+                )}
+              </div>
 
-            <p className="my-4">{cardDetails?.description}</p>
-
-            <div>
-              <span className="text-secondary">
-                Priority: {cardDetails.priority?.toLocaleUpperCase()}
-              </span>
+              <h4 className="mb-0">{cardDetails?.title}</h4>
             </div>
+            <p className="my-4 text-muted fw-light">
+              {cardDetails?.description}
+            </p>
           </>
         ) : (
           <div className="text-center mt-3">

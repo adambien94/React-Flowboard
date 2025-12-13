@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Outlet } from "react-router-dom";
 import Navbar from "./components/Navbar";
 import Drawer from "./components/Drawer";
-import styles from "./components/DashboardLayout.module.css";
+import styles from "./components/dashboard/DashboardLayout.module.css";
 import { BoardsProvider } from "./contexts/BoardsContext";
 
 export default function DashboardLayout() {
