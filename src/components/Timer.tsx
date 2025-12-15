@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState, useCallback } from "react";
 import Toast from "react-bootstrap/Toast";
 import Button from "react-bootstrap/Button";
-import { useTimerStore } from "../store/timerStore";
+import { usePersistentTimerStore } from "../store/timerStore";
 import formatTime from "../utils/formatTime";
 
 type TimerProps = {
@@ -17,14 +17,17 @@ const Timer: React.FC<TimerProps> = ({ show, onFinish }) => {
   const {
     stopTimer,
     activeTaskId: activeTimerTaskId,
-    clearActiveTaskId,
-  } = useTimerStore();
+    startTime,
+  } = usePersistentTimerStore();
 
   useEffect(() => {
     if (!show) return;
 
     setElapsed(0);
-    startTimeRef.current = Date.now();
+    startTimeRef.current = startTime ?? Date.now();
+    if (startTime) {
+      setElapsed(Date.now() - startTime);
+    }
     setRunning(true);
 
     intervalRef.current = setInterval(() => {
@@ -38,14 +41,14 @@ const Timer: React.FC<TimerProps> = ({ show, onFinish }) => {
         clearInterval(intervalRef.current);
       }
     };
-  }, [show, running]);
+  }, [show, running, startTime]);
 
   const handleStop = useCallback(() => {
     if (intervalRef.current) clearInterval(intervalRef.current);
     setRunning(false);
     onFinish?.(activeTimerTaskId as string, elapsed);
     stopTimer();
-  }, [activeTimerTaskId, elapsed, onFinish, stopTimer, clearActiveTaskId]);
+  }, [activeTimerTaskId, elapsed, onFinish, stopTimer]);
 
   useEffect(() => {
     if (!show && running) {

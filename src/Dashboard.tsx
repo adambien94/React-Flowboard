@@ -8,7 +8,7 @@ import TaskModal from "./components/TaskModal";
 import DashboardTopBar from "./components/dashboard/DashboardTopBar";
 import DashboardInitHeader from "./components/dashboard/DashboardInitHeader";
 import DashboardColumns from "./components/dashboard/DashboardColumns";
-import { useTimerStore } from "./store/timerStore";
+import { usePersistentTimerStore } from "./store/timerStore";
 import ConfirmModal from "./components/ConfirmModal";
 import formatTime from "./utils/formatTime";
 import { useBoardStore } from "./hooks/useBoardStore";
@@ -23,7 +23,7 @@ export default function Dashboard() {
   const { boardId } = useParams();
   const navigate = useNavigate();
   const { setTimeToLog, timeToLog, isTimerShow, clearActiveTaskId } =
-    useTimerStore();
+    usePersistentTimerStore();
   const { isTaskModalOpen, closeTaskModal } = useTaskModalStore();
   const activeBoardId = boardId || "";
   const {
