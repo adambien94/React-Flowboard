@@ -27,6 +27,7 @@ type State = {
   setLoader: (isShow: boolean) => void;
   setCardDetails: (card: Card | null) => void;
   fetchCardDetails: (cardId: string) => Promise<void>;
+  setLogTime: (cardId: string, seconds: number) => Promise<void>;
 };
 
 export const useBoardStore = create<State>((set, get) => ({
@@ -70,7 +71,7 @@ export const useBoardStore = create<State>((set, get) => ({
     const { data, error } = await supabase
       .from("columns")
       .select(
-        "id, title, color, position, cards(id, title, description, priority, position, column_id)"
+        "id, title, color, position, cards(id, title, description, priority, position, column_id, logged_time)"
       )
       .eq("board_id", boardId)
       .order("position");
@@ -236,6 +237,31 @@ export const useBoardStore = create<State>((set, get) => ({
     }
 
     set({ cardDetails: data });
+  },
+
+  setLogTime: async (cardId: string, seconds: number) => {
+    // 🔹 optimistic update
+    set((state) => ({
+      columns: state.columns.map((col) => ({
+        ...col,
+        cards: col.cards.map((card) =>
+          card.id === cardId
+            ? { ...card, logged_time: (card.logged_time ?? 0) + seconds }
+            : card
+        ),
+      })),
+    }));
+
+    // 🔹 atomic update w DB
+    const { error } = await supabase.rpc("increment_logged_time", {
+      card_id: cardId,
+      seconds,
+    });
+
+    if (error) {
+      console.error("❌ Failed to log time:", error);
+      // ❗ opcjonalnie rollback (jak chcesz)
+    }
   },
 
   addColumn: async (boardId: string, title: string, color?: string) => {

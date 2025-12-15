@@ -23,4 +23,5 @@ export type Card = {
   priority?: "low" | "medium" | "high";
   position: number;
   created_at?: string;
+  logged_time?: number;
 };

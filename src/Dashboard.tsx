@@ -17,8 +17,6 @@ import { useTaskModalStore } from "./store/taskModalStore";
 import { syncTaskModalWithUrl } from "./store/taskModalStore";
 import { syncTaskDrawerWithUrl } from "./store/taskDrawerStore";
 
-// 4669171143
-
 export default function Dashboard() {
   const [addColumnModalShow, setAddColumnModalShow] = useState(false);
   const [confirmLogTimeShow, setConfirmLogTimeShow] = useState(false);
@@ -38,6 +36,7 @@ export default function Dashboard() {
     subscribeRealtime,
     unsubscribeRealtime,
     loading,
+    setLogTime,
   } = useBoardStore();
 
   useEffect(() => {
@@ -76,6 +75,7 @@ export default function Dashboard() {
   }, [activeBoardId, boards, navigate]);
 
   const handleLogTime = () => {
+    if (timeToLog) setLogTime(timeToLog.taskId, timeToLog.time);
     clearActiveTaskId();
     setConfirmLogTimeShow(false);
   };

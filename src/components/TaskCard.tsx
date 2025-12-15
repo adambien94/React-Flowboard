@@ -5,7 +5,7 @@ import { CSS } from "@dnd-kit/utilities";
 import { useTimerStore } from "../store/timerStore";
 import { useTaskModalStore } from "../store/taskModalStore";
 import { useTaskDrawerStore } from "../store/taskDrawerStore";
-// import formatTime from "../utils/formatTime";
+import formatTime from "../utils/formatTime";
 
 type TaskCardProps = {
   card: Card;
@@ -109,7 +109,10 @@ export default function TaskCard({ card }: TaskCardProps) {
                 lineHeight: "1.4",
               }}
             >
-              0h 0min
+              {card.logged_time
+                ? formatTime(card.logged_time, true)
+                : "0h 0min "}
+              {/* 0h 0min */}
             </span>
 
             <div className="d-flex gap-1" style={{ translate: "0 3px" }}>
