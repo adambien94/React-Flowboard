@@ -2,7 +2,7 @@ import { Badge, Button } from "react-bootstrap";
 import type { Card } from "../types/index";
 import { useDraggable } from "@dnd-kit/core";
 import { CSS } from "@dnd-kit/utilities";
-import { usePersistentTimerStore } from "../store/timerStore";
+import { useTimerStore } from "../store/timerStore";
 import { useTaskModalStore } from "../store/taskModalStore";
 import { useTaskDrawerStore } from "../store/taskDrawerStore";
 import formatTime from "../utils/formatTime";
@@ -26,7 +26,7 @@ export default function TaskCard({ card }: TaskCardProps) {
     startTimer,
     stopTimer,
     activeTaskId: activeTimerTaskId,
-  } = usePersistentTimerStore();
+  } = useTimerStore();
   const { openTaskModal } = useTaskModalStore();
   const { openTaskDrawer } = useTaskDrawerStore();
 

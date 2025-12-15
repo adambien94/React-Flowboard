@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState, useCallback } from "react";
 import Toast from "react-bootstrap/Toast";
 import Button from "react-bootstrap/Button";
-import { usePersistentTimerStore } from "../store/timerStore";
+import { useTimerStore } from "../store/timerStore";
 import formatTime from "../utils/formatTime";
 
 type TimerProps = {
@@ -18,7 +18,7 @@ const Timer: React.FC<TimerProps> = ({ show, onFinish }) => {
     stopTimer,
     activeTaskId: activeTimerTaskId,
     startTime,
-  } = usePersistentTimerStore();
+  } = useTimerStore();
 
   useEffect(() => {
     if (!show) return;
