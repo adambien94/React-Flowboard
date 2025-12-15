@@ -106,7 +106,7 @@ export default function Drawer({
         ...(form as Partial<Card>),
       });
     } else {
-      createTask(colId, {
+      createTask(activeColId, {
         ...(form as Partial<Card>),
       });
     }

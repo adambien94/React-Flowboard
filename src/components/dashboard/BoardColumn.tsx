@@ -1,21 +1,31 @@
 import { Col, Card, Button } from "react-bootstrap";
 import type { Column, Card as CardType } from "../../types/index";
 import TaskCard from "../TaskCard";
-import { useDroppable } from "@dnd-kit/core";
+import { useDroppable, useDndContext } from "@dnd-kit/core";
 import { useTaskDrawerStore } from "../../store/taskDrawerStore";
 
 type BoardColumnProps = {
   column: Column;
 };
 
+type DroppableTaskCardProps = {
+  card: CardType;
+  columnId: string;
+};
+
 export default function BoardColumn({ column }: BoardColumnProps) {
-  const { setNodeRef, isOver } = useDroppable({
+  const { over } = useDndContext();
+  const { setNodeRef } = useDroppable({
     id: column.id,
   });
   const { openTaskDrawer, setActiveColId } = useTaskDrawerStore();
 
+  const isColumnActive = over?.data?.current?.columnId === column.id;
+
   const colStyle = {
-    background: isOver ? "rgba(255,255,255,0.1)" : "rgba(255,255,255,0.05)",
+    background: isColumnActive
+      ? "rgba(255,255,255,0.1)"
+      : "rgba(255,255,255,0.05)",
     transition: "all 0.2s ease",
     border: "1px solid rgba(255,255,255,0.1)",
     borderTop: `2px solid var(--bs-${column.color})`,
@@ -37,7 +47,11 @@ export default function BoardColumn({ column }: BoardColumnProps) {
 
             {column.cards.length > 0 ? (
               column.cards.map((card: CardType) => (
-                <TaskCard key={card.id} card={card} />
+                <DroppableTaskCard
+                  key={card.id}
+                  card={card}
+                  columnId={column.id}
+                />
               ))
             ) : (
               <div
@@ -59,3 +73,18 @@ export default function BoardColumn({ column }: BoardColumnProps) {
     </>
   );
 }
+
+const DroppableTaskCard = ({ card, columnId }: DroppableTaskCardProps) => {
+  const { setNodeRef } = useDroppable({
+    id: card.id,
+    data: {
+      columnId,
+    },
+  });
+
+  return (
+    <div ref={setNodeRef}>
+      <TaskCard card={card} />
+    </div>
+  );
+};

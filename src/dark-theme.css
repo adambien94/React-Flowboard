@@ -118,6 +118,10 @@ body {
   border-color: rgba(255, 255, 255, 0.4);
 }
 
+.btn[disabled] {
+  transition: 0.2s all;
+}
+
 .board-column-empty {
   color: var(--text-muted);
 }

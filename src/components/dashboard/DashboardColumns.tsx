@@ -34,7 +34,24 @@ const DashboardColumns = () => {
 
     const activeId = active.id as string;
     const overId = over.id as string;
-    await moveCard(activeId, overId, 0);
+
+    const targetColumn = boardCols.find((col) => col.id === overId);
+    if (targetColumn) {
+      await moveCard(activeId, targetColumn.id, 0);
+      return;
+    }
+
+    const columnWithTargetCard = boardCols.find((col) =>
+      col.cards.some((card) => card.id === overId)
+    );
+    if (!columnWithTargetCard) return;
+
+    const targetIndex = columnWithTargetCard.cards.findIndex(
+      (card) => card.id === overId
+    );
+    if (targetIndex === -1) return;
+
+    await moveCard(activeId, columnWithTargetCard.id, targetIndex);
   };
 
   return (

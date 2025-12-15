@@ -121,7 +121,10 @@ export default function Dashboard() {
 
       <ConfirmModal
         show={confirmLogTimeShow}
-        onHide={() => setConfirmLogTimeShow(false)}
+        onHide={() => {
+          clearActiveTaskId();
+          setConfirmLogTimeShow(false);
+        }}
         onConfirm={handleLogTime}
         title="Log time"
         confirmBtnText="Log Time"

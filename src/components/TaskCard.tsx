@@ -112,7 +112,6 @@ export default function TaskCard({ card }: TaskCardProps) {
               {card.logged_time
                 ? formatTime(card.logged_time, true)
                 : "0h 0min "}
-              {/* 0h 0min */}
             </span>
 
             <div className="d-flex gap-1" style={{ translate: "0 3px" }}>
