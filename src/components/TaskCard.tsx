@@ -1,3 +1,4 @@
+import React from "react";
 import { Badge, Button } from "react-bootstrap";
 import type { Card } from "../types/index";
 import { useDraggable } from "@dnd-kit/core";
@@ -17,7 +18,7 @@ const PRIORITIES: Record<string, string> = {
   high: "danger",
 };
 
-export default function TaskCard({ card }: TaskCardProps) {
+const TaskCardComponent = ({ card }: TaskCardProps) => {
   const { attributes, listeners, setNodeRef, transform, isDragging } =
     useDraggable({
       id: card.id,
@@ -136,4 +137,8 @@ export default function TaskCard({ card }: TaskCardProps) {
       </div>
     </div>
   );
-}
+};
+
+const TaskCard = React.memo(TaskCardComponent);
+
+export default TaskCard;

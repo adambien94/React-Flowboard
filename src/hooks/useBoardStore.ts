@@ -21,6 +21,7 @@ type State = {
     toColumnId: string,
     newPosition: number
   ) => Promise<void>;
+  moveColumn: (columnId: string, newPosition: number) => Promise<void>;
   removeCard: (cardId: string) => Promise<void>;
   subscribeRealtime: (boardId: string) => void;
   unsubscribeRealtime: () => void;
@@ -328,6 +329,34 @@ export const useBoardStore = create<State>((set, get) => ({
     set((state) => ({
       columns: [...state.columns, { ...data, cards: [] }],
     }));
+  },
+
+  moveColumn: async (columnId, newPosition) => {
+    const prevColumns = structuredClone(get().columns);
+    const cols = [...prevColumns];
+    const fromIndex = cols.findIndex((c) => c.id === columnId);
+    if (fromIndex === -1) return;
+
+    const boundedPosition = Math.max(0, Math.min(newPosition, cols.length - 1));
+    const [moved] = cols.splice(fromIndex, 1);
+    cols.splice(boundedPosition, 0, moved);
+
+    const reordered = cols.map((c, idx) => ({ ...c, position: idx }));
+    set({ columns: reordered });
+
+    try {
+      await Promise.all(
+        reordered.map((c) =>
+          supabase
+            .from("columns")
+            .update({ position: c.position })
+            .eq("id", c.id)
+        )
+      );
+    } catch (error) {
+      console.error("❌ Couldn't move column:", error);
+      set({ columns: prevColumns });
+    }
   },
 
   subscribeRealtime: (boardId) => {
