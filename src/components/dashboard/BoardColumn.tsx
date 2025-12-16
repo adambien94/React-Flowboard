@@ -15,12 +15,12 @@ type DroppableTaskCardProps = {
 
 export default function BoardColumn({ column }: BoardColumnProps) {
   const { over } = useDndContext();
-  const { setNodeRef } = useDroppable({
+  const { setNodeRef, isOver } = useDroppable({
     id: column.id,
   });
   const { openTaskDrawer, setActiveColId } = useTaskDrawerStore();
 
-  const isColumnActive = over?.data?.current?.columnId === column.id;
+  const isColumnActive = isOver || over?.data?.current?.columnId === column.id;
 
   const colStyle = {
     background: isColumnActive

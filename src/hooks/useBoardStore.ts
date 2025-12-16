@@ -1,4 +1,5 @@
 import { create } from "zustand";
+import type { RealtimeChannel } from "@supabase/supabase-js";
 import { supabase } from "../api/supabaseClient";
 import type { Column, Card, Board } from "../types/index";
 
@@ -6,7 +7,7 @@ type State = {
   columns: Column[];
   loading: boolean;
   boardTitle: string;
-  channels: any[];
+  channels: RealtimeChannel[];
   boards: Board[];
   cardDetails: Card | null;
   getBoardsList: () => Promise<void>;
@@ -24,7 +25,6 @@ type State = {
   subscribeRealtime: (boardId: string) => void;
   unsubscribeRealtime: () => void;
   clearBoardStore: () => void;
-  setLoader: (isShow: boolean) => void;
   setCardDetails: (card: Card | null) => void;
   fetchCardDetails: (cardId: string) => Promise<void>;
   setLogTime: (cardId: string, seconds: number) => Promise<void>;
@@ -83,12 +83,15 @@ export const useBoardStore = create<State>((set, get) => ({
     }
 
     const cols = (data || [])
-      .map((c: any) => ({
-        ...c,
-        cards: (c.cards || []).sort(
-          (a: Card, b: Card) => a.position - b.position
-        ),
-      }))
+      .map((c) => {
+        const col = c as Column & { cards: Card[] };
+        return {
+          ...col,
+          cards: (col.cards || []).sort(
+            (a: Card, b: Card) => a.position - b.position
+          ),
+        };
+      })
       .sort((a: Column, b: Column) => a.position - b.position);
 
     set({
@@ -169,6 +172,10 @@ export const useBoardStore = create<State>((set, get) => ({
 
   moveCard: async (cardId, toColumnId, newPosition) => {
     const prevColumns = structuredClone(get().columns);
+    const sourceColId =
+      prevColumns.find((c) => c.cards.some((card) => card.id === cardId))?.id ||
+      null;
+    let updates: { id: string; column_id: string; position: number }[] = [];
 
     set((state) => {
       const newCols = state.columns.map((col) => ({
@@ -182,21 +189,55 @@ export const useBoardStore = create<State>((set, get) => ({
 
       if (card) {
         card.column_id = toColumnId;
-        card.position = newPosition;
 
-        const targetCol = newCols.find((c) => c.id === toColumnId);
-        if (targetCol) targetCol.cards.splice(newPosition, 0, card);
+        const targetCol = newCols.find((c) => c.id === toColumnId) || null;
+        const sourceCol =
+          (sourceColId && newCols.find((c) => c.id === sourceColId)) || null;
+
+        if (targetCol) {
+          const boundedPosition = Math.max(
+            0,
+            Math.min(newPosition, targetCol.cards.length)
+          );
+          targetCol.cards.splice(boundedPosition, 0, card);
+          targetCol.cards = targetCol.cards.map((c, idx) => ({
+            ...c,
+            position: idx,
+          }));
+        }
+
+        if (sourceCol && sourceCol.id !== toColumnId) {
+          sourceCol.cards = sourceCol.cards.map((c, idx) => ({
+            ...c,
+            position: idx,
+          }));
+        }
+
+        const affectedColumns = [targetCol, sourceCol].filter(
+          (c): c is Column => Boolean(c)
+        );
+        updates = affectedColumns.flatMap((col) =>
+          col.cards.map((c, idx) => ({
+            id: c.id,
+            column_id: col.id,
+            position: idx,
+          }))
+        );
       }
 
       return { columns: newCols };
     });
 
-    const { error } = await supabase
-      .from("cards")
-      .update({ column_id: toColumnId, position: newPosition })
-      .eq("id", cardId);
-
-    if (error) {
+    try {
+      await Promise.all(
+        updates.map((u) =>
+          supabase
+            .from("cards")
+            .update({ column_id: u.column_id, position: u.position })
+            .eq("id", u.id)
+        )
+      );
+    } catch (error) {
       console.error("❌ Couldn't move card:", error);
       set({ columns: prevColumns });
     }
@@ -309,7 +350,7 @@ export const useBoardStore = create<State>((set, get) => ({
         (payload) => {
           // handle INSERT / UPDATE / DELETE payload
           const ev = payload.eventType;
-          const record = payload.new ?? payload.old;
+          const record = (payload.new ?? payload.old) as Card | null;
           set((state) => {
             let cols = [...state.columns];
             if (!record) return state;
@@ -325,7 +366,7 @@ export const useBoardStore = create<State>((set, get) => ({
               // find and update card
               cols = cols.map((c) => ({
                 ...c,
-                cards: (c.cards || []).map((card: any) =>
+                cards: (c.cards || []).map((card: Card) =>
                   card.id === record.id ? { ...card, ...record } : card
                 ),
               }));
@@ -333,7 +374,7 @@ export const useBoardStore = create<State>((set, get) => ({
               cols = cols.map((c) => ({
                 ...c,
                 cards: (c.cards || []).filter(
-                  (card: any) => card.id !== record.id
+                  (card: Card) => card.id !== record.id
                 ),
               }));
             }
@@ -341,7 +382,7 @@ export const useBoardStore = create<State>((set, get) => ({
             cols = cols.map((c) => ({
               ...c,
               cards: (c.cards || []).sort(
-                (a: any, b: any) => a.position - b.position
+                (a: Card, b: Card) => a.position - b.position
               ),
             }));
             return { columns: cols };
@@ -357,12 +398,12 @@ export const useBoardStore = create<State>((set, get) => ({
         { event: "*", schema: "public", table: "columns" },
         (payload) => {
           const ev = payload.eventType;
-          const record = payload.new ?? payload.old;
+          const record = (payload.new ?? payload.old) as Column | null;
           set((state) => {
             let cols = [...state.columns];
             if (!record) return state;
             if (ev === "INSERT") {
-              cols.push({ ...record, cards: [] });
+              cols.push({ ...record, cards: [] as Card[] });
             } else if (ev === "UPDATE") {
               cols = cols.map((c) =>
                 c.id === record.id ? { ...c, ...record } : c
@@ -397,12 +438,6 @@ export const useBoardStore = create<State>((set, get) => ({
       boards: [],
       loading: true,
       channels: [],
-    });
-  },
-
-  setLoader: (isShow) => {
-    set({
-      loading: isShow,
     });
   },
 }));

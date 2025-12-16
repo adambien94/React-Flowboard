@@ -51,6 +51,8 @@ const DashboardColumns = () => {
     );
     if (targetIndex === -1) return;
 
+    console.log(11111);
+
     await moveCard(activeId, columnWithTargetCard.id, targetIndex);
   };
 
