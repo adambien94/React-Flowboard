@@ -51,8 +51,6 @@ const DashboardColumns = () => {
     const isColumnDrag = boardCols.some((col) => col.id === activeId);
 
     if (isColumnDrag) {
-      // Column dragging
-      // Determine target column index (dropping over column or over a card inside a column)
       const overColumn =
         boardCols.find((col) => col.id === overId) ||
         boardCols.find((col) => col.cards.some((card) => card.id === overId));
@@ -68,7 +66,6 @@ const DashboardColumns = () => {
       return;
     }
 
-    // Card dragging
     const targetColumn = boardCols.find((col) => col.id === overId);
     if (targetColumn) {
       await moveCard(activeId, targetColumn.id, 0);
@@ -94,11 +91,11 @@ const DashboardColumns = () => {
         <Row>
           {columns.map((col) => (
             <Col
+              key={col.id}
               className="px-2 text-light"
               style={{ maxWidth: "calc(100%/3)" }}
             >
               <BoardColumn
-                key={col.id}
                 column={col}
                 isHidden={activeColumn?.id === col.id}
               />
@@ -108,9 +105,7 @@ const DashboardColumns = () => {
       </Stack>
       <DragOverlay>
         {activeColumn ? (
-          <div>
-            <BoardColumn column={activeColumn} />
-          </div>
+          <BoardColumn column={activeColumn} />
         ) : activeCard ? (
           <div style={dragCardStyle}>
             <TaskCard card={{ ...activeCard }} />

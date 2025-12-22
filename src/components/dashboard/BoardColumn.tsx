@@ -40,6 +40,7 @@ const BoardColumnComponent = ({ column, isHidden }: BoardColumnProps) => {
     background: isColumnActive
       ? "rgba(255,255,255,0.1)"
       : "rgba(255,255,255,0.05)",
+    // background: isColumnActive ? "rgba(255,255,255,0.1)" : "rgba(36,37,50,1)",
     transition: "background 0.2s ease",
     border: "1px solid rgba(255,255,255,0.1)",
     borderTop: `2px solid var(--bs-${column.color})`,

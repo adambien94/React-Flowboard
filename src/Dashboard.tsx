@@ -22,22 +22,25 @@ export default function Dashboard() {
   const [confirmLogTimeShow, setConfirmLogTimeShow] = useState(false);
   const { boardId } = useParams();
   const navigate = useNavigate();
-  const { setTimeToLog, timeToLog, isTimerShow, clearActiveTaskId } =
-    useTimerStore();
-  const { isTaskModalOpen, closeTaskModal } = useTaskModalStore();
+  const setTimeToLog = useTimerStore((state) => state.setTimeToLog);
+  const timeToLog = useTimerStore((state) => state.timeToLog);
+  const isTimerShow = useTimerStore((state) => state.isTimerShow);
+  const clearActiveTaskId = useTimerStore((state) => state.clearActiveTaskId);
+  const isTaskModalOpen = useTaskModalStore((state) => state.isTaskModalOpen);
+  const closeTaskModal = useTaskModalStore((state) => state.closeTaskModal);
   const activeBoardId = boardId || "";
-  const {
-    boards,
-    loadBoard,
-    addColumn,
-    updateCard,
-    addCard,
-    removeCard,
-    subscribeRealtime,
-    unsubscribeRealtime,
-    loading,
-    setLogTime,
-  } = useBoardStore();
+  const boards = useBoardStore((state) => state.boards);
+  const loadBoard = useBoardStore((state) => state.loadBoard);
+  const addColumn = useBoardStore((state) => state.addColumn);
+  const updateCard = useBoardStore((state) => state.updateCard);
+  const addCard = useBoardStore((state) => state.addCard);
+  const removeCard = useBoardStore((state) => state.removeCard);
+  const subscribeRealtime = useBoardStore((state) => state.subscribeRealtime);
+  const unsubscribeRealtime = useBoardStore(
+    (state) => state.unsubscribeRealtime
+  );
+  const loading = useBoardStore((state) => state.loading);
+  const setLogTime = useBoardStore((state) => state.setLogTime);
 
   useEffect(() => {
     if (!activeBoardId) {
@@ -50,7 +53,7 @@ export default function Dashboard() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [activeBoardId]);
 
-  // console.log("dashboard");
+  console.log("dashboard");
 
   useEffect(() => {
     syncTaskModalWithUrl();
@@ -69,7 +72,10 @@ export default function Dashboard() {
 
   useEffect(() => {
     if (!boards.length) return;
-    if (!activeBoardId || !boards.some((board) => board.id === activeBoardId)) {
+    if (
+      !activeBoardId ||
+      !boards.some((board: { id: string }) => board.id === activeBoardId)
+    ) {
       navigate(`/${boards[0].id}`, { replace: true });
     }
   }, [activeBoardId, boards, navigate]);
