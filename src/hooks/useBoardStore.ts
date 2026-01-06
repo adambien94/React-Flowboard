@@ -72,7 +72,7 @@ export const useBoardStore = create<State>((set, get) => ({
     const { data, error } = await supabase
       .from("columns")
       .select(
-        "id, title, color, position, cards(id, title, description, priority, position, column_id, logged_time)"
+        "id, title, color, position, cards(id, title, description, priority, position, column_id, logged_time, created_at)"
       )
       .eq("board_id", boardId)
       .order("position");

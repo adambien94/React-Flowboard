@@ -19,13 +19,8 @@ import { syncTaskDrawerWithUrl } from "./store/taskDrawerStore";
 
 export default function Dashboard() {
   const [addColumnModalShow, setAddColumnModalShow] = useState(false);
-  const [confirmLogTimeShow, setConfirmLogTimeShow] = useState(false);
   const { boardId } = useParams();
   const navigate = useNavigate();
-  const setTimeToLog = useTimerStore((state) => state.setTimeToLog);
-  const timeToLog = useTimerStore((state) => state.timeToLog);
-  const isTimerShow = useTimerStore((state) => state.isTimerShow);
-  const clearActiveTaskId = useTimerStore((state) => state.clearActiveTaskId);
   const isTaskModalOpen = useTaskModalStore((state) => state.isTaskModalOpen);
   const closeTaskModal = useTaskModalStore((state) => state.closeTaskModal);
   const activeBoardId = boardId || "";
@@ -40,7 +35,6 @@ export default function Dashboard() {
     (state) => state.unsubscribeRealtime
   );
   const loading = useBoardStore((state) => state.loading);
-  const setLogTime = useBoardStore((state) => state.setLogTime);
 
   useEffect(() => {
     if (!activeBoardId) {
@@ -80,17 +74,6 @@ export default function Dashboard() {
     }
   }, [activeBoardId, boards, navigate]);
 
-  const handleLogTime = () => {
-    if (timeToLog) setLogTime(timeToLog.taskId, timeToLog.time);
-    clearActiveTaskId();
-    setConfirmLogTimeShow(false);
-  };
-
-  const handleStopTimer = (taskId: string, time: number) => {
-    setTimeToLog(taskId, time);
-    setConfirmLogTimeShow(true);
-  };
-
   const handleAddColumn = (name: string, color: string) => {
     addColumn(activeBoardId, name, color);
   };
@@ -125,6 +108,40 @@ export default function Dashboard() {
         </>
       )}
 
+      <AddColumnModal
+        show={addColumnModalShow}
+        onHide={() => setAddColumnModalShow(false)}
+        onSave={handleAddColumn}
+      />
+
+      <TaskModal show={isTaskModalOpen} onHide={closeTaskModal} />
+
+      <TimerWithConfirmDialog />
+    </>
+  );
+}
+
+function TimerWithConfirmDialog() {
+  const [confirmLogTimeShow, setConfirmLogTimeShow] = useState(false);
+  const setTimeToLog = useTimerStore((state) => state.setTimeToLog);
+  const timeToLog = useTimerStore((state) => state.timeToLog);
+  const isTimerShow = useTimerStore((state) => state.isTimerShow);
+  const clearActiveTaskId = useTimerStore((state) => state.clearActiveTaskId);
+  const setLogTime = useBoardStore((state) => state.setLogTime);
+
+  const handleLogTime = () => {
+    if (timeToLog) setLogTime(timeToLog.taskId, timeToLog.time);
+    clearActiveTaskId();
+    setConfirmLogTimeShow(false);
+  };
+
+  const handleStopTimer = (taskId: string, time: number) => {
+    setTimeToLog(taskId, time);
+    setConfirmLogTimeShow(true);
+  };
+
+  return (
+    <>
       <ConfirmModal
         show={confirmLogTimeShow}
         onHide={() => {
@@ -140,15 +157,6 @@ export default function Dashboard() {
           true
         )} )`}
       />
-
-      <AddColumnModal
-        show={addColumnModalShow}
-        onHide={() => setAddColumnModalShow(false)}
-        onSave={handleAddColumn}
-      />
-
-      <TaskModal show={isTaskModalOpen} onHide={closeTaskModal} />
-
       <Timer show={isTimerShow} onFinish={handleStopTimer} />
     </>
   );

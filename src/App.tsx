@@ -3,6 +3,7 @@ import { Route, Routes } from "react-router-dom";
 import Dashboard from "./Dashboard";
 import DashboardLayout from "./DashboardLayout";
 import Login from "./Login";
+import Summary from "./Summary";
 import ProtectedRoute from "./components/ProtectedRoute";
 
 export default function App() {
@@ -19,6 +20,7 @@ export default function App() {
       >
         <Route index element={<Dashboard />} />
         <Route path=":boardId" element={<Dashboard />} />
+        <Route path="summary/:boardId" element={<Summary />} />
         <Route path="*" element={<h2>Page not found</h2>} />
       </Route>
     </Routes>

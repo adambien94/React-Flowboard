@@ -35,7 +35,11 @@ const DashboardTopBar = ({ openAddColumnModal }: DashboardTopBarParams) => {
             ))}
           </Dropdown.Menu>
         </Dropdown>
-        <h3 className="fw-bold text-white ms-4 mt-2 fs-4">{boardTitle}</h3>
+        <h3 className="fw-bold text- ms-4 mt-2 fs-4">
+          {boardTitle}
+          {/* <span className="mx-2">{"→"}</span>
+          <span>Summary</span> */}
+        </h3>
       </div>
 
       <Button variant="outline-secondary" onClick={openAddColumnModal}>
