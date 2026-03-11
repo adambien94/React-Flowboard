@@ -43,7 +43,7 @@ export default function TaskModal({ show, onHide }: TaskModalProps) {
         {cardDetails ? (
           <>
             <div className="d-flex align-items-center gap-3">
-              <div>
+              {/* <div>
                 {cardDetails && (
                   <Badge
                     bg={PRIORITIES[cardDetails.priority as string]}
@@ -52,7 +52,7 @@ export default function TaskModal({ show, onHide }: TaskModalProps) {
                     {" "}
                   </Badge>
                 )}
-              </div>
+              </div> */}
 
               <h4 className="mb-0">{cardDetails?.title}</h4>
             </div>

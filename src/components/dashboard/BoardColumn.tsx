@@ -1,5 +1,5 @@
 import React from "react";
-import { Col, Card, Button } from "react-bootstrap";
+import { Card, Button } from "react-bootstrap";
 import type { Column, Card as CardType } from "../../types/index";
 import TaskCard from "../TaskCard";
 import { useDroppable, useDraggable, useDndContext } from "@dnd-kit/core";
@@ -38,9 +38,8 @@ const BoardColumnComponent = ({ column, isHidden }: BoardColumnProps) => {
 
   const colStyle: React.CSSProperties = {
     background: isColumnActive
-      ? "rgba(255,255,255,0.1)"
-      : "rgba(255,255,255,0.05)",
-    // background: isColumnActive ? "rgba(255,255,255,0.1)" : "rgba(36,37,50,1)",
+      ? "rgba(255,255,255,0.05)"
+      : "rgba(255,255,255,0.0)",
     transition: "background 0.2s ease",
     border: "1px solid rgba(255,255,255,0.1)",
     borderTop: `2px solid var(--bs-${column.color})`,

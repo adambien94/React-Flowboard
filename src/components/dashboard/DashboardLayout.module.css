@@ -1,12 +1,14 @@
 .mainContent {
-  transition: margin-left 0.3s ease-in-out, opacity 0.25s ease;
+  transition:
+    margin-left 0.3s ease-in-out,
+    opacity 0.25s ease;
   min-height: calc(100vh - 56px);
   padding: 1rem;
-  background-image: radial-gradient(
+  /* background-image: radial-gradient(
     rgba(255, 255, 255, 0.07) 1px,
     transparent 1px
   );
-  background-size: 25px 25px;
+  background-size: 25px 25px; */
 }
 
 .drawerOpen {
@@ -20,7 +22,8 @@
 
   .mainContent {
     padding: 0.75rem;
-    background: radial-gradient(
+    background:
+      radial-gradient(
         circle at 20% -10%,
         rgba(139, 92, 246, 0.16),
         transparent 55%
