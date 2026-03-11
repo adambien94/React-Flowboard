@@ -1,17 +1,11 @@
 import { useEffect } from "react";
-import { Modal, Button, Spinner, Badge } from "react-bootstrap";
+import { Modal, Button, Spinner } from "react-bootstrap";
 import { useTaskModalStore } from "../store/taskModalStore";
 import { useBoardStore } from "../hooks/useBoardStore";
 
 type TaskModalProps = {
   show: boolean;
   onHide: () => void;
-};
-
-const PRIORITIES: Record<string, string> = {
-  low: "info",
-  medium: "warning",
-  high: "danger",
 };
 
 export default function TaskModal({ show, onHide }: TaskModalProps) {
@@ -62,7 +56,7 @@ export default function TaskModal({ show, onHide }: TaskModalProps) {
           </>
         ) : (
           <div className="text-center mt-3">
-            <Spinner />
+            <Spinner data-testid="task-modal-spinner" />
           </div>
         )}
       </Modal.Body>

@@ -4,7 +4,7 @@ import { useAuth } from "../contexts/AuthContext";
 export default function ProtectedRoute({
   children,
 }: {
-  children: JSX.Element;
+  children: React.ReactElement;
 }) {
   const { user, loading } = useAuth();
 

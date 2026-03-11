@@ -24,19 +24,24 @@ export const useTimerStore = create<TimerState>()(
       startTime: null,
       timeToLog: null,
       startTimer: (taskId) =>
-        set({ activeTaskId: taskId, startTime: Date.now(), isTimerShow: true }),
+        set({
+          activeTaskId: taskId,
+          startTime: Date.now(),
+          isTimerShow: true,
+        }),
       stopTimer: () => set({ isTimerShow: false, startTime: null }),
       setTimeToLog: (taskId, time) => set({ timeToLog: { taskId, time } }),
       clearActiveTaskId: () => set({ activeTaskId: null }),
     }),
     {
       name: "timer-store",
-      partialize: (s) => ({
+      // Explicitly type state to satisfy TS
+      partialize: (s: TimerState) => ({
         isTimerShow: s.isTimerShow,
         activeTaskId: s.activeTaskId,
         startTime: s.startTime,
         timeToLog: s.timeToLog,
       }),
     }
-  )
+  ) as any
 );
