@@ -76,7 +76,7 @@ export default function AddColumnModal({
         </Modal.Body>
 
         <Modal.Footer>
-          <Button variant="outline-secondary" onClick={onHide}>
+          <Button variant="action" onClick={onHide}>
             Cancel
           </Button>
           <Button type="submit" variant="success">

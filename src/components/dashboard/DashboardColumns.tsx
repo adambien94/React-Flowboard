@@ -17,8 +17,11 @@ const DashboardColumns = () => {
   const dragCardStyle = {
     transform: "rotate(0deg) translateY(-4px)",
     borderRadius: "18px",
-    backgroundColor: "var(--panel-bg)",
-    backdropFilter: "blur(var(--blur-amount))",
+    backgroundColor: "var(--panel-elevated-bg)",
+  };
+
+  const dragColStyle = {
+    backgroundColor: "var(--panel-elevated-bg)",
   };
 
   const handleDragStart = (event: DragStartEvent) => {
@@ -107,7 +110,9 @@ const DashboardColumns = () => {
       </Stack>
       <DragOverlay>
         {activeColumn ? (
-          <BoardColumn column={activeColumn} />
+          <div style={dragColStyle}>
+            <BoardColumn column={activeColumn} />
+          </div>
         ) : activeCard ? (
           <div style={dragCardStyle}>
             <TaskCard card={{ ...activeCard }} />

@@ -37,15 +37,14 @@ const BoardColumnComponent = ({ column, isHidden }: BoardColumnProps) => {
   const isColumnActive = isOver || over?.data?.current?.columnId === column.id;
 
   const colStyle: React.CSSProperties = {
-    background: isColumnActive
-      ? "rgba(255,255,255,0.03)"
-      : "rgba(255,255,255,0.0)",
+    background: isColumnActive ? "rgba(255,255,255,0.01)" : "rgba(0,0,0,0.05)",
     transition: "background 0.2s ease",
     border: "1px solid rgba(255,255,255,0.1)",
     borderTop: `2px solid var(--bs-${column.color})`,
     maxHeight: "calc(100vh - 160px)",
     overflow: "hidden",
     visibility: isHidden ? "hidden" : "visible",
+    backdropFilter: "blur(var(--blur-amount))",
   };
 
   const handleOpenDrawer = () => {

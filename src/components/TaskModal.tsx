@@ -61,7 +61,7 @@ export default function TaskModal({ show, onHide }: TaskModalProps) {
         )}
       </Modal.Body>
       <Modal.Footer>
-        <Button variant="outline-secondary" onClick={onHide}>
+        <Button variant="action" onClick={onHide}>
           Close
         </Button>
       </Modal.Footer>

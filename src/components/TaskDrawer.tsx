@@ -183,7 +183,7 @@ export default function Drawer({
                   Save Card
                 </Button>
                 <Button
-                  variant="outline-secondary"
+                  variant="action"
                   type="button"
                   onClick={onCloseTaskDrawer}
                 >
@@ -192,7 +192,7 @@ export default function Drawer({
               </div>
               {activeCardId && (
                 <Button
-                  variant="outline-secondary"
+                  variant="action"
                   onClick={() => setConfirmDeleteShow(true)}
                 >
                   <i className="bi bi-trash" />

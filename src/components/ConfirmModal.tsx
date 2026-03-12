@@ -26,7 +26,7 @@ const ConfirmModal = ({
       </Modal.Header>
       <Modal.Body className="text-muted">{message}</Modal.Body>
       <Modal.Footer>
-        <Button variant="outline-secondary" onClick={onHide}>
+        <Button variant="action" onClick={onHide}>
           Cancel
         </Button>
         <Button variant={btnVariant} onClick={onConfirm}>

@@ -115,7 +115,7 @@ const TaskCardComponent = ({ card }: TaskCardProps) => {
                 : "0h 0min "}
             </span>
 
-            <div className="d-flex gap-1" style={{ translate: "0 3px" }}>
+            <div className="d-flex" style={{ translate: "0 3px" }}>
               <Button
                 variant="action"
                 size="sm"
