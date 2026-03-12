@@ -17,6 +17,8 @@ const DashboardColumns = () => {
   const dragCardStyle = {
     transform: "rotate(0deg) translateY(-4px)",
     borderRadius: "18px",
+    backgroundColor: "var(--panel-bg)",
+    backdropFilter: "blur(var(--blur-amount))",
   };
 
   const handleDragStart = (event: DragStartEvent) => {
@@ -58,7 +60,7 @@ const DashboardColumns = () => {
       if (!overColumn) return;
 
       const targetIndex = boardCols.findIndex(
-        (col) => col.id === overColumn.id
+        (col) => col.id === overColumn.id,
       );
       if (targetIndex === -1) return;
 
@@ -73,12 +75,12 @@ const DashboardColumns = () => {
     }
 
     const columnWithTargetCard = boardCols.find((col) =>
-      col.cards.some((card) => card.id === overId)
+      col.cards.some((card) => card.id === overId),
     );
     if (!columnWithTargetCard) return;
 
     const targetIndex = columnWithTargetCard.cards.findIndex(
-      (card) => card.id === overId
+      (card) => card.id === overId,
     );
     if (targetIndex === -1) return;
 

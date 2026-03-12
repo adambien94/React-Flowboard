@@ -117,7 +117,7 @@ const TaskCardComponent = ({ card }: TaskCardProps) => {
 
             <div className="d-flex gap-1" style={{ translate: "0 3px" }}>
               <Button
-                variant="dark"
+                variant="action"
                 size="sm"
                 onClick={handleTimerClick}
                 disabled={!!activeTimerTaskId && activeTimerTaskId !== card.id}
@@ -128,7 +128,7 @@ const TaskCardComponent = ({ card }: TaskCardProps) => {
                   <i className="bi bi-clock text-muted"></i>
                 )}
               </Button>
-              <Button onClick={handleEditClick} variant="dark" size="sm">
+              <Button onClick={handleEditClick} variant="action" size="sm">
                 <i className="bi bi-pencil text-muted"></i>
               </Button>
             </div>

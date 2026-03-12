@@ -111,6 +111,15 @@ body {
   transition: all 0.2s ease;
 }
 
+.btn-action {
+  border: none;
+  color: rgba(255, 255, 255, 0.73);
+}
+
+.btn-action:hover {
+  background: rgba(255, 255, 255, 0.08);
+}
+
 .btn-outline-secondary:hover,
 .btn-outline-light:hover {
   background: rgba(255, 255, 255, 0.08);
@@ -129,6 +138,10 @@ body {
 .offcanvas {
   background: transparent;
   backdrop-filter: blur(var(--blur-amount));
+}
+
+.modal-header {
+  border-bottom: 1px solid var(--border-color);
 }
 
 .modal-content {

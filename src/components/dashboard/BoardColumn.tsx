@@ -38,7 +38,7 @@ const BoardColumnComponent = ({ column, isHidden }: BoardColumnProps) => {
 
   const colStyle: React.CSSProperties = {
     background: isColumnActive
-      ? "rgba(255,255,255,0.05)"
+      ? "rgba(255,255,255,0.03)"
       : "rgba(255,255,255,0.0)",
     transition: "background 0.2s ease",
     border: "1px solid rgba(255,255,255,0.1)",
