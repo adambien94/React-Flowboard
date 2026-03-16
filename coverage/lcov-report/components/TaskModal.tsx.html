@@ -30,9 +30,9 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">75% </span>
+                <span class="strong">66.66% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>3/4</span>
+                <span class='fraction'>4/6</span>
             </div>
         
             
@@ -133,7 +133,13 @@
 <a name='L68'></a><a href='#L68'>68</a>
 <a name='L69'></a><a href='#L69'>69</a>
 <a name='L70'></a><a href='#L70'>70</a>
-<a name='L71'></a><a href='#L71'>71</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">1x</span>
+<a name='L71'></a><a href='#L71'>71</a>
+<a name='L72'></a><a href='#L72'>72</a>
+<a name='L73'></a><a href='#L73'>73</a>
+<a name='L74'></a><a href='#L74'>74</a>
+<a name='L75'></a><a href='#L75'>75</a>
+<a name='L76'></a><a href='#L76'>76</a>
+<a name='L77'></a><a href='#L77'>77</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
@@ -162,6 +168,12 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -204,7 +216,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { useEffect } from "react";
-import { Modal, Button, Spinner } from "react-bootstrap";
+import { Modal, Spinner } from "react-bootstrap";
 import { useTaskModalStore } from "../store/taskModalStore";
 import { useBoardStore } from "../hooks/useBoardStore";
 &nbsp;
@@ -232,44 +244,50 @@ export default function TaskModal({ show, onHide }: TaskModalProps) {
   }, [show, setCardDetails]);
 &nbsp;
   return (
-    &lt;Modal show={show} onHide={onHide} centered&gt;
-      &lt;Modal.Header
-        closeButton
-        style={{ borderBottom: "none" }}
-        className="pt-4 px-4"
-      &gt;&lt;/Modal.Header&gt;
-      &lt;Modal.Body className="pt-0 px-4"&gt;
+    &lt;Modal
+      show={show}
+      onHide={onHide}
+      centered
+      contentClassName="fb-modal"
+      backdropClassName="fb-modal-backdrop"
+      data-bs-theme="dark"
+    &gt;
+      &lt;div className="fb-modal-header"&gt;
+        &lt;span className="fb-modal-title"&gt;Card details&lt;/span&gt;
+        &lt;button type="button" className="fb-modal-close" onClick={onHide} aria-label="Close"&gt;
+          ✕
+        &lt;/button&gt;
+      &lt;/div&gt;
+&nbsp;
+      &lt;div className="fb-modal-body"&gt;
         {cardDetails ? (
           &lt;&gt;
-            &lt;div className="d-flex align-items-center gap-3"&gt;
-              {/* &lt;div&gt;
-                {cardDetails &amp;&amp; (
-                  &lt;Badge
-                    bg={PRIORITIES[cardDetails.priority as string]}
-                    className="fs-6"
-                  &gt;
-                    {" "}
-                  &lt;/Badge&gt;
-                )}
-              &lt;/div&gt; */}
-&nbsp;
-              &lt;h4 className="mb-0"&gt;{cardDetails?.title}&lt;/h4&gt;
+            &lt;div className="fb-field" style={{ gap: 8 }}&gt;
+              &lt;div className="fb-field-label"&gt;Title&lt;/div&gt;
+              &lt;div style={{ fontSize: 14, fontWeight: 500, color: "var(--fb-text)" }}&gt;
+                {cardDetails.title}
+              &lt;/div&gt;
             &lt;/div&gt;
-            &lt;p className="my-4 text-muted fw-light"&gt;
-              {cardDetails?.description}
-            &lt;/p&gt;
+&nbsp;
+            &lt;div className="fb-field" style={{ gap: 8 }}&gt;
+              &lt;div className="fb-field-label"&gt;Description&lt;/div&gt;
+              &lt;div style={{ fontSize: 13, color: "var(--fb-text-muted)", lineHeight: 1.5 }}&gt;
+                {cardDetails.description || <span class="branch-1 cbranch-no" title="branch not covered" >"—"}</span>
+              &lt;/div&gt;
+            &lt;/div&gt;
           &lt;/&gt;
         ) : (
-          &lt;div className="text-center mt-3"&gt;
+          &lt;div className="text-center" style={{ padding: "10px 0" }}&gt;
             &lt;Spinner data-testid="task-modal-spinner" /&gt;
           &lt;/div&gt;
         )}
-      &lt;/Modal.Body&gt;
-      &lt;Modal.Footer&gt;
-        &lt;Button variant="action" onClick={onHide}&gt;
+      &lt;/div&gt;
+&nbsp;
+      &lt;div className="fb-modal-footer"&gt;
+        &lt;button type="button" className="fb-btn fb-btn-ghost" onClick={onHide} style={{ marginLeft: "auto" }}&gt;
           Close
-        &lt;/Button&gt;
-      &lt;/Modal.Footer&gt;
+        &lt;/button&gt;
+      &lt;/div&gt;
     &lt;/Modal&gt;
   );
 }
@@ -280,7 +298,7 @@ export default function TaskModal({ show, onHide }: TaskModalProps) {
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-03-16T11:39:03.078Z
+                at 2026-03-16T21:12:11.848Z
             </div>
         <script src="../prettify.js"></script>
         <script>

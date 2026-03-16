@@ -10,7 +10,6 @@ import type { Card } from "../types/index";
 import ConfirmModal from "./ConfirmModal";
 import { useBoardStore } from "../hooks/useBoardStore";
 import { useTaskDrawerStore } from "../store/taskDrawerStore";
-import { useTimerStore } from "../store/timerStore";
 import formatTime from "../utils/formatTime";
 
 type DrawerProps = {

@@ -23,9 +23,9 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">89.47% </span>
+                <span class="strong">94.73% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>17/19</span>
+                <span class='fraction'>18/19</span>
             </div>
         
             
@@ -37,9 +37,9 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">80% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>4/5</span>
+                <span class='fraction'>5/5</span>
             </div>
         
             
@@ -125,7 +125,22 @@
 <a name='L60'></a><a href='#L60'>60</a>
 <a name='L61'></a><a href='#L61'>61</a>
 <a name='L62'></a><a href='#L62'>62</a>
-<a name='L63'></a><a href='#L63'>63</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">1x</span>
+<a name='L63'></a><a href='#L63'>63</a>
+<a name='L64'></a><a href='#L64'>64</a>
+<a name='L65'></a><a href='#L65'>65</a>
+<a name='L66'></a><a href='#L66'>66</a>
+<a name='L67'></a><a href='#L67'>67</a>
+<a name='L68'></a><a href='#L68'>68</a>
+<a name='L69'></a><a href='#L69'>69</a>
+<a name='L70'></a><a href='#L70'>70</a>
+<a name='L71'></a><a href='#L71'>71</a>
+<a name='L72'></a><a href='#L72'>72</a>
+<a name='L73'></a><a href='#L73'>73</a>
+<a name='L74'></a><a href='#L74'>74</a>
+<a name='L75'></a><a href='#L75'>75</a>
+<a name='L76'></a><a href='#L76'>76</a>
+<a name='L77'></a><a href='#L77'>77</a>
+<a name='L78'></a><a href='#L78'>78</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -169,6 +184,19 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">15x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -187,8 +215,10 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { useEffect, useRef, useState, type FormEvent } from "react";
-import { Modal, Form, Button } from "react-bootstrap";
+import { Modal } from "react-bootstrap";
 &nbsp;
 type AddBoardModalProps = {
   show: boolean;
@@ -214,38 +244,53 @@ export default function AddBoardModal({
 &nbsp;
   useEffect(() =&gt; {
     if (show) {
-      setTimeout(<span class="fstat-no" title="function not covered" >() =</span>&gt; <span class="cstat-no" title="statement not covered" >inputRef.current?.focus(),</span> 150);
+      setTimeout(() =&gt; inputRef.current?.focus(), 150);
     } else <span class="missing-if-branch" title="else path not taken" >E</span>{
 <span class="cstat-no" title="statement not covered" >      setBoardName("");</span>
     }
   }, [show]);
 &nbsp;
   return (
-    &lt;Modal show={show} onHide={onHide} centered&gt;
-      &lt;Form onSubmit={handleSubmit}&gt;
-        &lt;Modal.Header closeButton&gt;
-          &lt;Modal.Title&gt;Create board&lt;/Modal.Title&gt;
-        &lt;/Modal.Header&gt;
-        &lt;Modal.Body&gt;
-          &lt;Form.Group className="pt-2"&gt;
-            &lt;Form.Control
+    &lt;Modal
+      show={show}
+      onHide={onHide}
+      centered
+      contentClassName="fb-modal"
+      backdropClassName="fb-modal-backdrop"
+      data-bs-theme="dark"
+    &gt;
+      &lt;form onSubmit={handleSubmit}&gt;
+        &lt;div className="fb-modal-header"&gt;
+          &lt;span className="fb-modal-title"&gt;New board&lt;/span&gt;
+          &lt;button type="button" className="fb-modal-close" onClick={onHide} aria-label="Close"&gt;
+            ✕
+          &lt;/button&gt;
+        &lt;/div&gt;
+&nbsp;
+        &lt;div className="fb-modal-body"&gt;
+          &lt;div className="fb-field"&gt;
+            &lt;div className="fb-field-label"&gt;Board name&lt;/div&gt;
+            &lt;input
               ref={inputRef}
+              className="fb-field-control"
               value={boardName}
               onChange={(e) =&gt; setBoardName(e.target.value)}
               placeholder="Board name"
               required
+              type="text"
             /&gt;
-          &lt;/Form.Group&gt;
-        &lt;/Modal.Body&gt;
-        &lt;Modal.Footer&gt;
-          &lt;Button variant="action" onClick={onHide}&gt;
+          &lt;/div&gt;
+        &lt;/div&gt;
+&nbsp;
+        &lt;div className="fb-modal-footer"&gt;
+          &lt;button type="button" className="fb-btn fb-btn-ghost" onClick={onHide}&gt;
             Cancel
-          &lt;/Button&gt;
-          &lt;Button type="submit" variant="success"&gt;
-            Create
-          &lt;/Button&gt;
-        &lt;/Modal.Footer&gt;
-      &lt;/Form&gt;
+          &lt;/button&gt;
+          &lt;button type="submit" className="fb-btn fb-btn-primary" style={{ marginLeft: "auto" }}&gt;
+            Create board
+          &lt;/button&gt;
+        &lt;/div&gt;
+      &lt;/form&gt;
     &lt;/Modal&gt;
   );
 }
@@ -256,7 +301,7 @@ export default function AddBoardModal({
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-03-16T11:39:03.078Z
+                at 2026-03-16T21:12:11.848Z
             </div>
         <script src="../prettify.js"></script>
         <script>
