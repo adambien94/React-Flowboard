@@ -8,9 +8,12 @@ jest.mock("../contexts/AuthContext");
 const mockedUseAuth = jest.mocked(useAuth);
 
 // Polyfill TextEncoder required by react-router in Jest environment
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-(global as any).TextEncoder =
-  (global as any).TextEncoder ||
+const globalWithEncoder = globalThis as typeof globalThis & {
+  TextEncoder?: typeof TextEncoder;
+};
+
+globalWithEncoder.TextEncoder =
+  globalWithEncoder.TextEncoder ||
   class {
     encode(str: string) {
       return new TextEncoder().encode(str);
@@ -27,7 +30,7 @@ describe("ProtectedRoute", () => {
       user: null,
       loading: true,
       logout: jest.fn(),
-    } as any);
+    });
 
     render(
       <MemoryRouter initialEntries={["/protected"]}>
@@ -49,10 +52,10 @@ describe("ProtectedRoute", () => {
 
   it("renders children when user is authenticated", () => {
     mockedUseAuth.mockReturnValue({
-      user: { id: "u1" } as any,
+      user: { id: "u1" } as unknown,
       loading: false,
       logout: jest.fn(),
-    } as any);
+    });
 
     render(
       <MemoryRouter initialEntries={["/protected"]}>
@@ -77,7 +80,7 @@ describe("ProtectedRoute", () => {
       user: null,
       loading: false,
       logout: jest.fn(),
-    } as any);
+    });
 
     render(
       <MemoryRouter initialEntries={["/protected"]}>

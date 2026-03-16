@@ -1,6 +1,6 @@
 import { useEffect, useMemo } from "react";
-import { useParams, useNavigate } from "react-router-dom";
-import { Container, Badge, Spinner, Button } from "react-bootstrap";
+import { useParams } from "react-router-dom";
+import { Container, Spinner } from "react-bootstrap";
 import { useBoardStore } from "./hooks/useBoardStore";
 import formatTime from "./utils/formatTime";
 import type { Card } from "./types/index";
@@ -47,10 +47,8 @@ const summaryRowStyles: React.CSSProperties = {
 
 export default function Summary() {
   const { boardId } = useParams();
-  const navigate = useNavigate();
   const loadBoard = useBoardStore((state) => state.loadBoard);
   const columns = useBoardStore((state) => state.columns);
-  const boardTitle = useBoardStore((state) => state.boardTitle);
   const loading = useBoardStore((state) => state.loading);
 
   useEffect(() => {
@@ -129,9 +127,7 @@ export default function Summary() {
       </div> */}
 
       <div className="mb-3">
-        <DashboardTopBar
-          openAddColumnModal={() => setAddColumnModalShow(true)}
-        />
+        <DashboardTopBar openAddColumnModal={() => {}} />
       </div>
 
       {allCards.length === 0 ? (

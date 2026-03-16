@@ -43,5 +43,5 @@ export const useTimerStore = create<TimerState>()(
         timeToLog: s.timeToLog,
       }),
     }
-  ) as any
+  ) as unknown
 );

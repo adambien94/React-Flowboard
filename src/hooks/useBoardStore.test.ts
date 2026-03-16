@@ -13,17 +13,23 @@ jest.mock("../api/supabaseClient", () => {
   };
 });
 
-const mockedSupabase = supabase as unknown as {
+type SupabaseMock = {
   from: jest.Mock;
   channel: jest.Mock;
   rpc: jest.Mock;
   removeChannel: jest.Mock;
 };
 
+const mockedSupabase = supabase as unknown as SupabaseMock;
+
 // Polyfill structuredClone for the Node/Jest environment
-(globalThis as any).structuredClone =
-  (globalThis as any).structuredClone ??
-  ((value: unknown) => JSON.parse(JSON.stringify(value)));
+const globalWithStructuredClone = globalThis as typeof globalThis & {
+  structuredClone?: <T>(value: T) => T;
+};
+
+globalWithStructuredClone.structuredClone =
+  globalWithStructuredClone.structuredClone ??
+  ((value: unknown) => JSON.parse(JSON.stringify(value)) as unknown);
 
 describe("useBoardStore", () => {
   const initialState = useBoardStore.getState();
@@ -44,7 +50,7 @@ describe("useBoardStore", () => {
     };
 
     act(() => {
-      useBoardStore.getState().setCardDetails(card as any);
+      useBoardStore.getState().setCardDetails(card);
     });
 
     expect(useBoardStore.getState().cardDetails).toEqual(card);
@@ -99,7 +105,7 @@ describe("useBoardStore", () => {
           }),
         }),
       }),
-    } as any);
+    });
 
     useBoardStore.setState((state) => ({
       ...state,
@@ -132,7 +138,7 @@ describe("useBoardStore", () => {
 
     mockedSupabase.from.mockReturnValue({
       update: updateMock,
-    } as any);
+    });
 
     useBoardStore.setState((state) => ({
       ...state,
@@ -180,7 +186,7 @@ describe("useBoardStore", () => {
 
     mockedSupabase.from.mockReturnValue({
       update: failingUpdateMock,
-    } as any);
+    });
 
     const originalColumns = [
       {

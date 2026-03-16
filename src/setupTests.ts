@@ -1,18 +1,22 @@
 import "@testing-library/jest-dom";
+import { TextEncoder as NodeTextEncoder } from "util";
 
 // Polyfill TextEncoder required by react-router in Jest / jsdom
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-if (!(global as any).TextEncoder) {
-  // eslint-disable-next-line @typescript-eslint/no-var-requires
-  const { TextEncoder } = require("util");
-  (global as any).TextEncoder = TextEncoder;
+const globalWithEncoder = globalThis as typeof globalThis & {
+  TextEncoder?: typeof NodeTextEncoder;
+};
+
+if (!globalWithEncoder.TextEncoder) {
+  globalWithEncoder.TextEncoder = NodeTextEncoder;
 }
 
 // Polyfill matchMedia used by react-bootstrap Offcanvas
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-if (!(window as any).matchMedia) {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  (window as any).matchMedia = (query: string) => ({
+const windowWithMatchMedia = window as typeof window & {
+  matchMedia?: (query: string) => MediaQueryList;
+};
+
+if (!windowWithMatchMedia.matchMedia) {
+  windowWithMatchMedia.matchMedia = (query: string): MediaQueryList => ({
     matches: false,
     media: query,
     onchange: null,

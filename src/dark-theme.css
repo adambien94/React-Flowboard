@@ -49,6 +49,10 @@ body {
   overflow: hidden !important;
 }
 
+.offcanvas-end .offcanvas-header {
+  padding-left: 1.5rem;
+}
+
 .offcanvas.offcanvas-end,
 .offcanvas.offcanvas-start,
 .border-top,

@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import { type FormEvent } from "react";
 import { Offcanvas, Form, Button } from "react-bootstrap";
 import type { Card } from "../types/index";
@@ -57,24 +57,24 @@ export default function Drawer({
 
   useEffect(() => {
     if (activeCardId) fetchCardDetails(activeCardId);
-  }, [activeCardId, fetchCardDetails, setCardDetails]);
+  }, [activeCardId, fetchCardDetails]);
 
-  useEffect(() => {
-    setCardForEdit();
-    setColName(columns.find(({ id }) => id === cardDetails?.column_id)?.title);
-  }, [cardDetails, columns]);
-
-  useEffect(() => {
-    setColName(columns.find(({ id }) => id === activeColId)?.title);
-  }, [activeColId, columns]);
-
-  const setCardForEdit = () => {
+  const setCardForEdit = useCallback(() => {
     setForm({
       title: cardDetails?.title || "",
       description: cardDetails?.description || "",
       priority: cardDetails?.priority || "",
     });
-  };
+  }, [cardDetails]);
+
+  useEffect(() => {
+    setCardForEdit();
+    setColName(columns.find(({ id }) => id === cardDetails?.column_id)?.title);
+  }, [cardDetails, columns, setCardForEdit]);
+
+  useEffect(() => {
+    setColName(columns.find(({ id }) => id === activeColId)?.title);
+  }, [activeColId, columns]);
 
   const handleDeleteCard = () => {
     if (!activeCardId) return;
@@ -89,7 +89,7 @@ export default function Drawer({
         titleInputRef.current?.focus();
       }, 200);
     }
-  }, [isTaskDrawerOpen, setCardDetails]);
+  }, [isTaskDrawerOpen]);
 
   const handleChange = (key: string, value: string) => {
     setForm((prev) => ({

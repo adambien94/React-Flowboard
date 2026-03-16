@@ -9,23 +9,37 @@ jest.mock("../store/taskDrawerStore");
 const mockedUseBoardStore = jest.mocked(useBoardStore);
 const mockedUseTaskDrawerStore = jest.mocked(useTaskDrawerStore);
 
-const baseBoardStore = {
+type BoardStoreMock = {
+  columns: unknown[];
+  fetchCardDetails: jest.Mock;
+  cardDetails: unknown;
+  setCardDetails: jest.Mock;
+};
+
+type DrawerStoreMock = {
+  isTaskDrawerOpen: boolean;
+  activeCardId: string | null;
+  activeColId: string | null;
+  closeTaskDrawer: jest.Mock;
+};
+
+const baseBoardStore: BoardStoreMock = {
   columns: [],
   fetchCardDetails: jest.fn(),
   cardDetails: null,
   setCardDetails: jest.fn(),
-} as any;
+};
 
-const baseDrawerStore = {
+const baseDrawerStore: DrawerStoreMock = {
   isTaskDrawerOpen: true,
   activeCardId: null,
   activeColId: "col-1",
   closeTaskDrawer: jest.fn(),
-} as any;
+};
 
 const setup = (overrides?: {
-  board?: Partial<typeof baseBoardStore>;
-  drawer?: Partial<typeof baseDrawerStore>;
+  board?: Partial<BoardStoreMock>;
+  drawer?: Partial<DrawerStoreMock>;
 }) => {
   mockedUseBoardStore.mockReturnValue({
     ...baseBoardStore,

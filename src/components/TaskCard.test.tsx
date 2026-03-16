@@ -27,7 +27,7 @@ const baseCard = {
   description: "Desc",
   priority: "low",
   logged_time: 0,
-} as any;
+} as const;
 
 describe("TaskCard", () => {
   beforeEach(() => {
@@ -40,15 +40,15 @@ describe("TaskCard", () => {
       timeToLog: null,
       setTimeToLog: jest.fn(),
       clearActiveTaskId: jest.fn(),
-    } as any);
+    });
 
     mockedUseTaskModalStore.mockReturnValue({
       openTaskModal: jest.fn(),
-    } as any);
+    });
 
     mockedUseTaskDrawerStore.mockReturnValue({
       openTaskDrawer: jest.fn(),
-    } as any);
+    });
   });
 
   afterEach(() => {
@@ -101,7 +101,7 @@ describe("TaskCard", () => {
       timeToLog: null,
       setTimeToLog: jest.fn(),
       clearActiveTaskId: jest.fn(),
-    } as any);
+    });
 
     render(<TaskCard card={baseCard} />);
 

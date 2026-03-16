@@ -1,3 +1,4 @@
+/* eslint-disable react-refresh/only-export-components */
 import {
   createContext,
   useContext,
@@ -40,9 +41,13 @@ export const BoardsProvider = ({ children }: BoardsProviderProps) => {
 
     try {
       await getBoardsList();
-    } catch (e: any) {
+    } catch (e: unknown) {
       console.error("Failed to load boards:", e);
-      setError(e.message ?? "Unknown error");
+      if (e instanceof Error) {
+        setError(e.message);
+      } else {
+        setError("Unknown error");
+      }
     } finally {
       setLoading(false);
     }
@@ -50,7 +55,7 @@ export const BoardsProvider = ({ children }: BoardsProviderProps) => {
 
   useEffect(() => {
     refreshBoards();
-  }, []);
+  }, [refreshBoards]);
 
   return (
     <BoardsContext.Provider
