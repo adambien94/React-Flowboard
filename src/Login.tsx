@@ -1,7 +1,6 @@
 import { useState, type FormEvent } from "react";
 import { Spinner } from "react-bootstrap";
 import Navbar from "./components/Navbar";
-import styles from "./components/dashboard/DashboardLayout.module.css";
 import { supabase } from "./api/supabaseClient";
 import { useNavigate } from "react-router-dom";
 
@@ -43,7 +42,8 @@ export default function Login() {
       <Navbar isControlsHidden={true} />
 
       <div
-        className={`${styles.mainContent} d-flex align-items-center justify-content-center`}
+        className="d-flex align-items-center justify-content-center"
+        style={{ minHeight: "calc(100vh - 60px)" }}
       >
         <div className="fb-auth-card">
           <div className="fb-modal-header">

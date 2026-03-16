@@ -11,7 +11,7 @@ export default function Navbar({
 }: NavbarProps) {
   return (
     <BSNavbar variant="dark" expand="lg" className="fb-topbar">
-      <Container fluid>
+      <Container fluid className="px-3">
         <BSNavbar.Brand
           href="#"
           className="fw-semibold"

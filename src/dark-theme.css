@@ -255,7 +255,7 @@ body {
   gap: 16px;
   align-items: flex-start;
   overflow-x: auto;
-  padding: 16px;
+  padding: 20px 16px;
   min-height: calc(100vh - 58px);
   /* overflow-x: scroll; */
 }
