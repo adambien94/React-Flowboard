@@ -14,8 +14,8 @@ import { useTimerStore } from "../store/timerStore";
 import formatTime from "../utils/formatTime";
 
 type DrawerProps = {
-  createTask: (colId: string, taskData: Partial<Card>) => void;
-  editTask: (cardId: string, taskData: Partial<Card>) => void;
+  createTask: (colId: string, taskData: Partial<Card>) => Promise<void>;
+  editTask: (cardId: string, taskData: Partial<Card>) => Promise<void>;
   deleteTask: (cardId: string) => void;
 };
 
@@ -56,16 +56,13 @@ export default function Drawer({
   });
   const [confirmDeleteShow, setConfirmDeleteShow] = useState(false);
   const [colName, setColName] = useState<string | undefined>("");
+  const [initialColumnId, setInitialColumnId] = useState<string | null>(null);
+  const [selectedColumnId, setSelectedColumnId] = useState<string | null>(null);
   const titleInputRef = useRef<HTMLInputElement>(null);
   const { columns, fetchCardDetails, cardDetails, setCardDetails, moveCard } =
     useBoardStore();
   const { isTaskDrawerOpen, closeTaskDrawer, activeCardId, activeColId } =
     useTaskDrawerStore();
-  const {
-    startTimer,
-    stopTimer,
-    activeTaskId: activeTimerTaskId,
-  } = useTimerStore();
 
   useEffect(() => {
     if (activeCardId) fetchCardDetails(activeCardId);
@@ -81,12 +78,18 @@ export default function Drawer({
 
   useEffect(() => {
     setCardForEdit();
-    setColName(columns.find(({ id }) => id === cardDetails?.column_id)?.title);
+    const currentColId = cardDetails?.column_id ?? null;
+    setInitialColumnId(currentColId);
+    setSelectedColumnId(currentColId);
+    setColName(columns.find(({ id }) => id === currentColId)?.title);
   }, [cardDetails, columns, setCardForEdit]);
 
   useEffect(() => {
-    setColName(columns.find(({ id }) => id === activeColId)?.title);
-  }, [activeColId, columns]);
+    if (!activeCardId) {
+      setSelectedColumnId(activeColId ?? null);
+      setColName(columns.find(({ id }) => id === activeColId)?.title);
+    }
+  }, [activeColId, activeCardId, columns]);
 
   const handleDeleteCard = () => {
     if (!activeCardId) return;
@@ -110,13 +113,21 @@ export default function Drawer({
     }));
   };
 
-  const handleSubmit = (e: FormEvent) => {
+  const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
 
     if (activeCardId) {
-      editTask(activeCardId, {
+      await editTask(activeCardId, {
         ...(form as Partial<Card>),
       });
+
+      if (
+        selectedColumnId &&
+        selectedColumnId !== initialColumnId &&
+        selectedColumnId !== cardDetails?.column_id
+      ) {
+        await moveCard(activeCardId, selectedColumnId, 0);
+      }
     } else if (activeColId) {
       createTask(activeColId, {
         ...(form as Partial<Card>),
@@ -152,26 +163,9 @@ export default function Drawer({
     return hhmmss.startsWith("00:") ? hhmmss.slice(3) : hhmmss;
   })();
 
-  const canControlTimer =
-    !activeTimerTaskId || (activeCardId && activeTimerTaskId === activeCardId);
-  const isThisTimerActive = Boolean(
-    activeCardId && activeTimerTaskId === activeCardId,
-  );
-
-  const handleTimerClick = () => {
-    if (!activeCardId) return;
-    if (isThisTimerActive) {
-      stopTimer();
-    } else if (!activeTimerTaskId) {
-      startTimer(activeCardId);
-    }
-  };
-
-  const handleMoveColumn = async (toColumnId: string) => {
-    if (!activeCardId) return;
+  const handleMoveColumnSelect = (toColumnId: string) => {
     if (!toColumnId) return;
-    if (toColumnId === cardDetails?.column_id) return;
-    await moveCard(activeCardId, toColumnId, 0);
+    setSelectedColumnId(toColumnId);
   };
 
   return (
@@ -262,8 +256,8 @@ export default function Drawer({
                 <div className="fb-field-label">Move to column</div>
                 <select
                   className="fb-field-control"
-                  value={cardDetails?.column_id || ""}
-                  onChange={(e) => handleMoveColumn(e.target.value)}
+                  value={selectedColumnId || ""}
+                  onChange={(e) => handleMoveColumnSelect(e.target.value)}
                 >
                   {columns.map((c) => (
                     <option key={c.id} value={c.id}>
@@ -287,15 +281,6 @@ export default function Drawer({
                     <div className="fb-timer-val">{timerValue}</div>
                     <div className="fb-timer-label">minutes logged</div>
                   </div>
-                  <button
-                    type="button"
-                    className="fb-timer-btn"
-                    title={isThisTimerActive ? "Stop timer" : "Start timer"}
-                    onClick={handleTimerClick}
-                    disabled={!canControlTimer}
-                  >
-                    {isThisTimerActive ? "❚❚" : "▶"}
-                  </button>
                 </div>
               </div>
             )}

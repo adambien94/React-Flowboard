@@ -1,5 +1,5 @@
 import { useState, type FormEvent } from "react";
-import { Button, Card, Form, Spinner } from "react-bootstrap";
+import { Spinner } from "react-bootstrap";
 import Navbar from "./components/Navbar";
 import styles from "./components/dashboard/DashboardLayout.module.css";
 import { supabase } from "./api/supabaseClient";
@@ -45,69 +45,71 @@ export default function Login() {
       <div
         className={`${styles.mainContent} d-flex align-items-center justify-content-center`}
       >
-        <Card
-          className="login-card"
-          style={{ width: 380, border: "1px solid var(--border-color)" }}
-        >
-          <Card.Body>
-            <h4 className="text-center mb-4 py-3">
-              {isRegister ? "Create Account" : "Sign in"}
-            </h4>
+        <div className="fb-auth-card">
+          <div className="fb-modal-header">
+            <span className="fb-modal-title">
+              {isRegister ? "Create account" : "Sign in"}
+            </span>
+          </div>
 
-            <Form onSubmit={handleAuth}>
-              <Form.Group className="mb-3">
-                <Form.Control
+          <form onSubmit={handleAuth}>
+            <div className="fb-modal-body">
+              <div className="fb-field">
+                <div className="fb-field-label">Email</div>
+                <input
                   type="email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   placeholder="Enter e-mail"
+                  className="fb-field-control"
+                  required
                 />
-              </Form.Group>
+              </div>
 
-              <Form.Group className="mb-4">
-                <Form.Control
+              <div className="fb-field">
+                <div className="fb-field-label">Password</div>
+                <input
                   type="password"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   placeholder="Enter password"
+                  className="fb-field-control"
+                  required
                 />
-              </Form.Group>
+              </div>
 
               {error && (
-                <div className="text-danger text-center mb-3">{error}</div>
+                <div className="fb-auth-error text-center">{error}</div>
               )}
+            </div>
 
-              <div className="d-grid gap-2 mb-2">
-                <Button
-                  variant="light"
-                  type="submit"
-                  className="fw-semibold"
-                  disabled={loading}
-                >
-                  {loading ? (
-                    <>
-                      <Spinner size="sm" /> Loading...
-                    </>
-                  ) : isRegister ? (
-                    "Register"
-                  ) : (
-                    "Login"
-                  )}
-                </Button>
+            <div className="fb-modal-footer fb-auth-footer">
+              <button
+                type="submit"
+                className="fb-btn fb-btn-primary fb-auth-primary"
+                disabled={loading}
+              >
+                {loading ? (
+                  <>
+                    <Spinner size="sm" /> Loading...
+                  </>
+                ) : isRegister ? (
+                  "Register"
+                ) : (
+                  "Login"
+                )}
+              </button>
 
-                <Button
-                  variant="outline-secondary"
-                  className="mt-1 fw-semibold"
-                  onClick={() => setIsRegister((prev) => !prev)}
-                >
-                  {isRegister
-                    ? "Already have an account?"
-                    : "Create new account"}
-                </Button>
-              </div>
-            </Form>
-          </Card.Body>
-        </Card>
+              <button
+                type="button"
+                className="fb-btn fb-btn-ghost fb-auth-secondary"
+                onClick={() => setIsRegister((prev) => !prev)}
+              >
+                {isRegister ? "Already have an account?" : "Create new account"}
+              </button>
+            </div>
+          </form>
+        </div>
       </div>
     </div>
   );

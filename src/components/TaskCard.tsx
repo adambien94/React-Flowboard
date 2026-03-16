@@ -66,7 +66,7 @@ const TaskCardComponent = ({ card }: TaskCardProps) => {
   };
 
   return (
-    <div key={card.id} className="mt-1">
+    <div key={card.id}>
       <div
         ref={setNodeRef}
         style={style}
@@ -74,10 +74,10 @@ const TaskCardComponent = ({ card }: TaskCardProps) => {
         {...attributes}
         onClick={onCardClick}
       >
-        <div className="card-body d-flex flex-column">
+        <div className="card-body d-flex flex-column pb-2">
           <div className="d-flex justify-content-between">
             <div className={priorityClass(card.priority)}>
-              {card.priority ?? "Backlog"}
+              {card.priority ? card.priority : "Backlog"}
             </div>
             <div {...listeners}>
               <i
@@ -123,11 +123,11 @@ const TaskCardComponent = ({ card }: TaskCardProps) => {
               {card.description}
             </p>
           </div>
-          <div className="flex-grow-1 mt-1 d-flex justify-content-between align-items-end gap-2">
+          <div className="flex-grow-1 d-flex justify-content-between align-items-center gap-2 border-top mt-2">
             <span
               className="pt-1"
               style={{
-                fontSize: 10,
+                fontSize: 11,
                 lineHeight: 1.4,
                 color: "var(--fb-text-faint)",
                 fontFamily:

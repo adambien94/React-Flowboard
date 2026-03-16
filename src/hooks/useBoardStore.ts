@@ -269,7 +269,7 @@ export const useBoardStore = create<State>((set, get) => ({
   fetchCardDetails: async (cardId: string) => {
     const { data, error } = await supabase
       .from("cards")
-      .select("id, title, description, priority, position, column_id")
+      .select("id, title, description, priority, position, column_id, logged_time")
       .eq("id", cardId)
       .single();
 
@@ -282,7 +282,6 @@ export const useBoardStore = create<State>((set, get) => ({
   },
 
   setLogTime: async (cardId: string, seconds: number) => {
-    // 🔹 optimistic update
     set((state) => ({
       columns: state.columns.map((col) => ({
         ...col,
@@ -292,9 +291,15 @@ export const useBoardStore = create<State>((set, get) => ({
             : card
         ),
       })),
+      cardDetails:
+        state.cardDetails && state.cardDetails.id === cardId
+          ? {
+              ...state.cardDetails,
+              logged_time: (state.cardDetails.logged_time ?? 0) + seconds,
+            }
+          : state.cardDetails,
     }));
 
-    // 🔹 atomic update w DB
     const { error } = await supabase.rpc("increment_logged_time", {
       card_id: cardId,
       seconds,

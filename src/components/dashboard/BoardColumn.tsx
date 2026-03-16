@@ -43,7 +43,10 @@ const BoardColumnComponent = ({ column, isHidden }: BoardColumnProps) => {
 
   return (
     <>
-      <div className="fb-column" style={{ visibility: isHidden ? "hidden" : "visible" }}>
+      <div
+        className="fb-column"
+        style={{ visibility: isHidden ? "hidden" : "visible" }}
+      >
         <div className="fb-col-header">
           <span
             className="fb-col-dot"
@@ -67,7 +70,11 @@ const BoardColumnComponent = ({ column, isHidden }: BoardColumnProps) => {
         >
           {column.cards.length > 0 ? (
             column.cards.map((card: CardType) => (
-              <DroppableTaskCard key={card.id} card={card} columnId={column.id} />
+              <DroppableTaskCard
+                key={card.id}
+                card={card}
+                columnId={column.id}
+              />
             ))
           ) : (
             <div
@@ -78,17 +85,11 @@ const BoardColumnComponent = ({ column, isHidden }: BoardColumnProps) => {
             </div>
           )}
 
-          <div className="mt-3 ps-2">
+          <div className="mt-2 d-flex">
             <Button
-              size="sm"
               variant="link"
-              className="p-0 text-decoration-none"
+              className="text-decoration-none col text-start"
               onClick={handleOpenDrawer}
-              style={{
-                color: "var(--fb-text-faint)",
-                fontSize: 12,
-                fontWeight: 500,
-              }}
             >
               + Add card
             </Button>

@@ -1,78 +1,78 @@
 const BoardLoader = () => {
+  const placeholderColumns = [5, 3, 4, 2];
+
   return (
-    <div className="container-fluid">
-      <div>
-        <div className="d-flex align-items-center justify-content-between mb-3">
-          <div className="d-flex align-items-center">
-            <div
-              className="skeleton-box"
-              style={{
-                width: "90px",
-                height: "40px",
-                borderRadius: "14px",
-                marginTop: "1px",
-              }}
-            />
-            <div
-              className="skeleton-box ms-4"
-              style={{
-                width: "200px",
-                height: "32px",
-                borderRadius: "6px",
-                marginTop: "3px",
-              }}
-            />
-          </div>
-
-          <div
-            className="skeleton-box"
-            style={{
-              width: "130px",
-              height: "40px",
-              borderRadius: "14px",
-              marginTop: "1px",
-            }}
-          />
-        </div>
-
-        <div className="mt-3">
-          <div className="row">
-            {[5, 3, 2, 4].map((i) => (
-              <div key={i} className="col-12 col-sm-6 col-md-3">
-                <div
-                  className="skeleton-column p-3"
+    <div>
+      <div className="fb-board ps-2">
+        {placeholderColumns.map((cardsCount, idx) => (
+          <div key={idx} className="fb-column">
+            <div className="fb-col-header">
+              <span
+                className="fb-col-dot skeleton-box"
+                style={{ width: 10, height: 10 }}
+              />
+              <span className="flex-grow-1">
+                <span
+                  className="skeleton-box"
                   style={{
-                    backgroundColor: "rgba(255, 255, 255, 0.05)",
-                    borderRadius: "18px",
-                    marginBottom: "1rem",
+                    display: "inline-block",
+                    width: "70%",
+                    height: 16,
+                    borderRadius: 6,
                   }}
-                >
-                  <div
-                    className="skeleton-box mb-3"
-                    style={{
-                      width: "70%",
-                      height: "24px",
-                      borderRadius: "6px",
-                    }}
-                  />
+                />
+              </span>
+              <span className="fb-col-count">
+                <span
+                  className="skeleton-box"
+                  style={{
+                    display: "inline-block",
+                    width: 24,
+                    height: 12,
+                    borderRadius: 4,
+                  }}
+                />
+              </span>
+              <span className="fb-col-handle">
+                <span
+                  className="skeleton-box"
+                  style={{
+                    display: "inline-block",
+                    width: 18,
+                    height: 10,
+                    borderRadius: 4,
+                  }}
+                />
+              </span>
+            </div>
 
-                  {[...Array(i).keys()].map((j) => (
-                    <div
-                      key={j}
-                      className="skeleton-box mb-2"
-                      style={{
-                        width: "100%",
-                        height: `${80 + j * 10}px`,
-                        borderRadius: "16px",
-                        animationDelay: `${i * 0.1 + j * 0.05}s`,
-                      }}
-                    />
-                  ))}
-                </div>
+            <div className="fb-cards-wrapper skeleton-column">
+              {Array.from({ length: cardsCount }).map((_, j) => (
+                <div
+                  key={j}
+                  className="skeleton-box"
+                  style={{
+                    width: "100%",
+                    height: 82 + j * 10,
+                    borderRadius: 12,
+                    animationDelay: `${idx * 0.12 + j * 0.06}s`,
+                  }}
+                />
+              ))}
+
+              <div className="mt-2 d-flex">
+                <div
+                  className="skeleton-box"
+                  style={{
+                    width: "60%",
+                    height: 28,
+                    borderRadius: 999,
+                  }}
+                />
               </div>
-            ))}
+            </div>
           </div>
-        </div>
+        ))}
       </div>
 
       <style>{`
