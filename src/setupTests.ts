@@ -1,13 +1,13 @@
 import "@testing-library/jest-dom";
-import { TextEncoder as NodeTextEncoder } from "util";
+import { TextDecoder, TextEncoder } from "util";
 
-// Polyfill TextEncoder required by react-router in Jest / jsdom
-const globalWithEncoder = globalThis as typeof globalThis & {
-  TextEncoder?: typeof NodeTextEncoder;
-};
-
-if (!globalWithEncoder.TextEncoder) {
-  globalWithEncoder.TextEncoder = NodeTextEncoder;
+// Polyfills required by react-router in Jest / jsdom.
+// Node's util types differ slightly from the DOM lib types, so we cast here.
+if (!globalThis.TextEncoder) {
+  globalThis.TextEncoder = TextEncoder as unknown as typeof globalThis.TextEncoder;
+}
+if (!globalThis.TextDecoder) {
+  globalThis.TextDecoder = TextDecoder as unknown as typeof globalThis.TextDecoder;
 }
 
 // Polyfill matchMedia used by react-bootstrap Offcanvas

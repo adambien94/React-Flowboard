@@ -44,7 +44,7 @@ describe("useBoardStore", () => {
       id: "card-1",
       title: "Test",
       description: "Desc",
-      priority: "low",
+      priority: "low" as const,
       position: 0,
       column_id: "col-1",
     };

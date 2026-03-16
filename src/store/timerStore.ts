@@ -35,13 +35,12 @@ export const useTimerStore = create<TimerState>()(
     }),
     {
       name: "timer-store",
-      // Explicitly type state to satisfy TS
-      partialize: (s: TimerState) => ({
+      partialize: (s) => ({
         isTimerShow: s.isTimerShow,
         activeTaskId: s.activeTaskId,
         startTime: s.startTime,
         timeToLog: s.timeToLog,
       }),
     }
-  ) as unknown
+  )
 );

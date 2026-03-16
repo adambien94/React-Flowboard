@@ -26,6 +26,8 @@ const baseCard = {
   title: "Test card",
   description: "Desc",
   priority: "low",
+  position: 0,
+  column_id: "col-1",
   logged_time: 0,
 } as const;
 

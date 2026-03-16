@@ -2,6 +2,7 @@
   "extends": "./tsconfig.app.json",
   "compilerOptions": {
     "module": "ESNext",
+    "moduleResolution": "NodeNext",
     "verbatimModuleSyntax": false,
     "esModuleInterop": true,
     "types": ["vite/client", "jest", "node", "@testing-library/jest-dom"]

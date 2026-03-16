@@ -3,6 +3,7 @@ import {
   createContext,
   useContext,
   type ReactNode,
+  useCallback,
   useEffect,
   useState,
 } from "react";
@@ -35,7 +36,7 @@ export const BoardsProvider = ({ children }: BoardsProviderProps) => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  const refreshBoards = async () => {
+  const refreshBoards = useCallback(async () => {
     setLoading(true);
     setError(null);
 
@@ -51,7 +52,7 @@ export const BoardsProvider = ({ children }: BoardsProviderProps) => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [getBoardsList]);
 
   useEffect(() => {
     refreshBoards();

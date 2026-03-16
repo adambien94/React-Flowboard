@@ -2,23 +2,11 @@ import { render, screen } from "@testing-library/react";
 import { MemoryRouter, Route, Routes } from "react-router-dom";
 import ProtectedRoute from "./ProtectedRoute";
 import { useAuth } from "../contexts/AuthContext";
+import type { User } from "@supabase/supabase-js";
 
 jest.mock("../contexts/AuthContext");
 
 const mockedUseAuth = jest.mocked(useAuth);
-
-// Polyfill TextEncoder required by react-router in Jest environment
-const globalWithEncoder = globalThis as typeof globalThis & {
-  TextEncoder?: typeof TextEncoder;
-};
-
-globalWithEncoder.TextEncoder =
-  globalWithEncoder.TextEncoder ||
-  class {
-    encode(str: string) {
-      return new TextEncoder().encode(str);
-    }
-  };
 
 describe("ProtectedRoute", () => {
   afterEach(() => {
@@ -52,7 +40,7 @@ describe("ProtectedRoute", () => {
 
   it("renders children when user is authenticated", () => {
     mockedUseAuth.mockReturnValue({
-      user: { id: "u1" } as unknown,
+      user: { id: "u1" } as unknown as User,
       loading: false,
       logout: jest.fn(),
     });
