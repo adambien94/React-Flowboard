@@ -63,6 +63,10 @@ body {
   background: var(--surface-bg);
 }
 
+.container-fluid {
+  padding: 0;
+}
+
 .btn {
   /* align-items: center; */
 }
@@ -251,8 +255,8 @@ body {
   gap: 16px;
   align-items: flex-start;
   overflow-x: auto;
-  padding-top: 8px;
-  min-height: calc(100vh - 90px);
+  padding: 16px;
+  min-height: calc(100vh - 58px);
   /* overflow-x: scroll; */
 }
 
