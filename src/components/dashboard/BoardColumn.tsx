@@ -78,8 +78,8 @@ const BoardColumnComponent = ({ column, isHidden }: BoardColumnProps) => {
             ))
           ) : (
             <div
-              style={{ fontSize: 12, padding: "10px 8px" }}
-              className="board-column-empty text-center"
+              style={{ fontSize: 12 }}
+              className="board-column-empty text-center pt-4"
             >
               List is empty.
             </div>

@@ -42,7 +42,11 @@ export default function Drawer({ show, onHide }: DrawerProps) {
       keyboard={false}
     >
       <Offcanvas.Header className="border-bottom">
-        <Offcanvas.Title className="fw-semibold" style={{ fontSize: 15 }}>
+        <Offcanvas.Title
+          className="fw-semibold text-white"
+          style={{ fontSize: 15 }}
+        >
+          <i className="bi bi-kanban me-2"></i>
           Flowboard
         </Offcanvas.Title>
       </Offcanvas.Header>

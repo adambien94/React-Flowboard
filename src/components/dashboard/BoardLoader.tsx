@@ -3,7 +3,7 @@ const BoardLoader = () => {
 
   return (
     <div>
-      <div className="fb-board ps-2">
+      <div className="fb-board ps-2 overflow-visible">
         {placeholderColumns.map((cardsCount, idx) => (
           <div key={idx} className="fb-column">
             <div className="fb-col-header">
