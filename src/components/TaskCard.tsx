@@ -1,5 +1,5 @@
 import React from "react";
-import { Badge, Button } from "react-bootstrap";
+import { Button } from "react-bootstrap";
 import type { Card } from "../types/index";
 import { useDraggable } from "@dnd-kit/core";
 import { CSS } from "@dnd-kit/utilities";
@@ -12,10 +12,17 @@ type TaskCardProps = {
   card: Card;
 };
 
-const PRIORITIES: Record<string, string> = {
-  low: "info",
-  medium: "warning",
-  high: "danger",
+const priorityClass = (priority?: string) => {
+  switch (priority) {
+    case "high":
+      return "fb-priority fb-priority-high";
+    case "medium":
+      return "fb-priority fb-priority-medium";
+    case "low":
+      return "fb-priority fb-priority-low";
+    default:
+      return "fb-priority fb-priority-none";
+  }
 };
 
 const TaskCardComponent = ({ card }: TaskCardProps) => {
@@ -63,40 +70,54 @@ const TaskCardComponent = ({ card }: TaskCardProps) => {
       <div
         ref={setNodeRef}
         style={style}
-        className="card h-100"
+        className="card h-100 fb-task-card"
         {...attributes}
         onClick={onCardClick}
       >
         <div className="card-body d-flex flex-column">
-          <div className="d-flex align-items-center justify-content-between gap-2">
-            <Badge bg={PRIORITIES[card.priority as string]}> </Badge>
-            <span
-              style={{ fontSize: "14px" }}
-              className="card-title w-100 mb-0 d-flex gap-2"
-            >
-              {card.title}
-            </span>
+          <div className="d-flex justify-content-between">
+            <div className={priorityClass(card.priority)}>
+              {card.priority ?? "Backlog"}
+            </div>
             <div {...listeners}>
               <i
-                className="bi bi-grip-vertical me-1 text-secondary"
+                className="bi bi-grip-vertical me-1"
                 style={{
                   cursor: "grab",
+                  color: "var(--fb-text-faint)",
                 }}
               ></i>
             </div>
           </div>
 
+          <div className="d-flex align-items-start justify-content-between gap-2">
+            <div className="w-100">
+              <div
+                className="card-title w-100 mb-0"
+                style={{
+                  fontSize: 13,
+                  fontWeight: 500,
+                  lineHeight: 1.4,
+                  color: "var(--fb-text)",
+                }}
+              >
+                {card.title}
+              </div>
+            </div>
+          </div>
+
           <div className="pe-4 pt-1">
             <p
-              className="card-text mb-0 text-secondary"
+              className="card-text mb-0"
               style={{
-                fontSize: "14px",
+                fontSize: 11,
                 display: "-webkit-box",
                 WebkitLineClamp: 2,
                 WebkitBoxOrient: "vertical",
                 overflow: "hidden",
                 textOverflow: "ellipsis",
-                lineHeight: "1.4",
+                lineHeight: 1.4,
+                color: "var(--fb-text-faint)",
               }}
             >
               {card.description}
@@ -104,10 +125,13 @@ const TaskCardComponent = ({ card }: TaskCardProps) => {
           </div>
           <div className="flex-grow-1 mt-1 d-flex justify-content-between align-items-end gap-2">
             <span
-              className="pt-1 text-secondary"
+              className="pt-1"
               style={{
-                fontSize: "14px",
-                lineHeight: "1.4",
+                fontSize: 10,
+                lineHeight: 1.4,
+                color: "var(--fb-text-faint)",
+                fontFamily:
+                  '"DM Mono", ui-monospace, SFMono-Regular, Menlo, monospace',
               }}
             >
               {card.logged_time
@@ -123,13 +147,22 @@ const TaskCardComponent = ({ card }: TaskCardProps) => {
                 disabled={!!activeTimerTaskId && activeTimerTaskId !== card.id}
               >
                 {activeTimerTaskId === card.id ? (
-                  <i className="bi bi-pause-circle text-muted"></i>
+                  <i
+                    className="bi bi-pause-circle"
+                    style={{ color: "var(--fb-text-muted)" }}
+                  ></i>
                 ) : (
-                  <i className="bi bi-clock text-muted"></i>
+                  <i
+                    className="bi bi-clock"
+                    style={{ color: "var(--fb-text-muted)" }}
+                  ></i>
                 )}
               </Button>
               <Button onClick={handleEditClick} variant="action" size="sm">
-                <i className="bi bi-pencil text-muted"></i>
+                <i
+                  className="bi bi-pencil"
+                  style={{ color: "var(--fb-text-muted)" }}
+                ></i>
               </Button>
             </div>
           </div>

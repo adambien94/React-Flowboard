@@ -1,13 +1,13 @@
 import { useState, type FormEvent, useRef, useEffect } from "react";
-import { Modal, Button, Form } from "react-bootstrap";
+import { Modal } from "react-bootstrap";
 
-const COL_COLORS = [
-  { value: "primary", label: "Blue" },
-  { value: "success", label: "Green" },
-  { value: "warning", label: "Yellow" },
-  { value: "danger", label: "Red" },
-  { value: "info", label: "Teal" },
-  { value: "secondary", label: "Grey" },
+const COL_COLORS: { value: string; label: string; cssVar: string }[] = [
+  { value: "secondary", label: "Gray", cssVar: "--fb-text-muted" },
+  { value: "primary", label: "Purple", cssVar: "--fb-accent" },
+  { value: "info", label: "Blue", cssVar: "--fb-blue" },
+  { value: "success", label: "Green", cssVar: "--fb-green" },
+  { value: "warning", label: "Amber", cssVar: "--fb-amber" },
+  { value: "danger", label: "Red", cssVar: "--fb-red" },
 ];
 
 type AddColumnModalProps = {
@@ -22,14 +22,14 @@ export default function AddColumnModal({
   onSave,
 }: AddColumnModalProps) {
   const [name, setName] = useState("");
-  const [color, setColor] = useState("primary");
+  const [color, setColor] = useState<string>("secondary");
   const titleInputRef = useRef<HTMLInputElement>(null);
 
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
     onSave(name, color);
     setName("");
-    setColor("primary");
+    setColor("secondary");
     onHide();
   };
 
@@ -42,48 +42,63 @@ export default function AddColumnModal({
   }, [show]);
 
   return (
-    <Modal show={show} onHide={onHide} centered>
-      <Modal.Header closeButton>
-        <Modal.Title>Add new column</Modal.Title>
-      </Modal.Header>
+    <Modal
+      show={show}
+      onHide={onHide}
+      centered
+      contentClassName="fb-modal"
+      backdropClassName="fb-modal-backdrop"
+      data-bs-theme="dark"
+    >
+      <form onSubmit={handleSubmit}>
+        <div className="fb-modal-header">
+          <span className="fb-modal-title">New column</span>
+          <button type="button" className="fb-modal-close" onClick={onHide} aria-label="Close">
+            ✕
+          </button>
+        </div>
 
-      <Form onSubmit={handleSubmit}>
-        <Modal.Body className="pt-4">
-          <Form.Group className="mb-3">
-            <Form.Control
+        <div className="fb-modal-body">
+          <div className="fb-field">
+            <div className="fb-field-label">Column name</div>
+            <input
               ref={titleInputRef}
+              className="fb-field-control"
               required
               type="text"
-              placeholder="Enter column name"
+              placeholder="e.g. In review"
               value={name}
               onChange={(e) => setName(e.target.value)}
             />
-          </Form.Group>
+          </div>
 
-          <Form.Group>
-            <Form.Select
-              required
-              value={color}
-              onChange={(e) => setColor(e.target.value)}
-            >
-              {COL_COLORS.map((col) => (
-                <option key={col.value} value={col.value}>
-                  {col.label}
-                </option>
+          <div className="fb-field">
+            <div className="fb-field-label">Color</div>
+            <div className="fb-color-row" role="listbox" aria-label="Column color">
+              {COL_COLORS.map((c) => (
+                <div
+                  key={c.value}
+                  role="option"
+                  aria-selected={color === c.value}
+                  title={c.label}
+                  className={`fb-color-dot ${color === c.value ? "is-selected" : ""}`}
+                  style={{ background: `var(${c.cssVar})` }}
+                  onClick={() => setColor(c.value)}
+                />
               ))}
-            </Form.Select>
-          </Form.Group>
-        </Modal.Body>
+            </div>
+          </div>
+        </div>
 
-        <Modal.Footer>
-          <Button variant="action" onClick={onHide}>
+        <div className="fb-modal-footer">
+          <button type="button" className="fb-btn fb-btn-ghost" onClick={onHide}>
             Cancel
-          </Button>
-          <Button type="submit" variant="success">
-            Add Column
-          </Button>
-        </Modal.Footer>
-      </Form>
+          </button>
+          <button type="submit" className="fb-btn fb-btn-primary" style={{ marginLeft: "auto" }}>
+            Add column
+          </button>
+        </div>
+      </form>
     </Modal>
   );
 }

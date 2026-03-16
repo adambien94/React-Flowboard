@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { Modal, Button, Spinner } from "react-bootstrap";
+import { Modal, Spinner } from "react-bootstrap";
 import { useTaskModalStore } from "../store/taskModalStore";
 import { useBoardStore } from "../hooks/useBoardStore";
 
@@ -27,44 +27,50 @@ export default function TaskModal({ show, onHide }: TaskModalProps) {
   }, [show, setCardDetails]);
 
   return (
-    <Modal show={show} onHide={onHide} centered>
-      <Modal.Header
-        closeButton
-        style={{ borderBottom: "none" }}
-        className="pt-4 px-4"
-      ></Modal.Header>
-      <Modal.Body className="pt-0 px-4">
+    <Modal
+      show={show}
+      onHide={onHide}
+      centered
+      contentClassName="fb-modal"
+      backdropClassName="fb-modal-backdrop"
+      data-bs-theme="dark"
+    >
+      <div className="fb-modal-header">
+        <span className="fb-modal-title">Card details</span>
+        <button type="button" className="fb-modal-close" onClick={onHide} aria-label="Close">
+          ✕
+        </button>
+      </div>
+
+      <div className="fb-modal-body">
         {cardDetails ? (
           <>
-            <div className="d-flex align-items-center gap-3">
-              {/* <div>
-                {cardDetails && (
-                  <Badge
-                    bg={PRIORITIES[cardDetails.priority as string]}
-                    className="fs-6"
-                  >
-                    {" "}
-                  </Badge>
-                )}
-              </div> */}
-
-              <h4 className="mb-0">{cardDetails?.title}</h4>
+            <div className="fb-field" style={{ gap: 8 }}>
+              <div className="fb-field-label">Title</div>
+              <div style={{ fontSize: 14, fontWeight: 500, color: "var(--fb-text)" }}>
+                {cardDetails.title}
+              </div>
             </div>
-            <p className="my-4 text-muted fw-light">
-              {cardDetails?.description}
-            </p>
+
+            <div className="fb-field" style={{ gap: 8 }}>
+              <div className="fb-field-label">Description</div>
+              <div style={{ fontSize: 13, color: "var(--fb-text-muted)", lineHeight: 1.5 }}>
+                {cardDetails.description || "—"}
+              </div>
+            </div>
           </>
         ) : (
-          <div className="text-center mt-3">
+          <div className="text-center" style={{ padding: "10px 0" }}>
             <Spinner data-testid="task-modal-spinner" />
           </div>
         )}
-      </Modal.Body>
-      <Modal.Footer>
-        <Button variant="action" onClick={onHide}>
+      </div>
+
+      <div className="fb-modal-footer">
+        <button type="button" className="fb-btn fb-btn-ghost" onClick={onHide} style={{ marginLeft: "auto" }}>
           Close
-        </Button>
-      </Modal.Footer>
+        </button>
+      </div>
     </Modal>
   );
 }

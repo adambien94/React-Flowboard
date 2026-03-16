@@ -13,12 +13,27 @@ export default function Navbar({
     <BSNavbar
       variant="dark"
       expand="lg"
-      className="border-bottom"
-      style={{ backgroundColor: "#181a23" }}
+      className="fb-topbar"
     >
       <Container fluid>
-        <BSNavbar.Brand href="#" className="fw-bold fs-4">
-          <i className="bi bi-kanban me-2"></i>
+        <BSNavbar.Brand href="#" className="fw-semibold" style={{ fontSize: 15 }}>
+          <span
+            style={{
+              width: 28,
+              height: 28,
+              borderRadius: 8,
+              background: "var(--fb-accent)",
+              display: "inline-flex",
+              alignItems: "center",
+              justifyContent: "center",
+              fontSize: 13,
+              fontWeight: 600,
+              color: "white",
+              marginRight: 10,
+            }}
+          >
+            F
+          </span>
           Flowboard
         </BSNavbar.Brand>
 

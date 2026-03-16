@@ -1,4 +1,4 @@
-import { Button, Modal } from "react-bootstrap";
+import { Modal } from "react-bootstrap";
 
 type ConfirmModalProps = {
   show: boolean;
@@ -19,20 +19,53 @@ const ConfirmModal = ({
   confirmBtnText,
   btnVariant = "danger",
 }: ConfirmModalProps) => {
+  const confirmBtnClass =
+    btnVariant === "success"
+      ? "fb-btn fb-btn-success"
+      : btnVariant === "danger"
+        ? "fb-btn fb-btn-danger"
+        : "fb-btn fb-btn-primary";
+
   return (
-    <Modal show={show} onHide={onHide} centered data-bs-theme="dark">
-      <Modal.Header closeButton>
-        <Modal.Title>{title}</Modal.Title>
-      </Modal.Header>
-      <Modal.Body className="text-muted">{message}</Modal.Body>
-      <Modal.Footer>
-        <Button variant="action" onClick={onHide}>
+    <Modal
+      show={show}
+      onHide={onHide}
+      centered
+      contentClassName="fb-modal"
+      backdropClassName="fb-modal-backdrop"
+      data-bs-theme="dark"
+    >
+      <div className="fb-modal-header">
+        <span className="fb-modal-title">{title}</span>
+        <button
+          type="button"
+          className="fb-modal-close"
+          onClick={onHide}
+          aria-label="Close"
+        >
+          ✕
+        </button>
+      </div>
+
+      <div className="fb-modal-body">
+        <div style={{ fontSize: 13, color: "var(--fb-text-muted)", lineHeight: 1.5 }}>
+          {message}
+        </div>
+      </div>
+
+      <div className="fb-modal-footer">
+        <button type="button" className="fb-btn fb-btn-ghost" onClick={onHide}>
           Cancel
-        </Button>
-        <Button variant={btnVariant} onClick={onConfirm}>
+        </button>
+        <button
+          type="button"
+          className={confirmBtnClass}
+          onClick={onConfirm}
+          style={{ marginLeft: "auto" }}
+        >
           {confirmBtnText}
-        </Button>
-      </Modal.Footer>
+        </button>
+      </div>
     </Modal>
   );
 };

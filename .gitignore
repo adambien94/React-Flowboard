@@ -11,6 +11,10 @@ node_modules
 dist
 dist-ssr
 *.local
+coverage
+coverage/
+lcov.info
+.nyc_output/
 .env
 .env.local
 .env*.local

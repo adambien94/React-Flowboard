@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState, type FormEvent } from "react";
-import { Modal, Form, Button } from "react-bootstrap";
+import { Modal } from "react-bootstrap";
 
 type AddBoardModalProps = {
   show: boolean;
@@ -32,31 +32,46 @@ export default function AddBoardModal({
   }, [show]);
 
   return (
-    <Modal show={show} onHide={onHide} centered>
-      <Form onSubmit={handleSubmit}>
-        <Modal.Header closeButton>
-          <Modal.Title>Create board</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          <Form.Group className="pt-2">
-            <Form.Control
+    <Modal
+      show={show}
+      onHide={onHide}
+      centered
+      contentClassName="fb-modal"
+      backdropClassName="fb-modal-backdrop"
+      data-bs-theme="dark"
+    >
+      <form onSubmit={handleSubmit}>
+        <div className="fb-modal-header">
+          <span className="fb-modal-title">New board</span>
+          <button type="button" className="fb-modal-close" onClick={onHide} aria-label="Close">
+            ✕
+          </button>
+        </div>
+
+        <div className="fb-modal-body">
+          <div className="fb-field">
+            <div className="fb-field-label">Board name</div>
+            <input
               ref={inputRef}
+              className="fb-field-control"
               value={boardName}
               onChange={(e) => setBoardName(e.target.value)}
               placeholder="Board name"
               required
+              type="text"
             />
-          </Form.Group>
-        </Modal.Body>
-        <Modal.Footer>
-          <Button variant="action" onClick={onHide}>
+          </div>
+        </div>
+
+        <div className="fb-modal-footer">
+          <button type="button" className="fb-btn fb-btn-ghost" onClick={onHide}>
             Cancel
-          </Button>
-          <Button type="submit" variant="success">
-            Create
-          </Button>
-        </Modal.Footer>
-      </Form>
+          </button>
+          <button type="submit" className="fb-btn fb-btn-primary" style={{ marginLeft: "auto" }}>
+            Create board
+          </button>
+        </div>
+      </form>
     </Modal>
   );
 }

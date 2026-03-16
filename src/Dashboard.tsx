@@ -5,7 +5,6 @@ import TaskDrawer from "./components/TaskDrawer";
 import Timer from "./components/Timer";
 import AddColumnModal from "./components/AddColumnModal";
 import TaskModal from "./components/TaskModal";
-import DashboardTopBar from "./components/dashboard/DashboardTopBar";
 import DashboardInitHeader from "./components/dashboard/DashboardInitHeader";
 import DashboardColumns from "./components/dashboard/DashboardColumns";
 import { useTimerStore } from "./store/timerStore";
@@ -32,7 +31,7 @@ export default function Dashboard() {
   const removeCard = useBoardStore((state) => state.removeCard);
   const subscribeRealtime = useBoardStore((state) => state.subscribeRealtime);
   const unsubscribeRealtime = useBoardStore(
-    (state) => state.unsubscribeRealtime
+    (state) => state.unsubscribeRealtime,
   );
   const loading = useBoardStore((state) => state.loading);
 
@@ -46,8 +45,6 @@ export default function Dashboard() {
     return () => unsubscribeRealtime();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [activeBoardId]);
-
-  console.log("dashboard");
 
   useEffect(() => {
     syncTaskModalWithUrl();
@@ -93,13 +90,9 @@ export default function Dashboard() {
           <Container fluid>
             {boards.length ? (
               <>
-                <DashboardTopBar
-                  openAddColumnModal={() => setAddColumnModalShow(true)}
+                <DashboardColumns
+                  onAddColumn={() => setAddColumnModalShow(true)}
                 />
-
-                <div className="mt-3">
-                  <DashboardColumns />
-                </div>
               </>
             ) : (
               <DashboardInitHeader />
@@ -154,7 +147,7 @@ function TimerWithConfirmDialog() {
         btnVariant="success"
         message={`Do you want to log time? (${formatTime(
           timeToLog?.time as number,
-          true
+          true,
         )} )`}
       />
       <Timer show={isTimerShow} onFinish={handleStopTimer} />

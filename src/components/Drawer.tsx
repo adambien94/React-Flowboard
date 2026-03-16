@@ -37,115 +37,106 @@ export default function Drawer({ show, onHide }: DrawerProps) {
       placement="start"
       backdrop={false}
       scroll={true}
-      className="shadow-none"
+      className="shadow-none fb-sidebar"
       data-bs-theme="dark"
       keyboard={false}
     >
-      <Offcanvas.Header closeButton className="border-bottom">
-        <Offcanvas.Title className="fw-bold text-light">
-          <i className="bi bi-kanban me-2"></i>
+      <Offcanvas.Header className="border-bottom">
+        <Offcanvas.Title className="fw-semibold" style={{ fontSize: 15 }}>
           Flowboard
         </Offcanvas.Title>
       </Offcanvas.Header>
 
-      <Offcanvas.Body className="p-0">
-        <div className="p-3">
-          <div className="mb-4">
-            <h6 className="text-muted mb-3">
-              <i className="bi bi-lightning me-2"></i>
-              Quick Actions
-            </h6>
-            <Button
-              variant="primary"
-              size="sm"
-              className="w-100 mb-2 fw-semibold"
-              onClick={() => setShowCreateBoardModal(true)}
-            >
-              <i className="bi bi-plus-circle me-2"></i>
-              Create Board
-            </Button>
-            <Button
-              variant="outline-secondary"
-              size="sm"
-              className="w-100 fw-semibold"
-              disabled
-            >
-              <i className="bi bi-search me-2"></i>
-              Search Cards
-            </Button>
-          </div>
+      <Offcanvas.Body className="p-0 d-flex flex-column">
+        <div className="px-3 pt-3">
+          <Button
+            className="w-100 fb-primary-btn"
+            size="sm"
+            onClick={() => setShowCreateBoardModal(true)}
+          >
+            + New board
+          </Button>
+        </div>
 
-          {!!boards.length && (
-            <div className="mb-4">
-              <h6 className="text-muted mb-3">
-                <i className="bi bi-clock me-2"></i>
-                Recent Boards
-              </h6>
-
-              <ListGroup variant="flush">
-                {boards.map((board) => (
-                  <ListGroup.Item
-                    action
-                    className="border-0 py-2"
-                    key={board.id}
-                    active={board.id === boardId}
-                    onClick={() => handleBoardSelect(board.id)}
+        <div className="px-3">
+          <div className="fb-section-label">Boards</div>
+          <ListGroup variant="flush">
+            {boards.map((board) => (
+              <ListGroup.Item
+                action
+                className="fb-nav-item"
+                key={board.id}
+                active={board.id === boardId}
+                onClick={() => handleBoardSelect(board.id)}
+              >
+                <div className="d-flex align-items-center gap-2">
+                  <span
+                    style={{ width: 16, textAlign: "center", fontSize: 14 }}
                   >
-                    <div className="d-flex justify-content-between align-items-center">
-                      <div>
-                        <div className="fw-semibold">{board.title}</div>
-                        <small className="text-muted">
-                          {/* {board.totalCards}{" "}
-                        {board.totalCards === 1 ? "card" : "cards"} */}
-                          12 cards
-                        </small>
-                      </div>
-                      <Badge className="custom-badge-color" pill>
-                        {/* {board.columns.length} */}4
-                      </Badge>
-                    </div>
-                  </ListGroup.Item>
-                ))}
-              </ListGroup>
-            </div>
-          )}
-
-          <div className="mb-4">
-            <h6 className="text-muted mb-3">
-              <i className="bi bi-grid me-2"></i>
-              Navigation
-            </h6>
-            <ListGroup variant="flush">
-              <ListGroup.Item action className="border-0 py-2">
-                <i className="bi bi-house me-3"></i>
-                Dashboard
+                    ◈
+                  </span>
+                  <span className="flex-grow-1">{board.title}</span>
+                  <Badge
+                    className="custom-badge-color"
+                    pill
+                    style={{
+                      fontFamily:
+                        '"DM Mono", ui-monospace, SFMono-Regular, Menlo, monospace',
+                    }}
+                  >
+                    12
+                  </Badge>
+                </div>
               </ListGroup.Item>
+            ))}
+          </ListGroup>
 
-              <ListGroup.Item action className="border-0 py-2">
-                <i className="bi bi-star me-3"></i>
-                Starred Boards
-              </ListGroup.Item>
+          <div className="fb-section-label">Navigation</div>
+          <ListGroup variant="flush">
+            <ListGroup.Item action className="fb-nav-item">
+              <span style={{ width: 16, textAlign: "center", fontSize: 14 }}>
+                ⊞
+              </span>
+              <span className="ms-2">Dashboard</span>
+            </ListGroup.Item>
+            <ListGroup.Item action className="fb-nav-item">
+              <span style={{ width: 16, textAlign: "center", fontSize: 14 }}>
+                ☆
+              </span>
+              <span className="ms-2">Starred</span>
+            </ListGroup.Item>
+            <ListGroup.Item action className="fb-nav-item">
+              <span style={{ width: 16, textAlign: "center", fontSize: 14 }}>
+                ◯
+              </span>
+              <span className="ms-2">Personal</span>
+            </ListGroup.Item>
+            <ListGroup.Item action className="fb-nav-item">
+              <span style={{ width: 16, textAlign: "center", fontSize: 14 }}>
+                ◻
+              </span>
+              <span className="ms-2">Work</span>
+            </ListGroup.Item>
+          </ListGroup>
+        </div>
 
-              <ListGroup.Item action className="border-0 py-2">
-                <i className="bi bi-person me-3"></i>
-                Personal
-              </ListGroup.Item>
-
-              <ListGroup.Item action className="border-0 py-2">
-                <i className="bi bi-briefcase me-3"></i>
-                Work
-              </ListGroup.Item>
-            </ListGroup>
-          </div>
-
-          <div className="border-top pt-4">
-            <ListGroup variant="flush">
-              <ListGroup.Item action className="border-0 py-2" onClick={logout}>
-                <i className="bi bi-box-arrow-right me-3"></i>
-                Logout
-              </ListGroup.Item>
-            </ListGroup>
-          </div>
+        <div
+          className="mt-auto px-3 py-2"
+          style={{ borderTop: "1px solid var(--fb-border)" }}
+        >
+          <ListGroup variant="flush">
+            <ListGroup.Item
+              action
+              className="fb-nav-item"
+              onClick={logout}
+              style={{ color: "var(--fb-text-faint)" }}
+            >
+              <span style={{ width: 16, textAlign: "center", fontSize: 14 }}>
+                ↪
+              </span>
+              <span className="ms-2">Logout</span>
+            </ListGroup.Item>
+          </ListGroup>
         </div>
       </Offcanvas.Body>
       <AddBoardModal

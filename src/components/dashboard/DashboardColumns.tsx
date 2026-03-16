@@ -1,13 +1,16 @@
 import { useMemo, useState } from "react";
 import type { Card, Column } from "../../types/index";
-import { Stack, Row, Col } from "react-bootstrap";
 import { DndContext, DragOverlay } from "@dnd-kit/core";
 import type { DragEndEvent, DragStartEvent } from "@dnd-kit/core";
 import BoardColumn from "./BoardColumn";
 import TaskCard from "../TaskCard";
 import { useBoardStore } from "../../hooks/useBoardStore";
 
-const DashboardColumns = () => {
+type DashboardColumnsProps = {
+  onAddColumn: () => void;
+};
+
+const DashboardColumns = ({ onAddColumn }: DashboardColumnsProps) => {
   const [activeCard, setActiveCard] = useState<Card | null>(null);
   const [activeColumn, setActiveColumn] = useState<Column | null>(null);
   const { columns, moveCard, moveColumn } = useBoardStore();
@@ -92,22 +95,18 @@ const DashboardColumns = () => {
 
   return (
     <DndContext onDragStart={handleDragStart} onDragEnd={handleDragEnd}>
-      <Stack>
-        <Row>
-          {columns.map((col) => (
-            <Col
-              key={col.id}
-              className="px-2 text-light"
-              style={{ maxWidth: "calc(100%/3)" }}
-            >
-              <BoardColumn
-                column={col}
-                isHidden={activeColumn?.id === col.id}
-              />
-            </Col>
-          ))}
-        </Row>
-      </Stack>
+      <div className="fb-board">
+        {columns.map((col) => (
+          <BoardColumn
+            key={col.id}
+            column={col}
+            isHidden={activeColumn?.id === col.id}
+          />
+        ))}
+        <button className="fb-add-col-btn" onClick={onAddColumn} type="button">
+          +
+        </button>
+      </div>
       <DragOverlay>
         {activeColumn ? (
           <div style={dragColStyle}>

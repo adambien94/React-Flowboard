@@ -1,5 +1,5 @@
 import React from "react";
-import { Card, Button } from "react-bootstrap";
+import { Button } from "react-bootstrap";
 import type { Column, Card as CardType } from "../../types/index";
 import TaskCard from "../TaskCard";
 import { useDroppable, useDraggable, useDndContext } from "@dnd-kit/core";
@@ -36,17 +36,6 @@ const BoardColumnComponent = ({ column, isHidden }: BoardColumnProps) => {
 
   const isColumnActive = isOver || over?.data?.current?.columnId === column.id;
 
-  const colStyle: React.CSSProperties = {
-    background: isColumnActive ? "rgba(255,255,255,0.01)" : "rgba(0,0,0,0.05)",
-    transition: "background 0.2s ease",
-    border: "1px solid rgba(255,255,255,0.1)",
-    borderTop: `2px solid var(--bs-${column.color})`,
-    maxHeight: "calc(100vh - 160px)",
-    overflow: "hidden",
-    visibility: isHidden ? "hidden" : "visible",
-    backdropFilter: "blur(var(--blur-amount))",
-  };
-
   const handleOpenDrawer = () => {
     setActiveColId(column.id);
     openTaskDrawer();
@@ -54,36 +43,35 @@ const BoardColumnComponent = ({ column, isHidden }: BoardColumnProps) => {
 
   return (
     <>
-      <Card ref={setRefs} style={colStyle}>
-        <Card.Body className="px-2">
-          <Card.Title className="mb-3 ps-2 d-flex justify-content-between">
-            {column.title}
-            <div className="d-flex gap-2">
-              {/* <Button variant="outline-secondary" size="sm">
-                  <i className="bi bi-pencil text-secondary"></i>
-                </Button> */}
-              <div {...listeners} {...attributes}>
-                <i
-                  className="bi bi-grip-vertical me-1 text-secondary"
-                  style={{
-                    cursor: "grab",
-                  }}
-                ></i>
-              </div>
-            </div>
-          </Card.Title>
+      <div className="fb-column" style={{ visibility: isHidden ? "hidden" : "visible" }}>
+        <div className="fb-col-header">
+          <span
+            className="fb-col-dot"
+            style={{ background: `var(--bs-${column.color})` }}
+          />
+          <span className="flex-grow-1">{column.title}</span>
+          <span className="fb-col-count">{column.cards.length}</span>
+          <span className="fb-col-handle" {...listeners} {...attributes}>
+            ⋯
+          </span>
+        </div>
 
+        <div
+          ref={setRefs}
+          className="fb-cards-wrapper"
+          style={{
+            boxShadow: isColumnActive
+              ? "0 0 0 1px var(--fb-border-strong) inset"
+              : undefined,
+          }}
+        >
           {column.cards.length > 0 ? (
             column.cards.map((card: CardType) => (
-              <DroppableTaskCard
-                key={card.id}
-                card={card}
-                columnId={column.id}
-              />
+              <DroppableTaskCard key={card.id} card={card} columnId={column.id} />
             ))
           ) : (
             <div
-              style={{ fontSize: "14px" }}
+              style={{ fontSize: 12, padding: "10px 8px" }}
               className="board-column-empty text-center"
             >
               List is empty.
@@ -91,12 +79,22 @@ const BoardColumnComponent = ({ column, isHidden }: BoardColumnProps) => {
           )}
 
           <div className="mt-3 ps-2">
-            <Button size="sm" variant="success" onClick={handleOpenDrawer}>
-              <i className="bi bi-plus-circle"></i> Add Card
+            <Button
+              size="sm"
+              variant="link"
+              className="p-0 text-decoration-none"
+              onClick={handleOpenDrawer}
+              style={{
+                color: "var(--fb-text-faint)",
+                fontSize: 12,
+                fontWeight: 500,
+              }}
+            >
+              + Add card
             </Button>
           </div>
-        </Card.Body>
-      </Card>
+        </div>
+      </div>
     </>
   );
 };
