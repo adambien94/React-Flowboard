@@ -42,8 +42,8 @@ const TaskCardComponent = ({ card }: TaskCardProps) => {
     transform: CSS.Translate.toString(transform),
     opacity: isDragging ? 0 : 1,
     cursor: "pointer",
-    transition: "border .2s ease-in-out 0.1s",
-    outline: card.id === activeTimerTaskId ? "1px solid var(--bs-primary)" : "",
+    // transition: "border .2s ease-in-out 0.1s",
+    border: card.id === activeTimerTaskId ? "1px dashed var(--bs-primary)" : "",
   };
 
   const handleEditClick = (e: React.MouseEvent) => {
@@ -74,7 +74,10 @@ const TaskCardComponent = ({ card }: TaskCardProps) => {
         {...attributes}
         onClick={onCardClick}
       >
-        <div className="card-body d-flex flex-column pb-2">
+        <div
+          className="card-body d-flex flex-column"
+          style={{ padding: "12px 12px 8px 12px" }}
+        >
           <div className="d-flex justify-content-between">
             <div className={priorityClass(card.priority)}>
               {card.priority ? card.priority : "Backlog"}
@@ -95,7 +98,7 @@ const TaskCardComponent = ({ card }: TaskCardProps) => {
               <div
                 className="card-title w-100 mb-0"
                 style={{
-                  fontSize: 13,
+                  fontSize: 14,
                   fontWeight: 500,
                   lineHeight: 1.4,
                   color: "var(--fb-text)",
@@ -110,7 +113,7 @@ const TaskCardComponent = ({ card }: TaskCardProps) => {
             <p
               className="card-text mb-0"
               style={{
-                fontSize: 11,
+                fontSize: 12,
                 display: "-webkit-box",
                 WebkitLineClamp: 2,
                 WebkitBoxOrient: "vertical",
@@ -127,7 +130,7 @@ const TaskCardComponent = ({ card }: TaskCardProps) => {
             <span
               className="pt-1"
               style={{
-                fontSize: 11,
+                fontSize: 12,
                 lineHeight: 1.4,
                 color: "var(--fb-text-faint)",
                 fontFamily:

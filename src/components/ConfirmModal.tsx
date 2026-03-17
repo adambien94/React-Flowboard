@@ -36,6 +36,9 @@ const ConfirmModal = ({
       data-bs-theme="dark"
     >
       <div className="fb-modal-header">
+        <div className="fb-modal-icon">
+          <i className="bi bi-info-square"></i>
+        </div>
         <span className="fb-modal-title">{title}</span>
         <button
           type="button"
@@ -48,7 +51,13 @@ const ConfirmModal = ({
       </div>
 
       <div className="fb-modal-body">
-        <div style={{ fontSize: 13, color: "var(--fb-text-muted)", lineHeight: 1.5 }}>
+        <div
+          style={{
+            fontSize: 14,
+            color: "var(--fb-text-muted)",
+            lineHeight: 1.5,
+          }}
+        >
           {message}
         </div>
       </div>

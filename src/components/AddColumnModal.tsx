@@ -52,8 +52,16 @@ export default function AddColumnModal({
     >
       <form onSubmit={handleSubmit}>
         <div className="fb-modal-header">
+          <div className="fb-modal-icon">
+            <i className="bi bi-plus-circle"></i>
+          </div>
           <span className="fb-modal-title">New column</span>
-          <button type="button" className="fb-modal-close" onClick={onHide} aria-label="Close">
+          <button
+            type="button"
+            className="fb-modal-close"
+            onClick={onHide}
+            aria-label="Close"
+          >
             ✕
           </button>
         </div>
@@ -74,7 +82,11 @@ export default function AddColumnModal({
 
           <div className="fb-field">
             <div className="fb-field-label">Color</div>
-            <div className="fb-color-row" role="listbox" aria-label="Column color">
+            <div
+              className="fb-color-row"
+              role="listbox"
+              aria-label="Column color"
+            >
               {COL_COLORS.map((c) => (
                 <div
                   key={c.value}
@@ -91,10 +103,18 @@ export default function AddColumnModal({
         </div>
 
         <div className="fb-modal-footer">
-          <button type="button" className="fb-btn fb-btn-ghost" onClick={onHide}>
+          <button
+            type="button"
+            className="fb-btn fb-btn-ghost"
+            onClick={onHide}
+          >
             Cancel
           </button>
-          <button type="submit" className="fb-btn fb-btn-primary" style={{ marginLeft: "auto" }}>
+          <button
+            type="submit"
+            className="fb-btn fb-btn-primary"
+            style={{ marginLeft: "auto" }}
+          >
             Add column
           </button>
         </div>

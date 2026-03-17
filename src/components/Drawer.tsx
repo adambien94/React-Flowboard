@@ -42,17 +42,14 @@ export default function Drawer({ show, onHide }: DrawerProps) {
       keyboard={false}
     >
       <Offcanvas.Header className="border-bottom">
-        <Offcanvas.Title
-          className="fw-semibold text-white"
-          style={{ fontSize: 15 }}
-        >
+        <Offcanvas.Title className="fw-semibold" style={{ fontSize: 15 }}>
           <i className="bi bi-kanban me-2"></i>
           Flowboard
         </Offcanvas.Title>
       </Offcanvas.Header>
 
       <Offcanvas.Body className="p-0 d-flex flex-column">
-        <div className="px-3 pt-3">
+        <div className="px-2 pt-3">
           <Button
             className="w-100 fb-primary-btn"
             size="sm"
@@ -62,7 +59,7 @@ export default function Drawer({ show, onHide }: DrawerProps) {
           </Button>
         </div>
 
-        <div className="px-3">
+        <div className="px-2">
           <div className="fb-section-label">Boards</div>
           <ListGroup variant="flush">
             {boards.map((board) => (
@@ -125,7 +122,7 @@ export default function Drawer({ show, onHide }: DrawerProps) {
         </div>
 
         <div
-          className="mt-auto px-3 py-2"
+          className="mt-auto px-2 py-2"
           style={{ borderTop: "1px solid var(--fb-border)" }}
         >
           <ListGroup variant="flush">

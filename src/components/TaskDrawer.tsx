@@ -182,7 +182,7 @@ export default function Drawer({
           <span className="fb-drawer-arrow">
             {activeCardId ? "Edit card" : "Add card"}
           </span>
-          <span style={{ color: "var(--fb-text-faint)", fontSize: 13 }}>→</span>
+          <span style={{ color: "var(--fb-text-faint)", fontSize: 14 }}>→</span>
           <span className="fb-drawer-col-pill">{colName || "Column"}</span>
           <button
             type="button"
@@ -289,6 +289,7 @@ export default function Drawer({
             <button type="submit" className="fb-btn fb-btn-primary">
               Save Card
             </button>
+            <div></div>
             <button
               type="button"
               className="fb-btn fb-btn-ghost"
@@ -299,10 +300,11 @@ export default function Drawer({
             {activeCardId && (
               <button
                 type="button"
-                className="fb-btn fb-btn-danger"
+                className="fb-btn fb-btn-ghost ms-auto"
                 onClick={() => setConfirmDeleteShow(true)}
                 title="Delete card"
               >
+                <i className="bi bi-trash me-2"></i>
                 Delete
               </button>
             )}
@@ -315,6 +317,7 @@ export default function Drawer({
         onHide={() => setConfirmDeleteShow(false)}
         onConfirm={handleDeleteCard}
         title="Delete this card?"
+        btnVariant="primary"
         message="This action permanently removes the selected task card. It cannot be undone."
         confirmBtnText="Delete"
       />

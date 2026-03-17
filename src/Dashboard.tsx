@@ -144,7 +144,7 @@ function TimerWithConfirmDialog() {
         onConfirm={handleLogTime}
         title="Log time"
         confirmBtnText="Log Time"
-        btnVariant="success"
+        btnVariant="primary"
         message={`Do you want to log time? (${formatTime(
           timeToLog?.time as number,
           true,

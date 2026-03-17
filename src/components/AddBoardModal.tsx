@@ -42,8 +42,16 @@ export default function AddBoardModal({
     >
       <form onSubmit={handleSubmit}>
         <div className="fb-modal-header">
+          <div className="fb-modal-icon">
+            <i className="bi bi-plus-circle"></i>
+          </div>
           <span className="fb-modal-title">New board</span>
-          <button type="button" className="fb-modal-close" onClick={onHide} aria-label="Close">
+          <button
+            type="button"
+            className="fb-modal-close"
+            onClick={onHide}
+            aria-label="Close"
+          >
             ✕
           </button>
         </div>
@@ -64,10 +72,18 @@ export default function AddBoardModal({
         </div>
 
         <div className="fb-modal-footer">
-          <button type="button" className="fb-btn fb-btn-ghost" onClick={onHide}>
+          <button
+            type="button"
+            className="fb-btn fb-btn-ghost"
+            onClick={onHide}
+          >
             Cancel
           </button>
-          <button type="submit" className="fb-btn fb-btn-primary" style={{ marginLeft: "auto" }}>
+          <button
+            type="submit"
+            className="fb-btn fb-btn-primary"
+            style={{ marginLeft: "auto" }}
+          >
             Create board
           </button>
         </div>
