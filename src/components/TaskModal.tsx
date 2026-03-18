@@ -1,7 +1,9 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { Modal, Spinner } from "react-bootstrap";
 import { useTaskModalStore } from "../store/taskModalStore";
 import { useBoardStore } from "../hooks/useBoardStore";
+import ConfirmModal from "./ConfirmModal";
+import { supabase } from "../api/supabaseClient";
 import formatTime from "../utils/formatTime";
 
 type TaskModalProps = {
@@ -11,7 +13,14 @@ type TaskModalProps = {
 
 export default function TaskModal({ show, onHide }: TaskModalProps) {
   const { activeCardId } = useTaskModalStore();
-  const { fetchCardDetails, cardDetails, setCardDetails } = useBoardStore();
+  const { fetchCardDetails, cardDetails, setCardDetails, updateCard } =
+    useBoardStore();
+
+  const [isGeneratingAi, setIsGeneratingAi] = useState(false);
+  const [aiSteps, setAiSteps] = useState<string[] | null>(null);
+  const [proposedDescription, setProposedDescription] = useState("");
+  const [aiError, setAiError] = useState<string | null>(null);
+  const [confirmAiShow, setConfirmAiShow] = useState(false);
 
   useEffect(() => {
     if (activeCardId) fetchCardDetails(activeCardId);
@@ -26,6 +35,109 @@ export default function TaskModal({ show, onHide }: TaskModalProps) {
       return () => clearTimeout(timeout);
     }
   }, [show, setCardDetails]);
+
+  useEffect(() => {
+    // Reset AI preview when opening a different card or closing the modal.
+    if (!show || !activeCardId) {
+      setAiSteps(null);
+      setProposedDescription("");
+      setAiError(null);
+      setConfirmAiShow(false);
+      setIsGeneratingAi(false);
+    } else {
+      setAiSteps(null);
+      setProposedDescription("");
+      setAiError(null);
+      setConfirmAiShow(false);
+      setIsGeneratingAi(false);
+    }
+  }, [activeCardId, show]);
+
+  const buildProposedDescription = (
+    existingDescription: string | undefined,
+    steps: string[]
+  ) => {
+    const base = existingDescription?.trimEnd() || "";
+    const aiSection =
+      `Kroki działania (AI):\n` +
+      steps.map((s, idx) => `${idx + 1}. ${s}`).join("\n");
+
+    if (!base) return aiSection;
+    return `${base}\n\n${aiSection}`;
+  };
+
+  const formatStepsForPreview = (steps: string[]) => {
+    return steps.map((s) => s.trim()).filter(Boolean);
+  };
+
+  const handleGenerateAiSteps = async () => {
+    if (!activeCardId || !cardDetails) return;
+    if (isGeneratingAi) return;
+
+    setIsGeneratingAi(true);
+    setAiError(null);
+
+    try {
+      const title = cardDetails.title;
+      const description = cardDetails.description ?? "";
+
+      const { data, error } = await supabase.functions.invoke(
+        "generate-steps",
+        {
+          body: { title, description },
+        }
+      );
+
+      if (error) {
+        console.error(error);
+        const msg =
+          (error as any)?.message ??
+          (typeof error === "string" ? error : null) ??
+          "Brak szczegółów błędu";
+        setAiError(`Nie udało się wygenerować kroków: ${msg}`);
+        return;
+      }
+
+      const steps = Array.isArray((data as any)?.steps)
+        ? ((data as any).steps as unknown[])
+        : [];
+
+      const cleaned = formatStepsForPreview(
+        steps.filter((s) => typeof s === "string") as string[]
+      ).slice(0, 5);
+
+      if (!cleaned.length) {
+        setAiError("AI nie zwróciło żadnych kroków. Spróbuj ponownie.");
+        return;
+      }
+
+      setAiSteps(cleaned);
+      setProposedDescription(
+        buildProposedDescription(cardDetails.description, cleaned)
+      );
+      setConfirmAiShow(true);
+    } catch (err) {
+      console.error(err);
+      const msg =
+        err instanceof Error ? err.message : "Wystąpił nieznany błąd";
+      setAiError(`Wystąpił błąd podczas generowania kroków: ${msg}`);
+    } finally {
+      setIsGeneratingAi(false);
+    }
+  };
+
+  const handleConfirmSaveAi = async () => {
+    if (!activeCardId) return;
+    if (!proposedDescription) return;
+
+    await updateCard(activeCardId, { description: proposedDescription });
+    // Make modal reflect the change immediately.
+    if (cardDetails) {
+      setCardDetails({ ...cardDetails, description: proposedDescription });
+    }
+
+    setConfirmAiShow(false);
+  };
 
   return (
     <Modal
@@ -92,6 +204,60 @@ export default function TaskModal({ show, onHide }: TaskModalProps) {
               </div>
             </div>
 
+            <div className="mt-3">
+              <button
+                type="button"
+                className="fb-btn fb-btn-primary"
+                onClick={handleGenerateAiSteps}
+                disabled={isGeneratingAi}
+                style={{ display: "inline-flex", alignItems: "center", gap: 8 }}
+              >
+                {isGeneratingAi ? (
+                  <Spinner animation="border" size="sm" />
+                ) : (
+                  <i className="bi bi-sparkles" />
+                )}
+                Wygeneruj kroki w AI
+              </button>
+              {aiError && (
+                <div
+                  style={{
+                    marginTop: 8,
+                    fontSize: 13,
+                    color: "var(--fb-red)",
+                  }}
+                >
+                  {aiError}
+                </div>
+              )}
+            </div>
+
+            {aiSteps && aiSteps.length > 0 && (
+              <div
+                className="fb-field"
+                style={{
+                  marginTop: 12,
+                  gap: 8,
+                  border: "1px solid var(--fb-border)",
+                  borderRadius: "var(--radius-sm)",
+                  padding: 12,
+                  background: "var(--fb-bg3)",
+                }}
+              >
+                <div className="fb-field-label" style={{ marginBottom: 4 }}>
+                  <i className="bi bi-lightning-charge me-2"></i>
+                  <span>Kroki działania (AI)</span>
+                </div>
+                <ol style={{ margin: 0, paddingLeft: 20 }}>
+                  {aiSteps.map((s, idx) => (
+                    <li key={`${idx}-${s}`} style={{ marginBottom: 4 }}>
+                      {s}
+                    </li>
+                  ))}
+                </ol>
+              </div>
+            )}
+
             <div className="d-flex justify-content-between" style={{ gap: 8 }}>
               <div className="col">
                 <div className="fb-field-label">
@@ -151,6 +317,27 @@ export default function TaskModal({ show, onHide }: TaskModalProps) {
           Close
         </button>
       </div>
+
+      <ConfirmModal
+        show={confirmAiShow}
+        onHide={() => {
+          setConfirmAiShow(false);
+          setAiSteps(null);
+          setProposedDescription("");
+          setAiError(null);
+        }}
+        onConfirm={handleConfirmSaveAi}
+        title="Zapisz kroki wygenerowane przez AI?"
+        btnVariant="primary"
+        confirmBtnText="Zapisz"
+        message={
+          aiSteps && aiSteps.length
+            ? `Zapisz poniższe kroki do opisu: ${aiSteps
+                .map((s, idx) => `${idx + 1}. ${s}`)
+                .join("; ")}`
+            : "Zapisz wygenerowane kroki?"
+        }
+      />
     </Modal>
   );
 }
