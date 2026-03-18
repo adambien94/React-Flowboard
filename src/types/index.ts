@@ -20,6 +20,7 @@ export type Card = {
   column_id: string;
   title: string;
   description?: string;
+  taskSteps?: string[];
   priority?: "low" | "medium" | "high";
   position: number;
   created_at?: string;

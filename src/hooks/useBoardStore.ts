@@ -69,21 +69,50 @@ export const useBoardStore = create<State>((set, get) => ({
       .eq("id", boardId)
       .single();
 
+    const columnsSelectWithTaskSteps =
+      "id, title, color, position, cards(id, title, description, taskSteps, priority, position, column_id, logged_time, created_at)";
+    const columnsSelectWithoutTaskSteps =
+      "id, title, color, position, cards(id, title, description, priority, position, column_id, logged_time, created_at)";
+
     const { data, error } = await supabase
       .from("columns")
-      .select(
-        "id, title, color, position, cards(id, title, description, priority, position, column_id, logged_time, created_at)"
-      )
+      .select(columnsSelectWithTaskSteps)
       .eq("board_id", boardId)
       .order("position");
 
+    let colsData: unknown = data;
     if (error) {
-      console.error(error);
-      set({ loading: false });
-      return;
+      const msg = error?.message?.toLowerCase?.() ?? "";
+      // If the column isn't created yet in DB, Supabase returns a 400.
+      // Retry without `taskSteps` so the board can still load.
+      if (
+        msg.includes("tasksteps") ||
+        msg.includes("task_steps") ||
+        msg.includes("does not exist")
+      ) {
+        const { data: fallbackData, error: fallbackError } = await supabase
+          .from("columns")
+          .select(columnsSelectWithoutTaskSteps)
+          .eq("board_id", boardId)
+          .order("position");
+
+        if (fallbackError) {
+          console.error(fallbackError);
+          set({ loading: false });
+          return;
+        }
+
+        colsData = fallbackData;
+      } else {
+        console.error(error);
+        set({ loading: false });
+        return;
+      }
     }
 
-    const cols = (data || [])
+    const dataToUse = (colsData ?? []) as unknown[];
+
+    const cols = dataToUse
       .map((c) => {
         const col = c as Column & { cards: Card[] };
         return {
@@ -267,13 +296,39 @@ export const useBoardStore = create<State>((set, get) => ({
   setCardDetails: (card: Card | null) => set({ cardDetails: card }),
 
   fetchCardDetails: async (cardId: string) => {
+    const selectWithTaskSteps =
+      "id, title, description, taskSteps, priority, position, column_id, logged_time";
+    const selectWithoutTaskSteps =
+      "id, title, description, priority, position, column_id, logged_time";
+
     const { data, error } = await supabase
       .from("cards")
-      .select("id, title, description, priority, position, column_id, logged_time")
+      .select(selectWithTaskSteps)
       .eq("id", cardId)
       .single();
 
     if (error) {
+      const msg = error?.message?.toLowerCase?.() ?? "";
+      if (
+        msg.includes("tasksteps") ||
+        msg.includes("task_steps") ||
+        msg.includes("does not exist")
+      ) {
+        const { data: fallbackData, error: fallbackError } = await supabase
+          .from("cards")
+          .select(selectWithoutTaskSteps)
+          .eq("id", cardId)
+          .single();
+
+        if (fallbackError) {
+          console.error("❌ Failed to fetch card details", fallbackError);
+          return;
+        }
+
+        set({ cardDetails: fallbackData });
+        return;
+      }
+
       console.error("❌ Failed to fetch card details", error);
       return;
     }

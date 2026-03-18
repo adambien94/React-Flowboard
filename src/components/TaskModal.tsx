@@ -18,7 +18,6 @@ export default function TaskModal({ show, onHide }: TaskModalProps) {
 
   const [isGeneratingAi, setIsGeneratingAi] = useState(false);
   const [aiSteps, setAiSteps] = useState<string[] | null>(null);
-  const [proposedDescription, setProposedDescription] = useState("");
   const [aiError, setAiError] = useState<string | null>(null);
   const [confirmAiShow, setConfirmAiShow] = useState(false);
 
@@ -40,31 +39,16 @@ export default function TaskModal({ show, onHide }: TaskModalProps) {
     // Reset AI preview when opening a different card or closing the modal.
     if (!show || !activeCardId) {
       setAiSteps(null);
-      setProposedDescription("");
       setAiError(null);
       setConfirmAiShow(false);
       setIsGeneratingAi(false);
     } else {
       setAiSteps(null);
-      setProposedDescription("");
       setAiError(null);
       setConfirmAiShow(false);
       setIsGeneratingAi(false);
     }
   }, [activeCardId, show]);
-
-  const buildProposedDescription = (
-    existingDescription: string | undefined,
-    steps: string[]
-  ) => {
-    const base = existingDescription?.trimEnd() || "";
-    const aiSection =
-      `Kroki działania (AI):\n` +
-      steps.map((s, idx) => `${idx + 1}. ${s}`).join("\n");
-
-    if (!base) return aiSection;
-    return `${base}\n\n${aiSection}`;
-  };
 
   const formatStepsForPreview = (steps: string[]) => {
     return steps.map((s) => s.trim()).filter(Boolean);
@@ -85,25 +69,29 @@ export default function TaskModal({ show, onHide }: TaskModalProps) {
         "generate-steps",
         {
           body: { title, description },
-        }
+        },
       );
 
       if (error) {
         console.error(error);
         const msg =
-          (error as any)?.message ??
-          (typeof error === "string" ? error : null) ??
-          "Brak szczegółów błędu";
+          error instanceof Error
+            ? error.message
+            : typeof error === "string"
+              ? error
+              : typeof (error as { message?: unknown } | null)?.message ===
+                  "string"
+                ? (error as { message?: string }).message
+                : "Brak szczegółów błędu";
         setAiError(`Nie udało się wygenerować kroków: ${msg}`);
         return;
       }
 
-      const steps = Array.isArray((data as any)?.steps)
-        ? ((data as any).steps as unknown[])
-        : [];
+      const stepsRaw = (data as { steps?: unknown } | null | undefined)?.steps;
+      const steps = Array.isArray(stepsRaw) ? stepsRaw : [];
 
       const cleaned = formatStepsForPreview(
-        steps.filter((s) => typeof s === "string") as string[]
+        steps.filter((s): s is string => typeof s === "string"),
       ).slice(0, 5);
 
       if (!cleaned.length) {
@@ -112,14 +100,10 @@ export default function TaskModal({ show, onHide }: TaskModalProps) {
       }
 
       setAiSteps(cleaned);
-      setProposedDescription(
-        buildProposedDescription(cardDetails.description, cleaned)
-      );
       setConfirmAiShow(true);
     } catch (err) {
       console.error(err);
-      const msg =
-        err instanceof Error ? err.message : "Wystąpił nieznany błąd";
+      const msg = err instanceof Error ? err.message : "Wystąpił nieznany błąd";
       setAiError(`Wystąpił błąd podczas generowania kroków: ${msg}`);
     } finally {
       setIsGeneratingAi(false);
@@ -128,16 +112,20 @@ export default function TaskModal({ show, onHide }: TaskModalProps) {
 
   const handleConfirmSaveAi = async () => {
     if (!activeCardId) return;
-    if (!proposedDescription) return;
+    if (!aiSteps?.length) return;
 
-    await updateCard(activeCardId, { description: proposedDescription });
+    await updateCard(activeCardId, { taskSteps: aiSteps });
     // Make modal reflect the change immediately.
     if (cardDetails) {
-      setCardDetails({ ...cardDetails, description: proposedDescription });
+      setCardDetails({ ...cardDetails, taskSteps: aiSteps });
     }
 
+    setAiSteps(null);
     setConfirmAiShow(false);
   };
+
+  const stepsToRender =
+    aiSteps && aiSteps.length > 0 ? aiSteps : (cardDetails?.taskSteps ?? null);
 
   return (
     <Modal
@@ -204,7 +192,7 @@ export default function TaskModal({ show, onHide }: TaskModalProps) {
               </div>
             </div>
 
-            <div className="mt-3">
+            <div className="mt-1">
               <button
                 type="button"
                 className="fb-btn fb-btn-primary"
@@ -232,11 +220,11 @@ export default function TaskModal({ show, onHide }: TaskModalProps) {
               )}
             </div>
 
-            {aiSteps && aiSteps.length > 0 && (
+            {stepsToRender && stepsToRender.length > 0 && (
               <div
                 className="fb-field"
                 style={{
-                  marginTop: 12,
+                  marginTop: 8,
                   gap: 8,
                   border: "1px solid var(--fb-border)",
                   borderRadius: "var(--radius-sm)",
@@ -248,8 +236,8 @@ export default function TaskModal({ show, onHide }: TaskModalProps) {
                   <i className="bi bi-lightning-charge me-2"></i>
                   <span>Kroki działania (AI)</span>
                 </div>
-                <ol style={{ margin: 0, paddingLeft: 20 }}>
-                  {aiSteps.map((s, idx) => (
+                <ol style={{ margin: 0, paddingLeft: 20, fontSize: 14 }}>
+                  {stepsToRender.map((s, idx) => (
                     <li key={`${idx}-${s}`} style={{ marginBottom: 4 }}>
                       {s}
                     </li>
@@ -323,7 +311,6 @@ export default function TaskModal({ show, onHide }: TaskModalProps) {
         onHide={() => {
           setConfirmAiShow(false);
           setAiSteps(null);
-          setProposedDescription("");
           setAiError(null);
         }}
         onConfirm={handleConfirmSaveAi}
@@ -332,7 +319,7 @@ export default function TaskModal({ show, onHide }: TaskModalProps) {
         confirmBtnText="Zapisz"
         message={
           aiSteps && aiSteps.length
-            ? `Zapisz poniższe kroki do opisu: ${aiSteps
+            ? `Zapisz poniższe kroki do pola taskSteps: ${aiSteps
                 .map((s, idx) => `${idx + 1}. ${s}`)
                 .join("; ")}`
             : "Zapisz wygenerowane kroki?"

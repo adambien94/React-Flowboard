@@ -53,5 +53,27 @@ describe("TaskModal", () => {
     expect(screen.getByText(cardDetails.title)).toBeInTheDocument();
     expect(screen.getByText(cardDetails.description)).toBeInTheDocument();
   });
+
+  it("renders AI steps from taskSteps when provided", () => {
+    const cardDetails = {
+      id: "card-1",
+      title: "Test card",
+      description: "Test description",
+      priority: "low",
+      taskSteps: ["Zrób coś", "Zrób kolejny krok"],
+    };
+
+    mockedUseBoardStore.mockReturnValue({
+      fetchCardDetails: jest.fn(),
+      cardDetails,
+      setCardDetails: jest.fn(),
+    });
+
+    render(<TaskModal show={true} onHide={jest.fn()} />);
+
+    expect(screen.getByText("Kroki działania (AI)")).toBeInTheDocument();
+    expect(screen.getByText(cardDetails.taskSteps[0])).toBeInTheDocument();
+    expect(screen.getByText(cardDetails.taskSteps[1])).toBeInTheDocument();
+  });
 });
 
