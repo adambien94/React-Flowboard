@@ -1,19 +1,22 @@
 const BoardLoader = () => {
-  const placeholderColumns = [5, 3, 4, 2];
+  const placeholderColumns = [5, 3, 4, 2, 5];
 
   return (
     <div>
-      <div className="fb-board ps-3 overflow-visible">
+      <div
+        className="fb-board ps-3 overflow-visible"
+        style={{ opacity: "0.3" }}
+      >
         {placeholderColumns.map((cardsCount, idx) => (
           <div key={idx} className="fb-column">
             <div className="fb-col-header">
               <span
-                className="fb-col-dot skeleton-box"
+                className="fb-col-dot skeleton-box "
                 style={{ width: 10, height: 10 }}
               />
               <span className="flex-grow-1">
                 <span
-                  className="skeleton-box"
+                  className="skeleton-box "
                   style={{
                     display: "inline-block",
                     width: "70%",
@@ -46,7 +49,7 @@ const BoardLoader = () => {
               </span>
             </div>
 
-            <div className="fb-cards-wrapper skeleton-column">
+            <div className="fb-cards-wrapper skeleton-column border-0">
               {Array.from({ length: cardsCount }).map((_, j) => (
                 <div
                   key={j}

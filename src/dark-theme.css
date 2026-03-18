@@ -2,14 +2,14 @@
   color-scheme: dark;
 
   --fb-bg: #0f1117;
-  --fb-bg2: #171b26;
-  --fb-bg3: #1e2233;
+  --fb-bg2: #12151d;
+  --fb-bg3: #171b26;
   --fb-bg4: #252a3a;
   --fb-border: rgba(255, 255, 255, 0.07);
   --fb-border-strong: rgba(255, 255, 255, 0.12);
   --fb-text: #e8eaf0;
   --fb-text-muted: #8b91a8;
-  --fb-text-faint: #565d78;
+  --fb-text-faint: #8b91a8;
   --fb-accent: #6c63ff;
   --fb-accent-2: #8b85ff;
   --fb-red: #ff5c5c;
@@ -707,6 +707,7 @@ body {
 .fb-auth-footer {
   flex-direction: column;
   align-items: stretch;
+  padding: 20px;
 }
 
 .fb-auth-primary,

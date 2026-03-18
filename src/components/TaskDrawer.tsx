@@ -182,7 +182,9 @@ export default function Drawer({
           <span className="fb-drawer-arrow">
             {activeCardId ? "Edit card" : "Add card"}
           </span>
-          <span style={{ color: "var(--fb-text-faint)", fontSize: 14 }}>→</span>
+          <span style={{ color: "var( --fb-text-muted)", fontSize: 14 }}>
+            →
+          </span>
           <span className="fb-drawer-col-pill">{colName || "Column"}</span>
           <button
             type="button"
@@ -206,7 +208,11 @@ export default function Drawer({
         >
           <div className="fb-drawer-body">
             <div className="fb-field">
-              <div className="fb-field-label">Title</div>
+              <div>
+                <i className="fb-field-label bi bi-text-left me-2"></i>
+                <span className="fb-field-label">Title</span>
+              </div>
+
               <input
                 ref={titleInputRef}
                 className="fb-field-control"
@@ -219,7 +225,11 @@ export default function Drawer({
             </div>
 
             <div className="fb-field">
-              <div className="fb-field-label">Description</div>
+              <div>
+                <i className="fb-field-label bi bi-card-text me-2"></i>
+                <span className="fb-field-label">Description</span>
+              </div>
+
               <textarea
                 className="fb-field-control"
                 value={form.description}
@@ -269,12 +279,11 @@ export default function Drawer({
 
             {activeCardId && (
               <div>
-                <div
-                  className="fb-section-divider"
-                  style={{ marginBottom: 12 }}
-                >
-                  Time tracked
+                <div className="fb-section-divider">
+                  <i className="bi bi-clock me-2"></i>
+                  <span style={{ marginBottom: 12 }}>Time tracked</span>
                 </div>
+
                 <div className="fb-timer-row">
                   <div>
                     <div className="fb-timer-val">{timerValue}</div>

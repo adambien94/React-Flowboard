@@ -15,7 +15,6 @@ export default function TaskModal({ show, onHide }: TaskModalProps) {
 
   useEffect(() => {
     if (activeCardId) fetchCardDetails(activeCardId);
-    console.log(cardDetails);
   }, [activeCardId, fetchCardDetails, setCardDetails]);
 
   useEffect(() => {
@@ -41,7 +40,6 @@ export default function TaskModal({ show, onHide }: TaskModalProps) {
         <div className="fb-modal-icon">
           <i className="bi bi-card-text"></i>
         </div>
-
         <span className="fb-modal-title">Card details</span>
         <button
           type="button"
@@ -57,9 +55,9 @@ export default function TaskModal({ show, onHide }: TaskModalProps) {
         {cardDetails ? (
           <>
             <div className="fb-field" style={{ gap: 8 }}>
-              <div>
+              <div className="fb-field-label">
                 <i className="fb-field-label bi bi-text-left me-2"></i>
-                <span className="fb-field-label">Title</span>
+                <span>Title</span>
               </div>
 
               <div
@@ -74,8 +72,8 @@ export default function TaskModal({ show, onHide }: TaskModalProps) {
             </div>
 
             <div className="fb-field" style={{ gap: 8 }}>
-              <div>
-                <i className="fb-field-label bi bi-card-text me-2"></i>
+              <div className="fb-field-label">
+                <i className="bi bi-card-text me-2"></i>
                 <span className="fb-field-label">Description</span>
               </div>
 
@@ -96,18 +94,19 @@ export default function TaskModal({ show, onHide }: TaskModalProps) {
 
             <div className="d-flex justify-content-between" style={{ gap: 8 }}>
               <div className="col">
-                <div>
-                  <span className="fb-field-label">Priority</span>
+                <div className="fb-field-label">
+                  <span>Priority</span>
                 </div>
 
                 <div
                   className="fb-priority fb-priority-none mt-2"
                   style={{ display: "inline-block" }}
                 >
+                  <i className="fb-field-label bi bi-record-fill me-2"></i>
                   {cardDetails.priority}
                 </div>
               </div>
-              <div className="col">
+              <div className="col ">
                 <i className="fb-field-label bi bi-clock me-2"></i>
                 <span className="fb-field-label">Time logged</span>
 

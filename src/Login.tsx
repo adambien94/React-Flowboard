@@ -3,6 +3,7 @@ import { Spinner } from "react-bootstrap";
 import Navbar from "./components/Navbar";
 import { supabase } from "./api/supabaseClient";
 import { useNavigate } from "react-router-dom";
+import styles from "./components/dashboard/DashboardLayout.module.css";
 
 export default function Login() {
   const [isRegister, setIsRegister] = useState(false);
@@ -38,7 +39,7 @@ export default function Login() {
   };
 
   return (
-    <div>
+    <div className={`${styles.mainContent}`}>
       <Navbar isControlsHidden={true} />
 
       <div
@@ -47,8 +48,11 @@ export default function Login() {
       >
         <div className="fb-auth-card">
           <div className="fb-modal-header">
-            <span className="fb-modal-title">
-              {isRegister ? "Create account" : "Sign in"}
+            <span className="fb-modal-title d-flex align-items-center">
+              <div className="fb-modal-icon me-2">
+                <i className="bi bi-person"></i>
+              </div>
+              {isRegister ? "Create account" : "Log in to Flowboard"}
             </span>
           </div>
 
@@ -96,7 +100,7 @@ export default function Login() {
                 ) : isRegister ? (
                   "Register"
                 ) : (
-                  "Login"
+                  "Log In"
                 )}
               </button>
 

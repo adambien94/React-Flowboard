@@ -130,7 +130,7 @@ export default function Drawer({ show, onHide }: DrawerProps) {
               action
               className="fb-nav-item"
               onClick={logout}
-              style={{ color: "var(--fb-text-faint)" }}
+              style={{ color: "var( --fb-text-muted)" }}
             >
               <span style={{ width: 16, textAlign: "center", fontSize: 14 }}>
                 ↪
