@@ -25,6 +25,17 @@ const BoardLoader = () => {
                   }}
                 />
               </span>
+              <span style={{ display: "inline-flex", width: 20, justifyContent: "center" }}>
+                <span
+                  className="skeleton-box"
+                  style={{
+                    display: "inline-block",
+                    width: 14,
+                    height: 14,
+                    borderRadius: 4,
+                  }}
+                />
+              </span>
               <span className="fb-col-count">
                 <span
                   className="skeleton-box"

@@ -301,7 +301,7 @@ body {
   font-family: "DM Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
   background: var(--fb-bg3);
   color: var(--fb-text-faint);
-  padding: 2px 6px;
+  padding: 2px 6px 3px 6px;
   border-radius: 6px;
   border: 1px solid var(--fb-border);
 }

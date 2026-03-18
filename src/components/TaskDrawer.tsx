@@ -26,8 +26,8 @@ type TaskForm = {
 
 const TASK_PRIORITIES = [
   {
-    label: "Priority",
-    value: "",
+    label: "Backlog",
+    value: "backlog",
   },
   {
     label: "Low",
@@ -71,7 +71,7 @@ export default function Drawer({
     setForm({
       title: cardDetails?.title || "",
       description: cardDetails?.description || "",
-      priority: cardDetails?.priority || "",
+      priority: cardDetails?.priority || "backlog",
     });
   }, [cardDetails]);
 

@@ -74,16 +74,7 @@ export default function TaskModal({ show, onHide }: TaskModalProps) {
 
       if (error) {
         console.error(error);
-        const msg =
-          error instanceof Error
-            ? error.message
-            : typeof error === "string"
-              ? error
-              : typeof (error as { message?: unknown } | null)?.message ===
-                  "string"
-                ? (error as { message?: string }).message
-                : "Brak szczegółów błędu";
-        setAiError(`Nie udało się wygenerować kroków: ${msg}`);
+        setAiError(`Nie udało się wygenerować kroków dla tego zadania.`);
         return;
       }
 
@@ -203,7 +194,7 @@ export default function TaskModal({ show, onHide }: TaskModalProps) {
                 {isGeneratingAi ? (
                   <Spinner animation="border" size="sm" />
                 ) : (
-                  <i className="bi bi-sparkles" />
+                  <i className="bi bi-robot" />
                 )}
                 Wygeneruj kroki w AI
               </button>
@@ -212,10 +203,10 @@ export default function TaskModal({ show, onHide }: TaskModalProps) {
                   style={{
                     marginTop: 8,
                     fontSize: 13,
-                    color: "var(--fb-red)",
+                    color: "var(--fb-text-muted)",
                   }}
                 >
-                  {aiError}
+                  <i className="bi bi-exclamation-circle mx-1"></i> {aiError}
                 </div>
               )}
             </div>
@@ -233,10 +224,20 @@ export default function TaskModal({ show, onHide }: TaskModalProps) {
                 }}
               >
                 <div className="fb-field-label" style={{ marginBottom: 4 }}>
-                  <i className="bi bi-lightning-charge me-2"></i>
+                  <i
+                    className="bi bi-lightning-charge me-2"
+                    style={{ color: "var(--fb-accent)" }}
+                  ></i>
                   <span>Kroki działania (AI)</span>
                 </div>
-                <ol style={{ margin: 0, paddingLeft: 20, fontSize: 14 }}>
+                <ol
+                  style={{
+                    margin: 0,
+                    paddingLeft: 20,
+                    fontSize: 14,
+                    color: "var(--fb-text-muted)",
+                  }}
+                >
                   {stepsToRender.map((s, idx) => (
                     <li key={`${idx}-${s}`} style={{ marginBottom: 4 }}>
                       {s}

@@ -23,6 +23,7 @@ type State = {
   ) => Promise<void>;
   moveColumn: (columnId: string, newPosition: number) => Promise<void>;
   removeCard: (cardId: string) => Promise<void>;
+  removeColumn: (columnId: string) => Promise<void>;
   subscribeRealtime: (boardId: string) => void;
   unsubscribeRealtime: () => void;
   clearBoardStore: () => void;
@@ -290,6 +291,46 @@ export const useBoardStore = create<State>((set, get) => ({
     if (error) {
       console.error("❌ Failed to delete card:", error);
       set({ columns: prevState });
+    }
+  },
+
+  removeColumn: async (columnId: string) => {
+    const prevColumns = get().columns;
+    const column = prevColumns.find((c) => c.id === columnId);
+    if (!column) return;
+
+    // Optimistically remove the column and compact positions.
+    const remainingColumns = prevColumns
+      .filter((c) => c.id !== columnId)
+      .map((c, idx) => ({ ...c, position: idx }));
+    set({ columns: remainingColumns });
+
+    try {
+      // Delete cards first (avoid relying on DB cascade behavior).
+      const { error: cardsError } = await supabase
+        .from("cards")
+        .delete()
+        .eq("column_id", columnId);
+      if (cardsError) throw cardsError;
+
+      const { error: columnsError } = await supabase
+        .from("columns")
+        .delete()
+        .eq("id", columnId);
+      if (columnsError) throw columnsError;
+
+      // Keep DB order consistent for remaining columns.
+      await Promise.all(
+        remainingColumns.map((c) =>
+          supabase
+            .from("columns")
+            .update({ position: c.position })
+            .eq("id", c.id)
+        )
+      );
+    } catch (err) {
+      console.error("❌ Failed to delete column:", err);
+      set({ columns: prevColumns });
     }
   },
 
