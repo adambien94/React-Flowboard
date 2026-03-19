@@ -18,7 +18,7 @@
 }
 
 .fb-modal-icon {
-  background: #212440;
+  background: var(--fb-modal-icon-bg);
   color: var(--fb-accent);
   width: 32px;
   height: 32px;
@@ -189,7 +189,7 @@
 .fb-field-control.form-select:focus {
   border-color: var(--fb-accent) !important;
   background: var(--fb-bg4) !important;
-  box-shadow: 0 0 0 3px rgba(108, 99, 255, 0.15) !important;
+  box-shadow: 0 0 0 3px var(--fb-focus-ring) !important;
 }
 
 .fb-field-control::placeholder {

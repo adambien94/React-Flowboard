@@ -2,8 +2,7 @@
   transition:
     margin-left 0.3s ease-in-out,
     opacity 0.25s ease;
-  /* min-height: calc(100vh - 56px); */
-  /* padding: 1rem; */
+
   background-image: radial-gradient(
     rgba(255, 255, 255, 0.07) 1px,
     transparent 2px
@@ -13,4 +12,10 @@
 
 .drawerOpen {
   margin-left: 220px;
+}
+
+[data-bs-theme="light"] {
+  .mainContent {
+    background-image: radial-gradient(rgba(0, 0, 0, 0.07) 1px, transparent 2px);
+  }
 }

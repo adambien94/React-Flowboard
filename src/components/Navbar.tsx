@@ -6,6 +6,7 @@ import {
   ButtonGroup,
 } from "react-bootstrap";
 import { useNavigate, useLocation, useParams } from "react-router-dom";
+import { useTheme } from "../hooks/useTheme";
 
 type NavbarProps = {
   onToggleDrawer?: () => void;
@@ -16,6 +17,7 @@ export default function Navbar({
   onToggleDrawer,
   isControlsHidden = false,
 }: NavbarProps) {
+  const { theme, toggleTheme } = useTheme();
   const { boardId } = useParams();
   const navigate = useNavigate();
   const location = useLocation();
@@ -37,7 +39,11 @@ export default function Navbar({
   };
 
   return (
-    <BSNavbar variant="dark" expand="lg" className="fb-topbar">
+    <BSNavbar
+      variant={theme === "dark" ? "dark" : "light"}
+      expand="lg"
+      className="fb-topbar"
+    >
       <Container fluid className="px-2">
         <BSNavbar.Brand
           href="#"
@@ -48,65 +54,85 @@ export default function Navbar({
           Flowboard
         </BSNavbar.Brand>
 
-        {!isControlsHidden && (
-          <BSNavbar.Collapse id="basic-navbar-nav">
-            <Nav className="ms-auto">
-              <ButtonGroup
-                size="sm"
-                className="mx-4 fb-view-switch"
-                aria-label="Board view mode switch"
-              >
-                <Button
-                  variant=""
-                  className={
-                    isTableMode
-                      ? "btn btn-outline-secondary btn-sm"
-                      : "fb-muted-btn btn  btn-sm"
-                  }
-                  onClick={() => handleModeSwitch("kanban")}
+        <BSNavbar.Collapse id="basic-navbar-nav">
+          <Nav className="ms-auto align-items-center flex-wrap gap-3">
+            {!isControlsHidden && (
+              <>
+                <ButtonGroup
+                  size="sm"
+                  className="fb-view-switch"
+                  aria-label="Board view mode switch"
                 >
-                  <i className="bi bi-kanban me-2"></i>
-                  Kanban Mode
+                  <Button
+                    variant=""
+                    className={
+                      isTableMode
+                        ? "btn btn-outline-secondary btn-sm"
+                        : "fb-muted-btn btn btn-sm"
+                    }
+                    onClick={() => handleModeSwitch("kanban")}
+                  >
+                    <i className="bi bi-kanban"></i>
+                    Kanban Mode
+                  </Button>
+                  <Button
+                    variant=""
+                    className={
+                      isTableMode
+                        ? "fb-muted-btn btn btn-sm"
+                        : "btn btn-outline-secondary btn-sm"
+                    }
+                    onClick={() => handleModeSwitch("table")}
+                    disabled={!boardId}
+                  >
+                    <i className="bi bi-list"></i>
+                    Table Mode
+                  </Button>
+                </ButtonGroup>
+                <Button
+                  variant="outline-secondary"
+                  size="sm"
+                  onClick={toggleTheme}
+                  aria-label={
+                    theme === "dark"
+                      ? "Switch to light mode"
+                      : "Switch to dark mode"
+                  }
+                  title={
+                    theme === "dark"
+                      ? "Switch to light mode"
+                      : "Switch to dark mode"
+                  }
+                >
+                  <i
+                    className={`bi ${theme === "dark" ? "bi-sun-fill" : "bi-moon-stars-fill"}`}
+                  />
+                </Button>
+                <div className="avatar-group d-flex">
+                  <div className="avatar" style={{ background: "#6c63ff" }}>
+                    AB
+                  </div>
+                  <div className="avatar" style={{ background: "#3ecf8e" }}>
+                    KL
+                  </div>
+                  <div className="avatar" style={{ background: "#f5a623" }}>
+                    MR
+                  </div>
+                </div>
+                <Button variant="outline-secondary" size="sm" className="">
+                  <i className="bi bi-filter"></i> Filter
                 </Button>
                 <Button
-                  variant=""
-                  className={
-                    isTableMode
-                      ? "fb-muted-btn btn  btn-sm"
-                      : "btn btn-outline-secondary btn-sm"
-                  }
-                  onClick={() => handleModeSwitch("table")}
-                  disabled={!boardId}
+                  variant="outline-secondary"
+                  size="sm"
+                  onClick={onToggleDrawer}
                 >
-                  <i className="bi bi-list me-2"></i>
-                  Table Mode
+                  <i className="bi bi-list"></i> Toggle Menu
                 </Button>
-              </ButtonGroup>
-              <div className="avatar-group d-flex">
-                <div className="avatar" style={{ background: "#6c63ff" }}>
-                  AB
-                </div>
-                <div className="avatar" style={{ background: "#3ecf8e" }}>
-                  KL
-                </div>
-                <div className="avatar" style={{ background: "#f5a623" }}>
-                  MR
-                </div>
-              </div>
-              <Button variant="outline-secondary" size="sm" className="ms-3">
-                <i className="bi bi-filter"></i> Filter
-              </Button>
-              <Button
-                variant="outline-secondary"
-                size="sm"
-                onClick={onToggleDrawer}
-                className="ms-3"
-              >
-                <i className="bi bi-list"></i> Toggle Menu
-              </Button>
-            </Nav>
-          </BSNavbar.Collapse>
-        )}
+              </>
+            )}
+          </Nav>
+        </BSNavbar.Collapse>
       </Container>
     </BSNavbar>
   );

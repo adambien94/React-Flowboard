@@ -95,6 +95,7 @@
 
 .fb-brand-title {
   font-size: 15px;
+  color: var(--fb-text);
 }
 
 .fb-nav-icon {
@@ -109,7 +110,7 @@
 
 .list-group-item.active .fb-board-count-badge {
   background: var(--fb-accent) !important;
-  color: var(--fb-text) !important;
+  color: #e8eaf0 !important;
 }
 
 .fb-sidebar-footer {

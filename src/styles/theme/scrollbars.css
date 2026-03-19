@@ -1,6 +1,6 @@
 * {
   scrollbar-width: thin;
-  scrollbar-color: rgba(37, 42, 58, 0.95) transparent;
+  scrollbar-color: var(--fb-bg4) transparent;
 }
 
 *::-webkit-scrollbar {
@@ -18,7 +18,7 @@
 }
 
 *::-webkit-scrollbar-thumb:hover {
-  background: rgba(37, 42, 58, 1);
+  background: var(--fb-scrollbar-thumb-hover);
 }
 
 *::-webkit-scrollbar-corner {

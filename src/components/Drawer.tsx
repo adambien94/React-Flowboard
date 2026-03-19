@@ -48,7 +48,7 @@ export default function Drawer({ show, onHide }: DrawerProps) {
       keyboard={false}
     >
       <Offcanvas.Header className="border-bottom">
-        <Offcanvas.Title className="fw-semibold fb-brand-title">
+        <Offcanvas.Title className="fw-semibold fb-brand-title text ">
           <i className="bi bi-kanban me-2"></i>
           Flowboard
         </Offcanvas.Title>
