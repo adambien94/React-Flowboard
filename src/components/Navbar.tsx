@@ -61,22 +61,24 @@ export default function Navbar({
                   className={
                     isTableMode
                       ? "btn btn-outline-secondary btn-sm"
-                      : "fb-primary-btn btn btn-primary btn-sm"
+                      : "fb-muted-btn btn  btn-sm"
                   }
                   onClick={() => handleModeSwitch("kanban")}
                 >
+                  <i className="bi bi-kanban me-2"></i>
                   Kanban mode
                 </Button>
                 <Button
                   variant=""
                   className={
                     isTableMode
-                      ? "fb-primary-btn btn btn-primary btn-sm"
+                      ? "fb-muted-btn btn  btn-sm"
                       : "btn btn-outline-secondary btn-sm"
                   }
                   onClick={() => handleModeSwitch("table")}
                   disabled={!boardId}
                 >
+                  <i className="bi bi-list me-2"></i>
                   Table mode
                 </Button>
               </ButtonGroup>

@@ -123,7 +123,7 @@ export default function Summary() {
           style={{
             textAlign: "center",
             padding: "60px 20px",
-            background: "rgba(22, 24, 33, 0.9)",
+            background: "var(--fb-bg2)",
             backdropFilter: "blur(43px)",
           }}
         >
@@ -167,19 +167,14 @@ export default function Summary() {
                     style={{
                       ...rowStyles,
                       background:
-                        index % 2 === 0
-                          ? "transparent"
-                          : "rgba(255, 255, 255, 0.01)",
+                        index % 2 === 0 ? "transparent" : "var(--fb-bg2)",
                     }}
                     onMouseEnter={(e) => {
-                      e.currentTarget.style.background =
-                        "rgba(255, 255, 255, 0.03)";
+                      e.currentTarget.style.background = "var(--fb-bg1)";
                     }}
                     onMouseLeave={(e) => {
                       e.currentTarget.style.background =
-                        index % 2 === 0
-                          ? "transparent"
-                          : "rgba(255, 255, 255, 0.01)";
+                        index % 2 === 0 ? "transparent" : "var(--fb-bg2)";
                     }}
                   >
                     <td
@@ -204,7 +199,7 @@ export default function Summary() {
                         ...cellStyles,
                         textAlign: "right",
                         fontWeight: 500,
-                        color: "var(--accent-blue)",
+                        color: "var(--fb-accent)",
                       }}
                     >
                       {formatLoggedTime(card.logged_time)}
@@ -225,7 +220,7 @@ export default function Summary() {
                     style={{
                       ...cellStyles,
                       textAlign: "left",
-                      color: "var(--text-primary)",
+                      color: "var(--fb-accent)",
                       fontSize: "15px",
                     }}
                   >
@@ -235,7 +230,7 @@ export default function Summary() {
                     style={{
                       ...cellStyles,
                       textAlign: "right",
-                      color: "var(--accent-blue)",
+                      color: "var(--fb-accent)",
                       fontSize: "15px",
                     }}
                   >

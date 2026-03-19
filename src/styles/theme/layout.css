@@ -81,6 +81,18 @@
   background: var(--fb-accent-2);
 }
 
+.fb-muted-btn.btn {
+  background: var(--fb-bg4);
+  border: none;
+  border-radius: var(--radius-sm);
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.fb-muted-btn.btn:hover {
+  background: var(--fb-bg4);
+}
+
 .fb-brand-title {
   font-size: 15px;
 }
