@@ -107,6 +107,11 @@
   font-family: "DM Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
 }
 
+.list-group-item.active .fb-board-count-badge {
+  background: var(--fb-accent) !important;
+  color: var(--fb-text) !important;
+}
+
 .fb-sidebar-footer {
   border-top: 1px solid var(--fb-border);
 }

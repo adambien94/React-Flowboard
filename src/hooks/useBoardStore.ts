@@ -9,6 +9,7 @@ type State = {
   boardTitle: string;
   channels: RealtimeChannel[];
   boards: Board[];
+  boardTaskCounts: Record<string, number>;
   cardDetails: Card | null;
   getBoardsList: () => Promise<void>;
   loadBoard: (boardId: string) => Promise<void>;
@@ -38,6 +39,7 @@ export const useBoardStore = create<State>((set, get) => ({
   boardTitle: "",
   channels: [],
   boards: [],
+  boardTaskCounts: {},
   cardDetails: null,
 
   getBoardsList: async () => {
@@ -52,13 +54,72 @@ export const useBoardStore = create<State>((set, get) => ({
       return;
     }
 
-    if (!data.length) {
-      set({ loading: false });
+    const boardsList = data || [];
+
+    if (!boardsList.length) {
+      set({ loading: false, boards: [], boardTaskCounts: {} });
+      return;
     }
 
-    set({
-      boards: data || [],
+    // Compute card/task count per board for the sidebar badge.
+    // We intentionally avoid changing `loading` here so Dashboard's loader behavior stays unchanged.
+    const boardIds = boardsList.map((b) => b.id);
+
+    const countsByBoard: Record<string, number> = {};
+    boardIds.forEach((id) => {
+      countsByBoard[id] = 0;
     });
+
+    try {
+      const { data: columnsData, error: columnsError } = await supabase
+        .from("columns")
+        .select("id, board_id")
+        .in("board_id", boardIds);
+
+      if (columnsError) {
+        console.error("❌ Failed to load columns for task counts:", columnsError);
+        set({ boards: boardsList, boardTaskCounts: countsByBoard });
+        return;
+      }
+
+      const columnsList = (columnsData ?? []) as Array<{
+        id: string;
+        board_id: string;
+      }>;
+
+      const columnIdToBoardId = new Map<string, string>(
+        columnsList.map((c) => [c.id, c.board_id])
+      );
+      const columnIds = columnsList.map((c) => c.id);
+
+      if (columnIds.length === 0) {
+        set({ boards: boardsList, boardTaskCounts: countsByBoard });
+        return;
+      }
+
+      const { data: cardsData, error: cardsError } = await supabase
+        .from("cards")
+        .select("column_id")
+        .in("column_id", columnIds);
+
+      if (cardsError) {
+        console.error("❌ Failed to load cards for task counts:", cardsError);
+        set({ boards: boardsList, boardTaskCounts: countsByBoard });
+        return;
+      }
+
+      const cardsList = (cardsData ?? []) as Array<{ column_id: string }>;
+      for (const card of cardsList) {
+        const bId = columnIdToBoardId.get(card.column_id);
+        if (bId) countsByBoard[bId] = (countsByBoard[bId] ?? 0) + 1;
+      }
+
+      set({ boards: boardsList, boardTaskCounts: countsByBoard });
+    } catch (e) {
+      console.error("❌ Failed computing task counts:", e);
+      // Still render boards; just show 0 for counts.
+      set({ boards: boardsList, boardTaskCounts: countsByBoard });
+    }
   },
 
   loadBoard: async (boardId) => {
@@ -566,6 +627,7 @@ export const useBoardStore = create<State>((set, get) => ({
       columns: [],
       boardTitle: "",
       boards: [],
+      boardTaskCounts: {},
       loading: true,
       channels: [],
     });

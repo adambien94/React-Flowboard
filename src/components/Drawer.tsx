@@ -14,8 +14,14 @@ export default function Drawer({ show, onHide }: DrawerProps) {
   const navigate = useNavigate();
   const { boardId } = useParams();
   const [showCreateBoardModal, setShowCreateBoardModal] = useState(false);
-  const { boards, addBoard } = useBoardStore();
+  const { boards, addBoard, boardTaskCounts, columns, loading } =
+    useBoardStore();
   const { logout } = useAuth();
+
+  const activeBoardTaskCount = columns.reduce(
+    (sum, col) => sum + (col.cards?.length ?? 0),
+    0,
+  );
 
   const handleBoardSelect = (targetBoardId: string) => {
     if (targetBoardId === boardId) {
@@ -71,13 +77,17 @@ export default function Drawer({ show, onHide }: DrawerProps) {
                 onClick={() => handleBoardSelect(board.id)}
               >
                 <div className="d-flex align-items-center gap-2">
-                  <span className="fb-nav-icon">◈</span>
+                  <i className="fb-nav-icon bi bi-x-diamond"></i>
                   <span className="flex-grow-1">{board.title}</span>
                   <Badge
                     className="custom-badge-color fb-board-count-badge"
                     pill
                   >
-                    12
+                    {board.id === boardId
+                      ? loading
+                        ? (boardTaskCounts[board.id] ?? 0)
+                        : activeBoardTaskCount
+                      : (boardTaskCounts[board.id] ?? 0)}
                   </Badge>
                 </div>
               </ListGroup.Item>
@@ -87,19 +97,19 @@ export default function Drawer({ show, onHide }: DrawerProps) {
           <div className="fb-section-label">Navigation</div>
           <ListGroup variant="flush">
             <ListGroup.Item action className="fb-nav-item" disabled>
-              <span className="fb-nav-icon">⊞</span>
+              <i className="bi bi-house"></i>
               <span className="ms-2">Dashboard</span>
             </ListGroup.Item>
             <ListGroup.Item action className="fb-nav-item" disabled>
-              <span className="fb-nav-icon">☆</span>
+              <i className="bi bi-star"></i>
               <span className="ms-2">Starred</span>
             </ListGroup.Item>
             <ListGroup.Item action className="fb-nav-item" disabled>
-              <span className="fb-nav-icon">◯</span>
+              <i className="bi bi-person"></i>
               <span className="ms-2">Personal</span>
             </ListGroup.Item>
             <ListGroup.Item action className="fb-nav-item" disabled>
-              <span className="fb-nav-icon">◻</span>
+              <i className="fb-nav-icon bi bi-briefcase"></i>
               <span className="ms-2">Work</span>
             </ListGroup.Item>
           </ListGroup>

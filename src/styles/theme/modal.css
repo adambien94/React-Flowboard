@@ -14,7 +14,7 @@
   align-items: center;
   padding: 18px 20px 16px;
   border-bottom: 1px solid var(--fb-border);
-  gap: 10px;
+  gap: 12px;
 }
 
 .fb-modal-icon {
