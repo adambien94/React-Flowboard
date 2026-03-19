@@ -19,21 +19,22 @@ const tableStyles: React.CSSProperties = {
   borderRadius: "18px",
   overflow: "hidden",
   backdropFilter: "blur(43px)",
-  border: "1px solid rgba(255, 255, 255, 0.1)",
+  color: "var(--fb-text-muted)",
+  background: "var(--fb-bg2)",
 };
 
 const headerStyles: React.CSSProperties = {
-  color: "var(--text-primary)",
+  color: "var(--fb-text-muted)",
   fontWeight: 600,
   fontSize: "14px",
   padding: "16px 20px",
-  borderBottom: "1px solid rgba(255, 255, 255, 0.1)",
+  borderBottom: "1px solid var(--fb-border)",
 };
 
 const cellStyles: React.CSSProperties = {
   padding: "8px 20px",
-  borderBottom: "1px solid rgba(255, 255, 255, 0.05)",
-  color: "var(--text-primary)",
+  borderBottom: "1px solid var(--fb-border)",
+  color: "var(--fb-text-muted)",
   fontSize: "14px",
 };
 
@@ -112,11 +113,7 @@ export default function Summary() {
   }
 
   return (
-    <Container fluid className="p-3">
-      <div className="mb-3">
-        <DashboardTopBar openAddColumnModal={() => {}} />
-      </div>
-
+    <Container fluid className="px-3 py-4">
       {allCards.length === 0 ? (
         <div
           className="card"
@@ -169,20 +166,11 @@ export default function Summary() {
                       background:
                         index % 2 === 0 ? "transparent" : "var(--fb-bg2)",
                     }}
-                    onMouseEnter={(e) => {
-                      e.currentTarget.style.background = "var(--fb-bg1)";
-                    }}
-                    onMouseLeave={(e) => {
-                      e.currentTarget.style.background =
-                        index % 2 === 0 ? "transparent" : "var(--fb-bg2)";
-                    }}
                   >
                     <td
                       style={{
                         ...cellStyles,
-                        fontWeight: 500,
                       }}
-                      className="text-muted"
                     >
                       {card.title}
                     </td>
@@ -191,15 +179,21 @@ export default function Summary() {
                         {card.priority ? card.priority : "Backlog"}
                       </span>
                     </td>
-                    <td style={{ ...cellStyles, color: "var(--text-muted)" }}>
+                    <td
+                      style={{
+                        ...cellStyles,
+                        color: "var(--text-muted)",
+                        fontSize: "12px",
+                      }}
+                    >
                       {formatDate(card.created_at)}
                     </td>
                     <td
                       style={{
                         ...cellStyles,
                         textAlign: "right",
-                        fontWeight: 500,
-                        color: "var(--fb-accent)",
+                        fontSize: "12px",
+                        fontFamily: "DM Mono",
                       }}
                     >
                       {formatLoggedTime(card.logged_time)}
@@ -220,8 +214,7 @@ export default function Summary() {
                     style={{
                       ...cellStyles,
                       textAlign: "left",
-                      color: "var(--fb-accent)",
-                      fontSize: "15px",
+                      fontSize: "14px",
                     }}
                   >
                     {/* TOTAL LOGGED TIME: */}
@@ -230,8 +223,8 @@ export default function Summary() {
                     style={{
                       ...cellStyles,
                       textAlign: "right",
-                      color: "var(--fb-accent)",
-                      fontSize: "15px",
+                      fontSize: "14px",
+                      fontFamily: "DM Mono",
                     }}
                   >
                     {formatTotalLoggedTime(totalLoggedTime)}

@@ -66,7 +66,7 @@ export default function Navbar({
                   onClick={() => handleModeSwitch("kanban")}
                 >
                   <i className="bi bi-kanban me-2"></i>
-                  Kanban mode
+                  Kanban Mode
                 </Button>
                 <Button
                   variant=""
@@ -79,7 +79,7 @@ export default function Navbar({
                   disabled={!boardId}
                 >
                   <i className="bi bi-list me-2"></i>
-                  Table mode
+                  Table Mode
                 </Button>
               </ButtonGroup>
               <div className="avatar-group d-flex">
