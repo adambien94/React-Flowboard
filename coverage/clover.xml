@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1773926352821" clover="3.2.0">
-  <project timestamp="1773926352821" name="All files">
-    <metrics statements="102" coveredstatements="100" conditionals="45" coveredconditionals="35" methods="24" coveredmethods="24" elements="171" coveredelements="159" complexity="0" loc="102" ncloc="102" packages="2" files="3" classes="3"/>
+<coverage generated="1773935257322" clover="3.2.0">
+  <project timestamp="1773935257322" name="All files">
+    <metrics statements="102" coveredstatements="100" conditionals="45" coveredconditionals="35" methods="24" coveredmethods="23" elements="171" coveredelements="158" complexity="0" loc="102" ncloc="102" packages="2" files="3" classes="3"/>
     <package name="components">
-      <metrics statements="86" coveredstatements="85" conditionals="43" coveredconditionals="33" methods="19" coveredmethods="19"/>
+      <metrics statements="86" coveredstatements="85" conditionals="43" coveredconditionals="33" methods="19" coveredmethods="18"/>
       <file name="AddBoardModal.tsx" path="/Users/adambien/Nauka - 2025/Flowboard/src/components/AddBoardModal.tsx">
-        <metrics statements="17" coveredstatements="16" conditionals="3" coveredconditionals="2" methods="5" coveredmethods="5"/>
+        <metrics statements="17" coveredstatements="16" conditionals="3" coveredconditionals="2" methods="5" coveredmethods="4"/>
         <line num="1" count="1" type="stmt"/>
         <line num="2" count="1" type="stmt"/>
         <line num="10" count="1" type="stmt"/>

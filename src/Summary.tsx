@@ -1,10 +1,10 @@
 import { useEffect, useMemo } from "react";
 import { useParams } from "react-router-dom";
-import { Container, Spinner } from "react-bootstrap";
+import { Container } from "react-bootstrap";
 import { useBoardStore } from "./hooks/useBoardStore";
 import formatTime from "./utils/formatTime";
 import type { Card } from "./types/index";
-import DashboardTopBar from "./components/dashboard/DashboardTopBar";
+import BoardLoader from "./components/dashboard/BoardLoader";
 
 // const PRIORITIES: Record<string, { label: string; variant: string }> = {
 //   low: { label: "Low", variant: "info" },
@@ -101,15 +101,7 @@ export default function Summary() {
   };
 
   if (loading) {
-    return (
-      <Container
-        fluid
-        className="d-flex justify-content-center align-items-center"
-        style={{ minHeight: "50vh" }}
-      >
-        <Spinner animation="border" variant="primary" />
-      </Container>
-    );
+    return <BoardLoader />;
   }
 
   return (
