@@ -18,13 +18,13 @@ const DashboardColumns = ({ onAddColumn }: DashboardColumnsProps) => {
   const boardCols = useMemo(() => columns ?? [], [columns]);
 
   const dragCardStyle = {
-    transform: "rotate(0deg) translateY(-4px)",
     borderRadius: "18px",
     backgroundColor: "var(--panel-elevated-bg)",
   };
 
   const dragColStyle = {
-    backgroundColor: "var(--panel-elevated-bg)",
+    // backgroundColor: "var(--panel-elevated-bg)",
+    pointerEvents: "none" as const,
   };
 
   const handleDragStart = (event: DragStartEvent) => {
@@ -110,7 +110,7 @@ const DashboardColumns = ({ onAddColumn }: DashboardColumnsProps) => {
       <DragOverlay>
         {activeColumn ? (
           <div style={dragColStyle}>
-            <BoardColumn column={activeColumn} />
+            <BoardColumn column={activeColumn} disableDnD />
           </div>
         ) : activeCard ? (
           <div style={dragCardStyle}>

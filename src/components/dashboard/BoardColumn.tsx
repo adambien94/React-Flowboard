@@ -10,6 +10,7 @@ import { useBoardStore } from "../../hooks/useBoardStore";
 type BoardColumnProps = {
   column: Column;
   isHidden?: boolean;
+  disableDnD?: boolean;
 };
 
 type DroppableTaskCardProps = {
@@ -17,10 +18,15 @@ type DroppableTaskCardProps = {
   columnId: string;
 };
 
-const BoardColumnComponent = ({ column, isHidden }: BoardColumnProps) => {
+const BoardColumnComponent = ({
+  column,
+  isHidden,
+  disableDnD,
+}: BoardColumnProps) => {
   const { over } = useDndContext();
   const { setNodeRef: setDroppableRef, isOver } = useDroppable({
     id: column.id,
+    disabled: disableDnD,
   });
   const {
     attributes,
@@ -28,6 +34,7 @@ const BoardColumnComponent = ({ column, isHidden }: BoardColumnProps) => {
     setNodeRef: setDraggableRef,
   } = useDraggable({
     id: column.id,
+    disabled: disableDnD,
   });
   const { openTaskDrawer, setActiveColId, activeColId, closeTaskDrawer } =
     useTaskDrawerStore();
@@ -53,6 +60,7 @@ const BoardColumnComponent = ({ column, isHidden }: BoardColumnProps) => {
     <>
       <div
         className="fb-column"
+        ref={setRefs}
         style={{ visibility: isHidden ? "hidden" : "visible" }}
       >
         <div className="fb-col-header">
@@ -72,6 +80,7 @@ const BoardColumnComponent = ({ column, isHidden }: BoardColumnProps) => {
               padding: 3,
               borderRadius: 6,
               opacity: canRemoveColumn ? 1 : 0.4,
+              transition: "0s all",
             }}
           >
             <i className="bi bi-trash" />
@@ -86,18 +95,18 @@ const BoardColumnComponent = ({ column, isHidden }: BoardColumnProps) => {
               padding: 3,
               borderRadius: 6,
               opacity: canRemoveColumn ? 1 : 0.4,
+              transition: "0s all",
             }}
           >
             <i className="bi bi-plus" />
           </button>
           <span className="fb-col-count">{column.cards.length}</span>
           <span className="fb-col-handle" {...listeners} {...attributes}>
-            ⋯
+            <i className="bi bi-grip-vertical" />
           </span>
         </div>
 
         <div
-          ref={setRefs}
           className="fb-cards-wrapper"
           style={{
             boxShadow: isColumnActive

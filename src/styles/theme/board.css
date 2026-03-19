@@ -1,5 +1,5 @@
 .fb-task-card.card:hover {
-  background: var(--fb-bg4);
+  /* background: var(--fb-bg4); */
   border-color: var(--fb-border-strong);
 }
 
