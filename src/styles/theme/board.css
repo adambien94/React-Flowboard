@@ -40,7 +40,6 @@
   color: var(--fb-text-faint);
 }
 
-/* Board layout (redesign) */
 .fb-board {
   display: flex;
   gap: 16px;
@@ -48,7 +47,6 @@
   overflow-x: auto;
   padding: 20px 16px;
   min-height: calc(100vh - 58px);
-  /* overflow-x: scroll; */
 }
 
 .fb-column {

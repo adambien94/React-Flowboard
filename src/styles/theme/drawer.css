@@ -18,6 +18,26 @@
   font-size: 14px;
 }
 
+.fb-drawer-muted-arrow {
+  color: var(--fb-text-muted);
+  font-size: 14px;
+}
+
+.fb-drawer-close-btn {
+  margin-left: auto;
+}
+
+.fb-drawer-form {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  min-height: 0;
+}
+
+.fb-tracked-time-label {
+  margin-bottom: 12px;
+}
+
 .fb-drawer-col-pill {
   font-size: 12px;
   font-weight: 500;

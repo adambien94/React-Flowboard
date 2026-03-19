@@ -36,18 +36,10 @@ export default function TaskModal({ show, onHide }: TaskModalProps) {
   }, [show, setCardDetails]);
 
   useEffect(() => {
-    // Reset AI preview when opening a different card or closing the modal.
-    if (!show || !activeCardId) {
-      setAiSteps(null);
-      setAiError(null);
-      setConfirmAiShow(false);
-      setIsGeneratingAi(false);
-    } else {
-      setAiSteps(null);
-      setAiError(null);
-      setConfirmAiShow(false);
-      setIsGeneratingAi(false);
-    }
+    setAiSteps(null);
+    setAiError(null);
+    setConfirmAiShow(false);
+    setIsGeneratingAi(false);
   }, [activeCardId, show]);
 
   const formatStepsForPreview = (steps: string[]) => {
@@ -74,7 +66,7 @@ export default function TaskModal({ show, onHide }: TaskModalProps) {
 
       if (error) {
         console.error(error);
-        setAiError(`Nie udało się wygenerować kroków dla tego zadania.`);
+        setAiError("Failed to generate steps for this task.");
         return;
       }
 
@@ -86,7 +78,7 @@ export default function TaskModal({ show, onHide }: TaskModalProps) {
       ).slice(0, 5);
 
       if (!cleaned.length) {
-        setAiError("AI nie zwróciło żadnych kroków. Spróbuj ponownie.");
+        setAiError("AI did not return any steps. Try again.");
         return;
       }
 
@@ -94,8 +86,8 @@ export default function TaskModal({ show, onHide }: TaskModalProps) {
       setConfirmAiShow(true);
     } catch (err) {
       console.error(err);
-      const msg = err instanceof Error ? err.message : "Wystąpił nieznany błąd";
-      setAiError(`Wystąpił błąd podczas generowania kroków: ${msg}`);
+      const msg = err instanceof Error ? err.message : "Unknown error occurred";
+      setAiError(`An error occurred while generating steps: ${msg}`);
     } finally {
       setIsGeneratingAi(false);
     }
@@ -145,40 +137,22 @@ export default function TaskModal({ show, onHide }: TaskModalProps) {
       <div className="fb-modal-body">
         {cardDetails ? (
           <>
-            <div className="fb-field" style={{ gap: 8 }}>
+            <div className="fb-field fb-field-wide-gap">
               <div className="fb-field-label">
                 <i className="fb-field-label bi bi-text-left me-2"></i>
                 <span>Title</span>
               </div>
 
-              <div
-                style={{
-                  fontSize: 14,
-                  fontWeight: 500,
-                  color: "var(--fb-text)",
-                }}
-              >
-                {cardDetails.title}
-              </div>
+              <div className="fb-task-title-value">{cardDetails.title}</div>
             </div>
 
-            <div className="fb-field" style={{ gap: 8 }}>
+            <div className="fb-field fb-field-wide-gap">
               <div className="fb-field-label">
                 <i className="bi bi-card-text me-2"></i>
                 <span className="fb-field-label">Description</span>
               </div>
 
-              <div
-                style={{
-                  fontSize: 14,
-                  color: "var(--fb-text-muted)",
-                  lineHeight: 1.5,
-                  background: "var(--fb-bg3)",
-                  borderRadius: "var(--radius-sm)",
-                  border: "1px solid var(--fb-border)",
-                  padding: "12px",
-                }}
-              >
+              <div className="fb-task-description-box">
                 {cardDetails.description || "—"}
               </div>
             </div>
@@ -196,50 +170,24 @@ export default function TaskModal({ show, onHide }: TaskModalProps) {
                 ) : (
                   <i className="bi bi-robot" />
                 )}
-                Wygeneruj kroki w AI
+                Generate AI steps
               </button>
               {aiError && (
-                <div
-                  style={{
-                    marginTop: 8,
-                    fontSize: 13,
-                    color: "var(--fb-text-muted)",
-                  }}
-                >
+                <div className="fb-ai-error">
                   <i className="bi bi-exclamation-circle mx-1"></i> {aiError}
                 </div>
               )}
             </div>
 
             {stepsToRender && stepsToRender.length > 0 && (
-              <div
-                className="fb-field"
-                style={{
-                  marginTop: 8,
-                  gap: 8,
-                  border: "1px solid var(--fb-border)",
-                  borderRadius: "var(--radius-sm)",
-                  padding: 12,
-                  background: "var(--fb-bg3)",
-                }}
-              >
-                <div className="fb-field-label" style={{ marginBottom: 4 }}>
-                  <i
-                    className="bi bi-lightning-charge me-2"
-                    style={{ color: "var(--fb-accent)" }}
-                  ></i>
-                  <span>Kroki działania (AI)</span>
+              <div className="fb-field fb-ai-steps-box">
+                <div className="fb-field-label fb-ai-steps-label">
+                  <i className="bi bi-lightning-charge me-2 fb-ai-steps-icon"></i>
+                  <span>Action steps (AI)</span>
                 </div>
-                <ol
-                  style={{
-                    margin: 0,
-                    paddingLeft: 20,
-                    fontSize: 14,
-                    color: "var(--fb-text-muted)",
-                  }}
-                >
+                <ol className="fb-ai-steps-list">
                   {stepsToRender.map((s, idx) => (
-                    <li key={`${idx}-${s}`} style={{ marginBottom: 4 }}>
+                    <li key={`${idx}-${s}`} className="fb-ai-step-item">
                       {s}
                     </li>
                   ))}
@@ -247,16 +195,13 @@ export default function TaskModal({ show, onHide }: TaskModalProps) {
               </div>
             )}
 
-            <div className="d-flex justify-content-between" style={{ gap: 8 }}>
+            <div className="d-flex justify-content-between fb-task-meta-row">
               <div className="col">
                 <div className="fb-field-label">
                   <span>Priority</span>
                 </div>
 
-                <div
-                  className="fb-priority fb-priority-none mt-2"
-                  style={{ display: "inline-block" }}
-                >
+                <div className="fb-priority fb-priority-none mt-2 fb-priority-badge-inline">
                   <i className="fb-field-label bi bi-record-fill me-2"></i>
                   {cardDetails.priority}
                 </div>
@@ -265,15 +210,7 @@ export default function TaskModal({ show, onHide }: TaskModalProps) {
                 <i className="fb-field-label bi bi-clock me-2"></i>
                 <span className="fb-field-label">Time logged</span>
 
-                <div
-                  className="mt-1"
-                  style={{
-                    fontSize: "14px",
-                    color: "var(--fb-text-muted)",
-                    fontFamily:
-                      '"DM Mono", ui-monospace, SFMono-Regular, Menlo, monospace',
-                  }}
-                >
+                <div className="mt-1 fb-time-logged-value">
                   {cardDetails.logged_time
                     ? formatTime(cardDetails.logged_time, true)
                     : "0h 0min "}
@@ -282,7 +219,7 @@ export default function TaskModal({ show, onHide }: TaskModalProps) {
             </div>
           </>
         ) : (
-          <div className="text-center" style={{ padding: "10px 0" }}>
+          <div className="text-center fb-modal-loading">
             <Spinner data-testid="task-modal-spinner" />
           </div>
         )}
@@ -299,9 +236,8 @@ export default function TaskModal({ show, onHide }: TaskModalProps) {
         </button>
         <button
           type="button"
-          className="fb-btn fb-btn-ghost"
+          className="fb-btn fb-btn-ghost fb-btn-ml-auto"
           onClick={onHide}
-          style={{ marginLeft: "auto" }}
         >
           Close
         </button>
@@ -315,15 +251,15 @@ export default function TaskModal({ show, onHide }: TaskModalProps) {
           setAiError(null);
         }}
         onConfirm={handleConfirmSaveAi}
-        title="Zapisz kroki wygenerowane przez AI?"
+        title="Save AI-generated steps?"
         btnVariant="primary"
-        confirmBtnText="Zapisz"
+        confirmBtnText="Save"
         message={
           aiSteps && aiSteps.length
-            ? `Zapisz poniższe kroki do pola taskSteps: ${aiSteps
+            ? `Save the following steps to the taskSteps field: ${aiSteps
                 .map((s, idx) => `${idx + 1}. ${s}`)
                 .join("; ")}`
-            : "Zapisz wygenerowane kroki?"
+            : "Save generated steps?"
         }
       />
     </Modal>

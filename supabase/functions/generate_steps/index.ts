@@ -106,17 +106,17 @@ serve(async (req) => {
     const safeDescription =
       typeof description === "string" ? description.trim() : "";
 
-    const prompt = `Wygeneruj maksymalnie 5 kroków działania na podstawie tytułu i opisu zadania.
+    const prompt = `Generate up to 5 action steps based on the task title and description.
 
-Zasady:
-- Odpowiedź ma być w formie JSON.
-- Zwróć wyłącznie obiekt w formacie: { "steps": ["...", "..."] }.
-- Każdy krok ma być krótkim poleceniem (czasownik w trybie rozkazującym) po polsku.
-- Liczba kroków: 1 do 5.
-- Nie dodawaj żadnego dodatkowego tekstu.
+Rules:
+- The response must be JSON.
+- Return only an object in this format: { "steps": ["...", "..."] }.
+- Each step must be a short imperative instruction in English.
+- Number of steps: 1 to 5.
+- Do not add any extra text.
 
-Tytuł: ${safeTitle}
-Opis: ${safeDescription}
+Title: ${safeTitle}
+Description: ${safeDescription}
 `;
 
     // `gemini-1.5-flash` can be removed/changed over time; use an alias that stays valid.

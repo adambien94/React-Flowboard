@@ -1,4 +1,3 @@
-/* Subtle scrollbar styling across the app (WebKit + Firefox). */
 * {
   scrollbar-width: thin;
   scrollbar-color: rgba(37, 42, 58, 0.95) transparent;

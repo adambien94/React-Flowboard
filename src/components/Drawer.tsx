@@ -42,7 +42,7 @@ export default function Drawer({ show, onHide }: DrawerProps) {
       keyboard={false}
     >
       <Offcanvas.Header className="border-bottom">
-        <Offcanvas.Title className="fw-semibold" style={{ fontSize: 15 }}>
+        <Offcanvas.Title className="fw-semibold fb-brand-title">
           <i className="bi bi-kanban me-2"></i>
           Flowboard
         </Offcanvas.Title>
@@ -71,20 +71,9 @@ export default function Drawer({ show, onHide }: DrawerProps) {
                 onClick={() => handleBoardSelect(board.id)}
               >
                 <div className="d-flex align-items-center gap-2">
-                  <span
-                    style={{ width: 16, textAlign: "center", fontSize: 14 }}
-                  >
-                    ◈
-                  </span>
+                  <span className="fb-nav-icon">◈</span>
                   <span className="flex-grow-1">{board.title}</span>
-                  <Badge
-                    className="custom-badge-color"
-                    pill
-                    style={{
-                      fontFamily:
-                        '"DM Mono", ui-monospace, SFMono-Regular, Menlo, monospace',
-                    }}
-                  >
+                  <Badge className="custom-badge-color fb-board-count-badge" pill>
                     12
                   </Badge>
                 </div>
@@ -95,46 +84,32 @@ export default function Drawer({ show, onHide }: DrawerProps) {
           <div className="fb-section-label">Navigation</div>
           <ListGroup variant="flush">
             <ListGroup.Item action className="fb-nav-item">
-              <span style={{ width: 16, textAlign: "center", fontSize: 14 }}>
-                ⊞
-              </span>
+              <span className="fb-nav-icon">⊞</span>
               <span className="ms-2">Dashboard</span>
             </ListGroup.Item>
             <ListGroup.Item action className="fb-nav-item">
-              <span style={{ width: 16, textAlign: "center", fontSize: 14 }}>
-                ☆
-              </span>
+              <span className="fb-nav-icon">☆</span>
               <span className="ms-2">Starred</span>
             </ListGroup.Item>
             <ListGroup.Item action className="fb-nav-item">
-              <span style={{ width: 16, textAlign: "center", fontSize: 14 }}>
-                ◯
-              </span>
+              <span className="fb-nav-icon">◯</span>
               <span className="ms-2">Personal</span>
             </ListGroup.Item>
             <ListGroup.Item action className="fb-nav-item">
-              <span style={{ width: 16, textAlign: "center", fontSize: 14 }}>
-                ◻
-              </span>
+              <span className="fb-nav-icon">◻</span>
               <span className="ms-2">Work</span>
             </ListGroup.Item>
           </ListGroup>
         </div>
 
-        <div
-          className="mt-auto px-2 py-2"
-          style={{ borderTop: "1px solid var(--fb-border)" }}
-        >
+        <div className="mt-auto px-2 py-2 fb-sidebar-footer">
           <ListGroup variant="flush">
             <ListGroup.Item
               action
-              className="fb-nav-item"
+              className="fb-nav-item fb-logout-item"
               onClick={logout}
-              style={{ color: "var( --fb-text-muted)" }}
             >
-              <span style={{ width: 16, textAlign: "center", fontSize: 14 }}>
-                ↪
-              </span>
+              <span className="fb-nav-icon">↪</span>
               <span className="ms-2">Logout</span>
             </ListGroup.Item>
           </ListGroup>

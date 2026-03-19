@@ -60,7 +60,7 @@ describe("TaskModal", () => {
       title: "Test card",
       description: "Test description",
       priority: "low",
-      taskSteps: ["Zrób coś", "Zrób kolejny krok"],
+      taskSteps: ["Do something", "Do the next step"],
     };
 
     mockedUseBoardStore.mockReturnValue({
@@ -71,7 +71,7 @@ describe("TaskModal", () => {
 
     render(<TaskModal show={true} onHide={jest.fn()} />);
 
-    expect(screen.getByText("Kroki działania (AI)")).toBeInTheDocument();
+    expect(screen.getByText("Action steps (AI)")).toBeInTheDocument();
     expect(screen.getByText(cardDetails.taskSteps[0])).toBeInTheDocument();
     expect(screen.getByText(cardDetails.taskSteps[1])).toBeInTheDocument();
   });

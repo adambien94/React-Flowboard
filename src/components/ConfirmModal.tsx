@@ -51,15 +51,7 @@ const ConfirmModal = ({
       </div>
 
       <div className="fb-modal-body">
-        <div
-          style={{
-            fontSize: 14,
-            color: "var(--fb-text-muted)",
-            lineHeight: 1.5,
-          }}
-        >
-          {message}
-        </div>
+        <div className="fb-confirm-message">{message}</div>
       </div>
 
       <div className="fb-modal-footer">
@@ -68,9 +60,8 @@ const ConfirmModal = ({
         </button>
         <button
           type="button"
-          className={confirmBtnClass}
+          className={`${confirmBtnClass} fb-btn-ml-auto`}
           onClick={onConfirm}
-          style={{ marginLeft: "auto" }}
         >
           {confirmBtnText}
         </button>

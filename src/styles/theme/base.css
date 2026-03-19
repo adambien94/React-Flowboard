@@ -8,8 +8,6 @@ body {
     Segoe UI,
     Roboto,
     sans-serif;
-  /* max-height: 100vh; */
-  /* overflow: hidden; */
 }
 
 .app-surface {
@@ -18,10 +16,6 @@ body {
 
 .container-fluid {
   padding: 0;
-}
-
-.btn {
-  /* align-items: center; */
 }
 
 .card {

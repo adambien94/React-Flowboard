@@ -1,4 +1,3 @@
-/* Flowboard redesign component helpers */
 .fb-topbar {
   background: var(--fb-bg) !important;
   border-bottom: 1px solid var(--fb-border) !important;
@@ -76,4 +75,26 @@
 
 .fb-primary-btn.btn:hover {
   background: var(--fb-accent-2);
+}
+
+.fb-brand-title {
+  font-size: 15px;
+}
+
+.fb-nav-icon {
+  width: 16px;
+  text-align: center;
+  font-size: 14px;
+}
+
+.fb-board-count-badge {
+  font-family: "DM Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+}
+
+.fb-sidebar-footer {
+  border-top: 1px solid var(--fb-border);
+}
+
+.fb-logout-item {
+  color: var(--fb-text-muted);
 }

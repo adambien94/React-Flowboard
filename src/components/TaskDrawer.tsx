@@ -182,30 +182,19 @@ export default function Drawer({
           <span className="fb-drawer-arrow">
             {activeCardId ? "Edit card" : "Add card"}
           </span>
-          <span style={{ color: "var( --fb-text-muted)", fontSize: 14 }}>
-            →
-          </span>
+          <span className="fb-drawer-muted-arrow">→</span>
           <span className="fb-drawer-col-pill">{colName || "Column"}</span>
           <button
             type="button"
-            className="fb-modal-close"
+            className="fb-modal-close fb-drawer-close-btn"
             onClick={onCloseTaskDrawer}
             aria-label="Close"
-            style={{ marginLeft: "auto" }}
           >
             ✕
           </button>
         </div>
 
-        <form
-          onSubmit={handleSubmit}
-          style={{
-            display: "flex",
-            flexDirection: "column",
-            height: "100%",
-            minHeight: 0,
-          }}
-        >
+        <form onSubmit={handleSubmit} className="fb-drawer-form">
           <div className="fb-drawer-body">
             <div className="fb-field">
               <div>
@@ -281,7 +270,7 @@ export default function Drawer({
               <div>
                 <div className="fb-section-divider">
                   <i className="bi bi-clock me-2"></i>
-                  <span style={{ marginBottom: 12 }}>Time tracked</span>
+                  <span className="fb-tracked-time-label">Time tracked</span>
                 </div>
 
                 <div className="fb-timer-row">
