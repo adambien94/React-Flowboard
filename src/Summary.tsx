@@ -45,6 +45,19 @@ const summaryRowStyles: React.CSSProperties = {
   fontWeight: 600,
 };
 
+const priorityClass = (priority?: string) => {
+  switch (priority) {
+    case "high":
+      return "fb-priority fb-priority-high";
+    case "medium":
+      return "fb-priority fb-priority-medium";
+    case "low":
+      return "fb-priority fb-priority-low";
+    default:
+      return "fb-priority fb-priority-none";
+  }
+};
+
 export default function Summary() {
   const { boardId } = useParams();
   const loadBoard = useBoardStore((state) => state.loadBoard);
@@ -99,33 +112,7 @@ export default function Summary() {
   }
 
   return (
-    <Container fluid>
-      {/* <div className="d-flex justify-content-between align-items-center mb-3">
-        <h2
-          className="mb-0"
-          style={{
-            color: "var(--text-primary)",
-            fontWeight: 600,
-            fontSize: "24px",
-          }}
-        >
-          {boardTitle || "Board"}
-          <i className="bi bi-arrow-right mx-3"></i>
-          Summary
-        </h2>
-        <Button
-          variant="outline-secondary"
-          onClick={() => navigate(boardId ? `/${boardId}` : "/")}
-          style={{
-            borderColor: "rgba(255, 255, 255, 0.2)",
-            color: "var(--text-primary)",
-          }}
-        >
-          <i className="bi bi-arrow-left me-2"></i>
-          Back to Board
-        </Button>
-      </div> */}
-
+    <Container fluid className="p-3">
       <div className="mb-3">
         <DashboardTopBar openAddColumnModal={() => {}} />
       </div>
@@ -148,7 +135,6 @@ export default function Summary() {
         <div
           className="card"
           style={{
-            padding: 0,
             background: "transparent",
             backdropFilter: "blur(43px)",
             border: "1px solid rgba(255, 255, 255, 0.1)",
@@ -206,23 +192,9 @@ export default function Summary() {
                       {card.title}
                     </td>
                     <td style={{ ...cellStyles, textAlign: "center" }}>
-                      {card.priority ? (
-                        // <Badge
-                        //   bg={PRIORITIES[card.priority]?.variant || "secondary"}
-                        //   style={{
-                        //     fontSize: "12px",
-                        //     padding: "4px 10px",
-                        //     borderRadius: "6px",
-                        //   }}
-                        // >
-                        //   {" "}
-                        // </Badge>
-                        <span style={{ color: "var(--text-muted)" }}>
-                          {card.priority.toUpperCase()}
-                        </span>
-                      ) : (
-                        <span style={{ color: "var(--text-muted)" }}>-</span>
-                      )}
+                      <span className={priorityClass(card.priority)}>
+                        {card.priority ? card.priority : "Backlog"}
+                      </span>
                     </td>
                     <td style={{ ...cellStyles, color: "var(--text-muted)" }}>
                       {formatDate(card.created_at)}

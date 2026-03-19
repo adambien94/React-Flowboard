@@ -98,8 +98,7 @@
 .fb-timer-val {
   font-family: "DM Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
   font-size: 20px;
-  font-weight: 500;
-  color: var(--fb-text);
+  color: var(--fb-text-muted);
   letter-spacing: 1px;
 }
 

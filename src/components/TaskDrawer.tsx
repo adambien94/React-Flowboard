@@ -155,13 +155,6 @@ export default function Drawer({
     }
   };
 
-  const timerValue = (() => {
-    const raw = cardDetails?.logged_time ?? 0;
-    const hhmmss = formatTime(raw);
-    // show mm:ss when hours are 00, else show hh:mm:ss
-    return hhmmss.startsWith("00:") ? hhmmss.slice(3) : hhmmss;
-  })();
-
   const handleMoveColumnSelect = (toColumnId: string) => {
     if (!toColumnId) return;
     setSelectedColumnId(toColumnId);
@@ -275,8 +268,10 @@ export default function Drawer({
 
                 <div className="fb-timer-row">
                   <div>
-                    <div className="fb-timer-val">{timerValue}</div>
-                    <div className="fb-timer-label">minutes logged</div>
+                    <div className="fb-timer-val">
+                      {formatTime(cardDetails?.logged_time ?? 0, true)}
+                    </div>
+                    <div className="fb-timer-label">logged</div>
                   </div>
                 </div>
               </div>

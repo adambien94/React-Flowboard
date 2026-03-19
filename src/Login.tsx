@@ -52,7 +52,7 @@ export default function Login() {
               <div className="fb-modal-icon me-2">
                 <i className="bi bi-person"></i>
               </div>
-              {isRegister ? "Create account" : "Log in to Flowboard"}
+              {isRegister ? "Create account" : "Log In"}
             </span>
           </div>
 

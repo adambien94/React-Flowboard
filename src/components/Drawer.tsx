@@ -73,7 +73,10 @@ export default function Drawer({ show, onHide }: DrawerProps) {
                 <div className="d-flex align-items-center gap-2">
                   <span className="fb-nav-icon">◈</span>
                   <span className="flex-grow-1">{board.title}</span>
-                  <Badge className="custom-badge-color fb-board-count-badge" pill>
+                  <Badge
+                    className="custom-badge-color fb-board-count-badge"
+                    pill
+                  >
                     12
                   </Badge>
                 </div>
@@ -83,19 +86,19 @@ export default function Drawer({ show, onHide }: DrawerProps) {
 
           <div className="fb-section-label">Navigation</div>
           <ListGroup variant="flush">
-            <ListGroup.Item action className="fb-nav-item">
+            <ListGroup.Item action className="fb-nav-item" disabled>
               <span className="fb-nav-icon">⊞</span>
               <span className="ms-2">Dashboard</span>
             </ListGroup.Item>
-            <ListGroup.Item action className="fb-nav-item">
+            <ListGroup.Item action className="fb-nav-item" disabled>
               <span className="fb-nav-icon">☆</span>
               <span className="ms-2">Starred</span>
             </ListGroup.Item>
-            <ListGroup.Item action className="fb-nav-item">
+            <ListGroup.Item action className="fb-nav-item" disabled>
               <span className="fb-nav-icon">◯</span>
               <span className="ms-2">Personal</span>
             </ListGroup.Item>
-            <ListGroup.Item action className="fb-nav-item">
+            <ListGroup.Item action className="fb-nav-item" disabled>
               <span className="fb-nav-icon">◻</span>
               <span className="ms-2">Work</span>
             </ListGroup.Item>

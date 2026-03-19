@@ -44,6 +44,10 @@
   margin-left: -6px;
 }
 
+.fb-view-switch.btn-group .btn {
+  min-width: 106px;
+}
+
 .btn-link,
 .fb-nav-item.list-group-item {
   background: transparent;

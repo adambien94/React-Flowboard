@@ -80,7 +80,7 @@ describe("TaskDrawer", () => {
     fireEvent.change(screen.getByPlaceholderText("Add a description"), {
       target: { value: "Desc" },
     });
-    fireEvent.change(screen.getByDisplayValue("Priority"), {
+    fireEvent.change(screen.getByRole("combobox"), {
       target: { value: "low" },
     });
 

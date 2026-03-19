@@ -1,4 +1,11 @@
-import { Navbar as BSNavbar, Nav, Button, Container } from "react-bootstrap";
+import {
+  Navbar as BSNavbar,
+  Nav,
+  Button,
+  Container,
+  ButtonGroup,
+} from "react-bootstrap";
+import { useNavigate, useLocation, useParams } from "react-router-dom";
 
 type NavbarProps = {
   onToggleDrawer?: () => void;
@@ -9,6 +16,26 @@ export default function Navbar({
   onToggleDrawer,
   isControlsHidden = false,
 }: NavbarProps) {
+  const { boardId } = useParams();
+  const navigate = useNavigate();
+  const location = useLocation();
+  const isTableMode = location.pathname.startsWith("/summary/");
+
+  const handleModeSwitch = (mode: "kanban" | "table") => {
+    if (mode === "table") {
+      if (!boardId || isTableMode) return;
+      navigate(`/summary/${boardId}`);
+      return;
+    }
+
+    if (isTableMode && boardId) {
+      navigate(`/${boardId}`);
+      return;
+    }
+
+    navigate("/");
+  };
+
   return (
     <BSNavbar variant="dark" expand="lg" className="fb-topbar">
       <Container fluid className="px-2">
@@ -24,6 +51,35 @@ export default function Navbar({
         {!isControlsHidden && (
           <BSNavbar.Collapse id="basic-navbar-nav">
             <Nav className="ms-auto">
+              <ButtonGroup
+                size="sm"
+                className="mx-4 fb-view-switch"
+                aria-label="Board view mode switch"
+              >
+                <Button
+                  variant=""
+                  className={
+                    isTableMode
+                      ? "btn btn-outline-secondary btn-sm"
+                      : "fb-primary-btn btn btn-primary btn-sm"
+                  }
+                  onClick={() => handleModeSwitch("kanban")}
+                >
+                  Kanban mode
+                </Button>
+                <Button
+                  variant=""
+                  className={
+                    isTableMode
+                      ? "fb-primary-btn btn btn-primary btn-sm"
+                      : "btn btn-outline-secondary btn-sm"
+                  }
+                  onClick={() => handleModeSwitch("table")}
+                  disabled={!boardId}
+                >
+                  Table mode
+                </Button>
+              </ButtonGroup>
               <div className="avatar-group d-flex">
                 <div className="avatar" style={{ background: "#6c63ff" }}>
                   AB
