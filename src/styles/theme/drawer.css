@@ -1,0 +1,112 @@
+.fb-task-drawer.offcanvas.offcanvas-end {
+  width: 490px !important;
+  min-width: 490px;
+  background: var(--fb-bg2);
+  border-left: 1px solid var(--fb-border-strong);
+}
+
+.fb-drawer-header {
+  display: flex;
+  align-items: center;
+  padding: 14px 12px;
+  border-bottom: 1px solid var(--fb-border);
+  gap: 8px;
+}
+
+.fb-drawer-arrow {
+  color: var(--fb-text-faint);
+  font-size: 14px;
+}
+
+.fb-drawer-col-pill {
+  font-size: 12px;
+  font-weight: 500;
+  padding: 3px 9px;
+  border-radius: 20px;
+  background: rgba(77, 166, 255, 0.12);
+  color: var(--fb-blue);
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.fb-drawer-col-pill::before {
+  content: "";
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--fb-blue);
+}
+
+.fb-drawer-body {
+  flex: 1;
+  overflow-y: auto;
+  padding: 16px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.fb-drawer-footer {
+  padding: 14px 12px;
+  border-top: 1px solid var(--fb-border);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.fb-section-divider {
+  font-size: 10px;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  color: var(--fb-text-faint);
+  padding-bottom: 4px;
+  border-bottom: 1px solid var(--fb-border);
+}
+
+.fb-timer-row {
+  display: flex;
+  align-items: center;
+  background: var(--fb-bg3);
+  border: 1px solid var(--fb-border);
+  border-radius: var(--radius-sm);
+  padding: 10px 14px;
+  gap: 10px;
+}
+
+.fb-timer-val {
+  font-family: "DM Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 20px;
+  font-weight: 500;
+  color: var(--fb-text);
+  letter-spacing: 1px;
+}
+
+.fb-timer-label {
+  font-size: 12px;
+  color: var(--fb-text-faint);
+  margin-top: 1px;
+}
+
+.fb-timer-btn {
+  margin-left: auto;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: 1px solid var(--fb-border-strong);
+  background: var(--fb-bg4);
+  color: var(--fb-text-muted);
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  transition: all 0.15s;
+}
+
+.fb-timer-btn:hover {
+  background: var(--fb-accent);
+  border-color: var(--fb-accent);
+  color: white;
+}

@@ -1,0 +1,40 @@
+/* Subtle scrollbar styling across the app (WebKit + Firefox). */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(37, 42, 58, 0.95) transparent;
+}
+
+*::-webkit-scrollbar {
+  width: 4px;
+  height: 4px;
+}
+
+*::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+*::-webkit-scrollbar-thumb {
+  background: var(--fb-bg4);
+  border-radius: 999px;
+}
+
+*::-webkit-scrollbar-thumb:hover {
+  background: rgba(37, 42, 58, 1);
+}
+
+*::-webkit-scrollbar-corner {
+  background: transparent;
+}
+
+.fb-drawer-body::-webkit-scrollbar {
+  width: 4px;
+}
+
+.fb-drawer-body::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.fb-drawer-body::-webkit-scrollbar-thumb {
+  background: var(--fb-bg4);
+  border-radius: 4px;
+}

@@ -1,0 +1,92 @@
+body {
+  background: var(--surface-bg);
+  color: var(--text-primary);
+  font-family:
+    "DM Sans",
+    system-ui,
+    -apple-system,
+    Segoe UI,
+    Roboto,
+    sans-serif;
+  /* max-height: 100vh; */
+  /* overflow: hidden; */
+}
+
+.app-surface {
+  background: var(--surface-bg);
+}
+
+.container-fluid {
+  padding: 0;
+}
+
+.btn {
+  /* align-items: center; */
+}
+
+.card {
+  background-color: var(--panel-elevated-bg);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  color: var(--text-primary);
+}
+
+.dropdown-item.active,
+.list-group-item.active {
+  background-color: rgba(255, 255, 255, 0.06);
+}
+
+.list-group-item:hover {
+  background-color: rgba(255, 255, 255, 0.06) !important;
+}
+
+.border-top,
+.border-bottom {
+  border-color: var(--border-color) !important;
+}
+
+.btn {
+  border-radius: var(--radius-md);
+}
+.btn-outline-secondary,
+.btn-outline-light {
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border-color);
+  color: var(--text-muted);
+  transition: all 0.2s ease;
+}
+
+.btn-action {
+  border: none;
+  color: var(--text-muted);
+}
+
+.btn-action:hover {
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.btn-outline-secondary:hover,
+.btn-outline-light:hover {
+  background: var(--fb-bg3);
+  border-color: var(--fb-border-strong);
+  color: var(--text-primary);
+}
+
+.btn[disabled] {
+  transition: 0.2s all;
+}
+
+.board-column-empty {
+  color: var(--text-muted);
+}
+
+.custom-badge-color {
+  background-color: var(--fb-bg4) !important;
+  color: var(--fb-text-faint) !important;
+  border: 1px solid var(--fb-border);
+}
+
+.modal-backdrop.show,
+.offcanvas-backdrop.show {
+  opacity: 0.3;
+}

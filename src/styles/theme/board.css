@@ -1,0 +1,132 @@
+.fb-task-card.card:hover {
+  background: var(--fb-bg4);
+  border-color: var(--fb-border-strong);
+}
+
+.fb-priority {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 10px;
+  font-weight: 500;
+  padding: 2px 7px;
+  border-radius: 4px;
+  margin-bottom: 8px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  font-family:
+    "DM Sans",
+    system-ui,
+    -apple-system,
+    Segoe UI,
+    Roboto,
+    sans-serif;
+}
+
+.fb-priority-high {
+  background: rgba(255, 92, 92, 0.12);
+  color: var(--fb-red);
+}
+.fb-priority-medium {
+  background: rgba(245, 166, 35, 0.12);
+  color: var(--fb-amber);
+}
+.fb-priority-low {
+  background: rgba(62, 207, 142, 0.12);
+  color: var(--fb-green);
+}
+.fb-priority-none {
+  background: rgba(139, 145, 168, 0.1);
+  color: var(--fb-text-faint);
+}
+
+/* Board layout (redesign) */
+.fb-board {
+  display: flex;
+  gap: 16px;
+  align-items: flex-start;
+  overflow-x: auto;
+  padding: 20px 16px;
+  min-height: calc(100vh - 58px);
+  /* overflow-x: scroll; */
+}
+
+.fb-column {
+  min-width: 272px;
+  width: 272px;
+  display: flex;
+  flex-direction: column;
+}
+
+.fb-col-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0 4px 12px;
+  color: var(--fb-text);
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.fb-col-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.fb-col-count {
+  font-size: 12px;
+  font-weight: 500;
+  font-family: "DM Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+  background: var(--fb-bg3);
+  color: var(--fb-text-faint);
+  padding: 2px 6px 3px 6px;
+  border-radius: 6px;
+  border: 1px solid var(--fb-border);
+}
+
+.fb-col-handle {
+  margin-left: auto;
+  color: var(--fb-text-faint);
+  cursor: grab;
+  padding: 2px;
+  line-height: 1;
+}
+
+.fb-cards-wrapper {
+  background: var(--fb-bg2);
+  border: 1px solid var(--fb-border);
+  border-radius: 12px;
+  padding: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  max-height: calc(100vh - 200px);
+  overflow: hidden;
+}
+
+.fb-add-col-btn {
+  min-width: 44px;
+  width: 44px;
+  height: 44px;
+  background: var(--fb-bg2);
+  border: 1px dashed var(--fb-border-strong);
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--fb-text-faint);
+  cursor: pointer;
+  font-size: 20px;
+  font-weight: 300;
+  transition: all 0.15s;
+  align-self: flex-start;
+  margin-top: 36px;
+}
+
+.fb-add-col-btn:hover {
+  border-color: var(--fb-accent);
+  color: var(--fb-accent);
+  background: rgba(108, 99, 255, 0.08);
+}

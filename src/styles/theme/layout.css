@@ -1,0 +1,79 @@
+/* Flowboard redesign component helpers */
+.fb-topbar {
+  background: var(--fb-bg) !important;
+  border-bottom: 1px solid var(--fb-border) !important;
+  height: 56px;
+}
+
+.fb-sidebar.offcanvas-start {
+  width: 220px;
+  min-width: 220px;
+  background: var(--fb-bg);
+  border-right: 1px solid var(--fb-border);
+  border-radius: 0;
+}
+
+.fb-sidebar .offcanvas-header {
+  background: var(--fb-bg);
+  border-bottom: 1px solid var(--fb-border);
+  height: 56px;
+  padding-left: 12px;
+  padding-right: 12px;
+}
+
+.fb-section-label {
+  font-size: 10px;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--fb-text-faint);
+  padding: 0 8px;
+  margin: 14px 0 6px;
+}
+
+.avatar {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  border: 2px solid var(--fb-bg2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 10px;
+  font-weight: 600;
+  color: white;
+  margin-left: -6px;
+}
+
+.btn-link,
+.fb-nav-item.list-group-item {
+  background: transparent;
+  border: none;
+  border-radius: var(--radius-sm);
+  padding: 8px 10px;
+  font-size: 14px;
+  color: var(--fb-text-muted);
+  transition: all 0.15s;
+}
+.btn-link:hover,
+.fb-nav-item.list-group-item:hover {
+  background: var(--fb-bg3) !important;
+  color: var(--fb-text) !important;
+}
+
+.fb-nav-item.list-group-item.active {
+  background: var(--fb-bg4) !important;
+  color: var(--fb-text) !important;
+}
+
+.fb-primary-btn.btn {
+  background: var(--fb-accent);
+  border: none;
+  border-radius: var(--radius-sm);
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.fb-primary-btn.btn:hover {
+  background: var(--fb-accent-2);
+}
