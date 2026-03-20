@@ -6,12 +6,6 @@ import formatTime from "./utils/formatTime";
 import type { Card } from "./types/index";
 import BoardLoader from "./components/dashboard/BoardLoader";
 
-// const PRIORITIES: Record<string, { label: string; variant: string }> = {
-//   low: { label: "Low", variant: "info" },
-//   medium: { label: "Medium", variant: "warning" },
-//   high: { label: "High", variant: "danger" },
-// };
-
 const tableStyles: React.CSSProperties = {
   width: "100%",
   borderCollapse: "separate",
@@ -41,6 +35,7 @@ const cellStyles: React.CSSProperties = {
 
 const rowStyles: React.CSSProperties = {
   transition: "background 0.2s ease",
+  background: "var(--fb-bg2)",
 };
 
 const summaryRowStyles: React.CSSProperties = {
@@ -188,9 +183,15 @@ export default function Summary() {
                                     : "var(--fb-bg2)",
                               }}
                             >
-                              <td style={{ ...cellStyles }}>{card.title}</td>
+                              <td style={{ ...cellStyles, width: "45%" }}>
+                                {card.title}
+                              </td>
                               <td
-                                style={{ ...cellStyles, textAlign: "center" }}
+                                style={{
+                                  ...cellStyles,
+                                  textAlign: "center",
+                                  width: "20%",
+                                }}
                               >
                                 <span className={priorityClass(card.priority)}>
                                   {card.priority ? card.priority : "Backlog"}
@@ -201,6 +202,7 @@ export default function Summary() {
                                   ...cellStyles,
                                   color: "var(--text-muted)",
                                   fontSize: "12px",
+                                  width: "20%",
                                 }}
                               >
                                 {formatDate(card.created_at)}
@@ -244,6 +246,7 @@ export default function Summary() {
                               textAlign: "right",
                               fontSize: "14px",
                               fontFamily: "DM Mono",
+                              fontWeight: 100,
                             }}
                           >
                             {formatTotalLoggedTime(totalLoggedTimeForColumn)}
