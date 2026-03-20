@@ -15,6 +15,7 @@ import BoardLoader from "./components/dashboard/BoardLoader";
 import { useTaskModalStore } from "./store/taskModalStore";
 import { syncTaskModalWithUrl } from "./store/taskModalStore";
 import { syncTaskDrawerWithUrl } from "./store/taskDrawerStore";
+import { useBoardsContext } from "./contexts/BoardsContext";
 
 export default function Dashboard() {
   const [addColumnModalShow, setAddColumnModalShow] = useState(false);
@@ -23,7 +24,7 @@ export default function Dashboard() {
   const isTaskModalOpen = useTaskModalStore((state) => state.isTaskModalOpen);
   const closeTaskModal = useTaskModalStore((state) => state.closeTaskModal);
   const activeBoardId = boardId || "";
-  const boards = useBoardStore((state) => state.boards);
+  const { boards, loading: boardsListLoading } = useBoardsContext();
   const loadBoard = useBoardStore((state) => state.loadBoard);
   const addColumn = useBoardStore((state) => state.addColumn);
   const updateCard = useBoardStore((state) => state.updateCard);
@@ -34,6 +35,7 @@ export default function Dashboard() {
     (state) => state.unsubscribeRealtime,
   );
   const loading = useBoardStore((state) => state.loading);
+  const isHomeRoute = !activeBoardId;
 
   useEffect(() => {
     if (!activeBoardId) {
@@ -77,7 +79,7 @@ export default function Dashboard() {
 
   return (
     <>
-      {loading ? (
+      {loading || (isHomeRoute && boardsListLoading) ? (
         <BoardLoader />
       ) : (
         <>
@@ -88,12 +90,12 @@ export default function Dashboard() {
           />
 
           <Container fluid>
-            {boards.length ? (
-              <>
-                <DashboardColumns
-                  onAddColumn={() => setAddColumnModalShow(true)}
-                />
-              </>
+            {activeBoardId ? (
+              <DashboardColumns onAddColumn={() => setAddColumnModalShow(true)} />
+            ) : boards.length ? (
+              // We're on "/" and just received boards; redirect happens in an effect.
+              // Avoid flashing the init header and avoid rendering an empty board UI.
+              <BoardLoader />
             ) : (
               <DashboardInitHeader />
             )}

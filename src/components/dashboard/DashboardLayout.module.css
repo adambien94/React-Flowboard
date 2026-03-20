@@ -8,6 +8,10 @@
     transparent 2px
   );
   background-size: 25px 25px;
+
+  /* Ensure the dotted background fills the full viewport,
+     even on shorter pages like Summary. */
+  min-height: calc(100vh - 56px);
 }
 
 .drawerOpen {
@@ -16,6 +20,6 @@
 
 [data-bs-theme="light"] {
   .mainContent {
-    background-image: radial-gradient(rgba(0, 0, 0, 0.07) 1px, transparent 2px);
+    background-image: radial-gradient(rgba(0, 0, 0, 0.09) 1px, transparent 2px);
   }
 }

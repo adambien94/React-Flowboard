@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import { Modal, Spinner } from "react-bootstrap";
 import { useTaskModalStore } from "../store/taskModalStore";
 import { useBoardStore } from "../hooks/useBoardStore";
-import ConfirmModal from "./ConfirmModal";
 import { supabase } from "../api/supabaseClient";
 import formatTime from "../utils/formatTime";
 
@@ -19,7 +18,6 @@ export default function TaskModal({ show, onHide }: TaskModalProps) {
   const [isGeneratingAi, setIsGeneratingAi] = useState(false);
   const [aiSteps, setAiSteps] = useState<string[] | null>(null);
   const [aiError, setAiError] = useState<string | null>(null);
-  const [confirmAiShow, setConfirmAiShow] = useState(false);
 
   useEffect(() => {
     if (activeCardId) fetchCardDetails(activeCardId);
@@ -38,7 +36,6 @@ export default function TaskModal({ show, onHide }: TaskModalProps) {
   useEffect(() => {
     setAiSteps(null);
     setAiError(null);
-    setConfirmAiShow(false);
     setIsGeneratingAi(false);
   }, [activeCardId, show]);
 
@@ -83,7 +80,6 @@ export default function TaskModal({ show, onHide }: TaskModalProps) {
       }
 
       setAiSteps(cleaned);
-      setConfirmAiShow(true);
     } catch (err) {
       console.error(err);
       const msg = err instanceof Error ? err.message : "Unknown error occurred";
@@ -104,7 +100,11 @@ export default function TaskModal({ show, onHide }: TaskModalProps) {
     }
 
     setAiSteps(null);
-    setConfirmAiShow(false);
+  };
+
+  const handleRejectAi = () => {
+    setAiSteps(null);
+    setAiError(null);
   };
 
   const stepsToRender =
@@ -192,13 +192,31 @@ export default function TaskModal({ show, onHide }: TaskModalProps) {
                     </li>
                   ))}
                 </ol>
+                {aiSteps?.length ? (
+                  <div className="fb-ai-steps-actions">
+                    <button
+                      type="button"
+                      className="fb-btn fb-btn-ghost"
+                      onClick={handleRejectAi}
+                    >
+                      Reject
+                    </button>
+                    <button
+                      type="button"
+                      className="fb-btn fb-btn-primary"
+                      onClick={handleConfirmSaveAi}
+                    >
+                      Accept
+                    </button>
+                  </div>
+                ) : null}
               </div>
             )}
 
             <div className="d-flex justify-content-between fb-task-meta-row">
-              <div className="col">
-                <div className="fb-field-label">
-                  <span>Priority</span>
+              <div className="col ">
+                <div className="fb-field-label mt-1">
+                  <span className="fb-field-label">Priority</span>
                 </div>
 
                 <div className="fb-priority fb-priority-none mt-2 fb-priority-badge-inline">
@@ -243,25 +261,6 @@ export default function TaskModal({ show, onHide }: TaskModalProps) {
         </button>
       </div>
 
-      <ConfirmModal
-        show={confirmAiShow}
-        onHide={() => {
-          setConfirmAiShow(false);
-          setAiSteps(null);
-          setAiError(null);
-        }}
-        onConfirm={handleConfirmSaveAi}
-        title="Save AI-generated steps?"
-        btnVariant="primary"
-        confirmBtnText="Save"
-        message={
-          aiSteps && aiSteps.length
-            ? `Save the following steps to the taskSteps field: ${aiSteps
-                .map((s, idx) => `${idx + 1}. ${s}`)
-                .join("; ")}`
-            : "Save generated steps?"
-        }
-      />
     </Modal>
   );
 }

@@ -132,6 +132,13 @@
   margin-bottom: 4px;
 }
 
+.fb-ai-steps-actions {
+  margin-top: 12px;
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+}
+
 .fb-task-meta-row {
   gap: 8px;
 }
@@ -286,8 +293,8 @@
   left: 12px;
   top: 50%;
   transform: translateY(-50%);
-  width: 7px;
-  height: 7px;
+  width: 8px;
+  height: 8px;
   border-radius: 50%;
   pointer-events: none;
 }

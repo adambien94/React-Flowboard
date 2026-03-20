@@ -1,6 +1,6 @@
 import { Dropdown, Button } from "react-bootstrap";
 import { useBoardStore } from "../../hooks/useBoardStore";
-import { useNavigate, useParams } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 
 type DashboardTopBarParams = {
   openAddColumnModal: () => void;
@@ -11,6 +11,8 @@ const DashboardTopBar = ({ openAddColumnModal }: DashboardTopBarParams) => {
 
   const { boardId } = useParams();
   const navigate = useNavigate();
+  const location = useLocation();
+  const isTableMode = location.pathname.startsWith("/summary/");
 
   return (
     <div className="d-flex align-items-center justify-content-between">
@@ -27,7 +29,9 @@ const DashboardTopBar = ({ openAddColumnModal }: DashboardTopBarParams) => {
                 active={board.id === boardId}
                 onClick={() => {
                   if (board.id === boardId) return;
-                  navigate(`/${board.id}`);
+                  navigate(
+                    isTableMode ? `/summary/${board.id}` : `/${board.id}`,
+                  );
                 }}
               >
                 {board.title}

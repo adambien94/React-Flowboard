@@ -53,12 +53,12 @@
 [data-bs-theme="light"] {
   color-scheme: light;
 
-  --fb-bg: #dddbe5;
-  --fb-bg2: #cac6d8;
-  --fb-bg3: #d9d6e4;
-  --fb-bg4: #b8b3cb;
-  --fb-border: rgba(20, 23, 32, 0.11);
-  --fb-border-strong: rgba(20, 23, 32, 0.17);
+  --fb-bg: #fff;
+  --fb-bg2: #e5e4eb;
+  --fb-bg3: #fcfbff;
+  --fb-bg4: #e6e6e6;
+  --fb-border: rgba(20, 23, 32, 0.16);
+  --fb-border-strong: rgba(20, 23, 32, 0.23);
   --fb-text: #12151e;
   --fb-text-muted: #4a4e5c;
   --fb-text-faint: #5a5e6e;

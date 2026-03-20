@@ -101,7 +101,7 @@ describe("TaskModal", () => {
     expect(setCardDetails).toHaveBeenCalledWith(null);
   });
 
-  it("generates steps and saves them after confirmation", async () => {
+  it("generates steps and saves them after clicking Accept", async () => {
     const user = userEvent.setup();
     mockedUseBoardStore.mockReturnValue({
       fetchCardDetails,
@@ -124,8 +124,8 @@ describe("TaskModal", () => {
       body: { title: cardDetails.title, description: cardDetails.description },
     });
 
-    expect(await screen.findByText(/save ai-generated steps\?/i)).toBeInTheDocument();
-    await user.click(screen.getByRole("button", { name: /^save$/i }));
+    expect(await screen.findByRole("button", { name: /accept/i })).toBeInTheDocument();
+    await user.click(screen.getByRole("button", { name: /accept/i }));
 
     await waitFor(() => {
       expect(updateCard).toHaveBeenCalledWith("card-1", {
@@ -186,7 +186,7 @@ describe("TaskModal", () => {
     ).toBeInTheDocument();
   });
 
-  it("shows thrown invocation errors and can close confirm modal", async () => {
+  it("shows thrown invocation errors and supports Reject", async () => {
     const user = userEvent.setup();
     mockedUseBoardStore.mockReturnValue({
       fetchCardDetails,
@@ -206,10 +206,10 @@ describe("TaskModal", () => {
     await user.click(
       screen.getByRole("button", { name: /generate ai steps/i }),
     );
-    expect(await screen.findByText(/save ai-generated steps\?/i)).toBeInTheDocument();
-    await user.click(screen.getByRole("button", { name: /cancel/i }));
+    expect(await screen.findByRole("button", { name: /reject/i })).toBeInTheDocument();
+    await user.click(screen.getByRole("button", { name: /reject/i }));
     await waitFor(() => {
-      expect(screen.queryByText(/save ai-generated steps\?/i)).not.toBeInTheDocument();
+      expect(screen.queryByRole("button", { name: /reject/i })).not.toBeInTheDocument();
     });
 
     await user.click(

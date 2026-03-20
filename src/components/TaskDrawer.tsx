@@ -282,7 +282,6 @@ export default function Drawer({
             <button type="submit" className="fb-btn fb-btn-primary">
               Save Card
             </button>
-            <div></div>
             <button
               type="button"
               className="fb-btn fb-btn-ghost"

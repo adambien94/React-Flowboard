@@ -72,7 +72,7 @@ export default function Navbar({
                     }
                     onClick={() => handleModeSwitch("kanban")}
                   >
-                    <i className="bi bi-kanban"></i>
+                    <i className="bi bi-kanban me-1"></i>
                     Kanban Mode
                   </Button>
                   <Button
@@ -85,7 +85,7 @@ export default function Navbar({
                     onClick={() => handleModeSwitch("table")}
                     disabled={!boardId}
                   >
-                    <i className="bi bi-list"></i>
+                    <i className="bi bi-list me-1"></i>
                     Table Mode
                   </Button>
                 </ButtonGroup>

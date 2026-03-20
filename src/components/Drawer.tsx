@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Offcanvas, ListGroup, Button, Badge } from "react-bootstrap";
-import { useNavigate, useParams } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import AddBoardModal from "./AddBoardModal";
 import { useBoardStore } from "../hooks/useBoardStore";
 import { useAuth } from "../contexts/AuthContext";
@@ -13,6 +13,8 @@ type DrawerProps = {
 export default function Drawer({ show, onHide }: DrawerProps) {
   const navigate = useNavigate();
   const { boardId } = useParams();
+  const location = useLocation();
+  const isTableMode = location.pathname.startsWith("/summary/");
   const [showCreateBoardModal, setShowCreateBoardModal] = useState(false);
   const { boards, addBoard, boardTaskCounts, columns, loading } =
     useBoardStore();
@@ -27,7 +29,7 @@ export default function Drawer({ show, onHide }: DrawerProps) {
     if (targetBoardId === boardId) {
       return;
     }
-    navigate(`/${targetBoardId}`);
+    navigate(isTableMode ? `/summary/${targetBoardId}` : `/${targetBoardId}`);
   };
 
   const handleCreateBoard = async (title: string) => {

@@ -21,6 +21,7 @@ const tableStyles: React.CSSProperties = {
   backdropFilter: "blur(43px)",
   color: "var(--fb-text-muted)",
   background: "var(--fb-bg2)",
+  border: "1px solid var(--fb-border)",
 };
 
 const headerStyles: React.CSSProperties = {
@@ -75,12 +76,6 @@ export default function Summary() {
     return columns.flatMap((col) => col.cards || []);
   }, [columns]);
 
-  const totalLoggedTime = useMemo(() => {
-    return allCards.reduce((total, card) => {
-      return total + (card.logged_time || 0);
-    }, 0);
-  }, [allCards]);
-
   const formatDate = (dateString?: string) => {
     if (!dateString) return "N/A";
     return new Date(dateString).toLocaleDateString("en-US", {
@@ -122,108 +117,144 @@ export default function Summary() {
         </div>
       ) : (
         <div
-          className="card"
           style={{
             background: "transparent",
-            backdropFilter: "blur(43px)",
-            border: "1px solid rgba(255, 255, 255, 0.1)",
-            borderRadius: "18px",
             overflow: "hidden",
           }}
         >
-          <div style={{ overflowX: "auto" }}>
-            <table style={tableStyles}>
-              <thead>
-                <tr>
-                  <th style={{ ...headerStyles, textAlign: "left" }}>Title</th>
-                  <th style={{ ...headerStyles, textAlign: "center" }}>
-                    Priority
-                  </th>
-                  <th style={{ ...headerStyles, textAlign: "left" }}>
-                    <i className="bi bi-calendar me-2"></i>
-                    Created
-                  </th>
-                  <th style={{ ...headerStyles, textAlign: "right" }}>
-                    <i className="bi bi-clock me-2"></i>
-                    Logged Time
-                  </th>
-                </tr>
-              </thead>
-              <tbody>
-                {allCards.map((card: Card, index: number) => (
-                  <tr
-                    key={card.id}
-                    style={{
-                      ...rowStyles,
-                      background:
-                        index % 2 === 0 ? "transparent" : "var(--fb-bg2)",
-                    }}
-                  >
-                    <td
-                      style={{
-                        ...cellStyles,
-                      }}
-                    >
-                      {card.title}
-                    </td>
-                    <td style={{ ...cellStyles, textAlign: "center" }}>
-                      <span className={priorityClass(card.priority)}>
-                        {card.priority ? card.priority : "Backlog"}
-                      </span>
-                    </td>
-                    <td
-                      style={{
-                        ...cellStyles,
-                        color: "var(--text-muted)",
-                        fontSize: "12px",
-                      }}
-                    >
-                      {formatDate(card.created_at)}
-                    </td>
-                    <td
-                      style={{
-                        ...cellStyles,
-                        textAlign: "right",
-                        fontSize: "12px",
-                        fontFamily: "DM Mono",
-                      }}
-                    >
-                      {formatLoggedTime(card.logged_time)}
-                    </td>
-                  </tr>
-                ))}
-                <tr
-                  style={{
-                    ...summaryRowStyles,
-                    background:
-                      allCards.length % 2 === 0
-                        ? "transparent"
-                        : "rgba(255, 255, 255, 0.01)",
-                  }}
-                >
-                  <td
-                    colSpan={3}
-                    style={{
-                      ...cellStyles,
-                      textAlign: "left",
-                      fontSize: "14px",
-                    }}
-                  >
-                    {/* TOTAL LOGGED TIME: */}
-                  </td>
-                  <td
-                    style={{
-                      ...cellStyles,
-                      textAlign: "right",
-                      fontSize: "14px",
-                      fontFamily: "DM Mono",
-                    }}
-                  >
-                    {formatTotalLoggedTime(totalLoggedTime)}
-                  </td>
-                </tr>
-              </tbody>
-            </table>
+          <div style={{ display: "flex", flexDirection: "column", gap: 18 }}>
+            {columns.map((column) => {
+              const columnCards = column.cards;
+              const totalLoggedTimeForColumn = columnCards.reduce(
+                (total, card) => total + (card.logged_time || 0),
+                0,
+              );
+
+              return (
+                <div key={column.id} style={{ width: "100%" }}>
+                  <div className="fb-col-header" style={{ paddingBottom: 10 }}>
+                    <span
+                      className="fb-col-dot"
+                      style={{ background: `var(--bs-${column.color})` }}
+                    />
+                    <span className="flex-grow-1">{column.title}</span>
+                    <span className="fb-col-count">{columnCards.length}</span>
+                  </div>
+
+                  <div style={{ overflowX: "auto" }}>
+                    <table style={tableStyles}>
+                      <thead>
+                        <tr>
+                          <th style={{ ...headerStyles, textAlign: "left" }}>
+                            Title
+                          </th>
+                          <th style={{ ...headerStyles, textAlign: "center" }}>
+                            Priority
+                          </th>
+                          <th style={{ ...headerStyles, textAlign: "left" }}>
+                            <i className="bi bi-calendar me-2"></i>
+                            Created
+                          </th>
+                          <th style={{ ...headerStyles, textAlign: "right" }}>
+                            <i className="bi bi-clock me-2"></i>
+                            Logged Time
+                          </th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {columnCards.length === 0 ? (
+                          <tr>
+                            <td
+                              colSpan={4}
+                              style={{
+                                ...cellStyles,
+                                textAlign: "center",
+                                fontSize: 12,
+                                borderBottom: "1px solid var(--fb-border)",
+                              }}
+                            >
+                              List is empty.
+                            </td>
+                          </tr>
+                        ) : (
+                          columnCards.map((card: Card, index: number) => (
+                            <tr
+                              key={card.id}
+                              style={{
+                                ...rowStyles,
+                                background:
+                                  index % 2 === 0
+                                    ? "transparent"
+                                    : "var(--fb-bg2)",
+                              }}
+                            >
+                              <td style={{ ...cellStyles }}>{card.title}</td>
+                              <td
+                                style={{ ...cellStyles, textAlign: "center" }}
+                              >
+                                <span className={priorityClass(card.priority)}>
+                                  {card.priority ? card.priority : "Backlog"}
+                                </span>
+                              </td>
+                              <td
+                                style={{
+                                  ...cellStyles,
+                                  color: "var(--text-muted)",
+                                  fontSize: "12px",
+                                }}
+                              >
+                                {formatDate(card.created_at)}
+                              </td>
+                              <td
+                                style={{
+                                  ...cellStyles,
+                                  textAlign: "right",
+                                  fontSize: "12px",
+                                  fontFamily: "DM Mono",
+                                }}
+                              >
+                                {formatLoggedTime(card.logged_time)}
+                              </td>
+                            </tr>
+                          ))
+                        )}
+
+                        <tr
+                          style={{
+                            ...summaryRowStyles,
+                            background:
+                              columnCards.length % 2 === 0
+                                ? "transparent"
+                                : "rgba(255, 255, 255, 0.01)",
+                          }}
+                        >
+                          <td
+                            colSpan={3}
+                            style={{
+                              ...cellStyles,
+                              textAlign: "left",
+                              fontSize: "14px",
+                            }}
+                          >
+                            TOTAL LOGGED TIME:
+                          </td>
+                          <td
+                            style={{
+                              ...cellStyles,
+                              textAlign: "right",
+                              fontSize: "14px",
+                              fontFamily: "DM Mono",
+                            }}
+                          >
+                            {formatTotalLoggedTime(totalLoggedTimeForColumn)}
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              );
+            })}
           </div>
         </div>
       )}
