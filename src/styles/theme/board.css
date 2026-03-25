@@ -121,10 +121,16 @@
   transition: all 0.15s;
   align-self: flex-start;
   margin-top: 36px;
+  transition: width 0s;
 }
 
 .fb-add-col-btn:hover {
   border-color: var(--fb-accent);
   color: var(--fb-accent);
   background: rgba(108, 99, 255, 0.08);
+}
+
+.fb-add-col-btn.fb-add-col-btn--column-width {
+  width: 272px;
+  min-width: 272px;
 }

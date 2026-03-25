@@ -38,11 +38,9 @@ const BoardColumnComponent = ({
   });
   const { openTaskDrawer, setActiveColId, activeColId, closeTaskDrawer } =
     useTaskDrawerStore();
-  const { removeColumn, columns } = useBoardStore();
+  const { removeColumn } = useBoardStore();
 
   const [confirmRemoveShow, setConfirmRemoveShow] = useState(false);
-
-  const canRemoveColumn = columns.length > 1;
 
   const setRefs = (el: HTMLElement | null) => {
     setDroppableRef(el);

@@ -103,7 +103,15 @@ const DashboardColumns = ({ onAddColumn }: DashboardColumnsProps) => {
             isHidden={activeColumn?.id === col.id}
           />
         ))}
-        <button className="fb-add-col-btn" onClick={onAddColumn} type="button">
+        <button
+          className={
+            boardCols.length === 0
+              ? "fb-add-col-btn fb-add-col-btn--column-width"
+              : "fb-add-col-btn"
+          }
+          onClick={onAddColumn}
+          type="button"
+        >
           +
         </button>
       </div>
