@@ -16,14 +16,8 @@ export default function Drawer({ show, onHide }: DrawerProps) {
   const location = useLocation();
   const isTableMode = location.pathname.startsWith("/summary/");
   const [showCreateBoardModal, setShowCreateBoardModal] = useState(false);
-  const { boards, addBoard, boardTaskCounts, columns, loading } =
-    useBoardStore();
+  const { boards, addBoard, boardTaskCounts } = useBoardStore();
   const { logout } = useAuth();
-
-  const activeBoardTaskCount = columns.reduce(
-    (sum, col) => sum + (col.cards?.length ?? 0),
-    0,
-  );
 
   const handleBoardSelect = (targetBoardId: string) => {
     if (targetBoardId === boardId) {
@@ -85,11 +79,7 @@ export default function Drawer({ show, onHide }: DrawerProps) {
                     className="custom-badge-color fb-board-count-badge"
                     pill
                   >
-                    {board.id === boardId
-                      ? loading
-                        ? (boardTaskCounts[board.id] ?? 0)
-                        : activeBoardTaskCount
-                      : (boardTaskCounts[board.id] ?? 0)}
+                    {boardTaskCounts[board.id] ?? 0}
                   </Badge>
                 </div>
               </ListGroup.Item>
