@@ -74,12 +74,10 @@ const BoardColumnComponent = ({
             className="fb-btn fb-btn-ghost"
             title="Delete column"
             aria-label="Delete column"
-            disabled={!canRemoveColumn}
             onClick={() => setConfirmRemoveShow(true)}
             style={{
               padding: 3,
               borderRadius: 6,
-              opacity: canRemoveColumn ? 1 : 0.4,
               transition: "0s all",
             }}
           >
@@ -94,7 +92,6 @@ const BoardColumnComponent = ({
             style={{
               padding: 3,
               borderRadius: 6,
-              opacity: canRemoveColumn ? 1 : 0.4,
               transition: "0s all",
             }}
           >
