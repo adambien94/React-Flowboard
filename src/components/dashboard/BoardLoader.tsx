@@ -11,7 +11,7 @@ const BoardLoader = () => {
           <div key={idx} className="fb-column">
             <div className="fb-col-header">
               <span
-                className="fb-col-dot skeleton-box "
+                className="fb-col-dot skeleton-box"
                 style={{ width: 10, height: 10 }}
               />
               <span className="flex-grow-1">
@@ -25,7 +25,13 @@ const BoardLoader = () => {
                   }}
                 />
               </span>
-              <span style={{ display: "inline-flex", width: 20, justifyContent: "center" }}>
+              <span
+                style={{
+                  display: "inline-flex",
+                  width: 20,
+                  justifyContent: "center",
+                }}
+              >
                 <span
                   className="skeleton-box"
                   style={{
@@ -88,43 +94,6 @@ const BoardLoader = () => {
           </div>
         ))}
       </div>
-
-      <style>{`
-          @keyframes shimmer {
-            0% {
-              background-position: -1000px 0;
-            }
-            100% {
-              background-position: 1000px 0;
-            }
-          }
-  
-          .skeleton-box {
-            background: linear-gradient(
-              90deg,
-              rgba(255, 255, 255, 0.05) 0%,
-              rgba(255, 255, 255, 0.15) 50%,
-              rgba(255, 255, 255, 0.05) 100%
-            );
-            background-size: 1000px 100%;
-            animation: shimmer 2s infinite;
-          }
-  
-          .skeleton-column {
-            animation: fadeIn 0.3s ease-in;
-          }
-  
-          @keyframes fadeIn {
-            from {
-              opacity: 0;
-              transform: translateY(12px);
-            }
-            to {
-              opacity: 1;
-              transform: translateY(2px);
-            }
-          }
-        `}</style>
     </div>
   );
 };

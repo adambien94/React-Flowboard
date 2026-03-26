@@ -91,7 +91,9 @@ export default function Dashboard() {
 
           <Container fluid>
             {activeBoardId ? (
-              <DashboardColumns onAddColumn={() => setAddColumnModalShow(true)} />
+              <DashboardColumns
+                onAddColumn={() => setAddColumnModalShow(true)}
+              />
             ) : boards.length ? (
               // We're on "/" and just received boards; redirect happens in an effect.
               // Avoid flashing the init header and avoid rendering an empty board UI.

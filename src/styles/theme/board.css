@@ -1,5 +1,4 @@
 .fb-task-card.card:hover {
-  /* background: var(--fb-bg4); */
   border-color: var(--fb-border-strong);
 }
 
@@ -133,4 +132,49 @@
 .fb-add-col-btn.fb-add-col-btn--column-width {
   width: 272px;
   min-width: 272px;
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -1000px 0;
+  }
+  100% {
+    background-position: 1000px 0;
+  }
+}
+
+.skeleton-box {
+  background: linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0.05) 0%,
+    rgba(255, 255, 255, 0.15) 50%,
+    rgba(255, 255, 255, 0.05) 100%
+  );
+  background-size: 1000px 100%;
+  animation: shimmer 2s infinite;
+}
+
+[data-bs-theme="light"] .skeleton-box {
+  background: linear-gradient(
+    90deg,
+    rgba(20, 23, 32, 0.06) 0%,
+    rgba(20, 23, 32, 0.13) 50%,
+    rgba(20, 23, 32, 0.06) 100%
+  );
+}
+
+.skeleton-column {
+  background: var(--fb-bg2);
+  animation: fadeIn 0.3s ease-in;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(2px);
+  }
 }
