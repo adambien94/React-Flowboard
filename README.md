@@ -28,9 +28,3 @@ It combines Kanban planning, time tracking, and actionable task workflows in one
 npm install
 npm run dev
 ```
-
-## Why Recruiters Like This Project
-
-- Demonstrates end-to-end product thinking (UX, data model, auth, performance, reliability).
-- Uses modern frontend patterns (lazy loading, store architecture, route protection, realtime sync).
-- Includes engineering discipline: automated tests, linting, CI pipeline, and production-ready structure.
