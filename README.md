@@ -28,3 +28,5 @@ It combines Kanban planning, time tracking, and actionable task workflows in one
 npm install
 npm run dev
 ```
+<img width="1727" height="1079" alt="Screenshot 2026-03-26 at 17 12 59" src="https://github.com/user-attachments/assets/cb9999a1-f884-457e-ab5a-19368ebcc140" />
+<img width="1043" height="964" alt="Screenshot 2026-03-26 at 17 13 19" src="https://github.com/user-attachments/assets/5f1f8196-0866-4eae-b093-397342c635e4" />
