@@ -2,11 +2,11 @@ import { act, render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import TaskModal from "./TaskModal";
 import { useTaskModalStore } from "../store/taskModalStore";
-import { useBoardStore } from "../hooks/useBoardStore";
+import { useBoardStore } from "../store/useBoardStore";
 import { supabase } from "../api/supabaseClient";
 
 jest.mock("../store/taskModalStore");
-jest.mock("../hooks/useBoardStore");
+jest.mock("../store/useBoardStore");
 jest.mock("../api/supabaseClient", () => ({
   supabase: {
     functions: {

@@ -8,7 +8,7 @@ import {
 import { Offcanvas } from "react-bootstrap";
 import type { Card } from "../types/index";
 import ConfirmModal from "./ConfirmModal";
-import { useBoardStore } from "../hooks/useBoardStore";
+import { useBoardStore } from "../store/useBoardStore";
 import { useTaskDrawerStore } from "../store/taskDrawerStore";
 import formatTime from "../utils/formatTime";
 

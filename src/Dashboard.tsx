@@ -10,7 +10,7 @@ import DashboardColumns from "./components/dashboard/DashboardColumns";
 import { useTimerStore } from "./store/timerStore";
 import ConfirmModal from "./components/ConfirmModal";
 import formatTime from "./utils/formatTime";
-import { useBoardStore } from "./hooks/useBoardStore";
+import { useBoardStore } from "./store/useBoardStore";
 import BoardLoader from "./components/dashboard/BoardLoader";
 import { useTaskModalStore } from "./store/taskModalStore";
 import { syncTaskModalWithUrl } from "./store/taskModalStore";

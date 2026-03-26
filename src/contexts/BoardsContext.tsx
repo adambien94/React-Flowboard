@@ -8,7 +8,7 @@ import {
   useState,
 } from "react";
 import type { Board } from "../types/index";
-import { useBoardStore } from "../hooks/useBoardStore";
+import { useBoardStore } from "../store/useBoardStore";
 
 type BoardsContextType = {
   boards: Board[];

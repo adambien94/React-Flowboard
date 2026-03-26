@@ -1,11 +1,10 @@
 import { Button } from "react-bootstrap";
-import { useState } from "react";
-import AddBoardModal from "../AddBoardModal";
-import { useBoardStore } from "../../hooks/useBoardStore";
+import { useUiStore } from "../../store/useUiStore";
 
 const DashboardInitHeader = () => {
-  const [showCreateBoardModal, setShowCreateBoardModal] = useState(false);
-  const addBoard = useBoardStore((state) => state.addBoard);
+  const openCreateBoardModal = useUiStore(
+    (state) => state.openCreateBoardModal,
+  );
 
   return (
     <div
@@ -16,20 +15,11 @@ const DashboardInitHeader = () => {
       <Button
         size="lg"
         variant="outline-secondary"
-        onClick={() => setShowCreateBoardModal(true)}
+        onClick={openCreateBoardModal}
       >
         <i className="bi bi-plus-circle me-3"></i>
         Create Board
       </Button>
-
-      <AddBoardModal
-        show={showCreateBoardModal}
-        onHide={() => setShowCreateBoardModal(false)}
-        onSave={async (title) => {
-          await addBoard(title);
-          setShowCreateBoardModal(false);
-        }}
-      />
     </div>
   );
 };

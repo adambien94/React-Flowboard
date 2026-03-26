@@ -1,7 +1,7 @@
 import { useEffect, useMemo } from "react";
 import { useParams } from "react-router-dom";
 import { Container } from "react-bootstrap";
-import { useBoardStore } from "./hooks/useBoardStore";
+import { useBoardStore } from "./store/useBoardStore";
 import formatTime from "./utils/formatTime";
 import type { Card } from "./types/index";
 import BoardLoader from "./components/dashboard/BoardLoader";

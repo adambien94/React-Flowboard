@@ -1,9 +1,9 @@
 import { render, screen, fireEvent } from "@testing-library/react";
 import TaskDrawer from "./TaskDrawer";
-import { useBoardStore } from "../hooks/useBoardStore";
+import { useBoardStore } from "../store/useBoardStore";
 import { useTaskDrawerStore } from "../store/taskDrawerStore";
 
-jest.mock("../hooks/useBoardStore");
+jest.mock("../store/useBoardStore");
 jest.mock("../store/taskDrawerStore");
 
 const mockedUseBoardStore = jest.mocked(useBoardStore);

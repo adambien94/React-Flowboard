@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Modal, Spinner } from "react-bootstrap";
 import { useTaskModalStore } from "../store/taskModalStore";
-import { useBoardStore } from "../hooks/useBoardStore";
+import { useBoardStore } from "../store/useBoardStore";
 import { supabase } from "../api/supabaseClient";
 import formatTime from "../utils/formatTime";
 

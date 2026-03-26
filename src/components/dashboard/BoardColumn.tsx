@@ -5,7 +5,7 @@ import TaskCard from "../TaskCard";
 import { useDroppable, useDraggable, useDndContext } from "@dnd-kit/core";
 import { useTaskDrawerStore } from "../../store/taskDrawerStore";
 import ConfirmModal from "../ConfirmModal";
-import { useBoardStore } from "../../hooks/useBoardStore";
+import { useBoardStore } from "../../store/useBoardStore";
 
 type BoardColumnProps = {
   column: Column;

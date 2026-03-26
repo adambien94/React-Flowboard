@@ -4,7 +4,7 @@ import { DndContext, DragOverlay } from "@dnd-kit/core";
 import type { DragEndEvent, DragStartEvent } from "@dnd-kit/core";
 import BoardColumn from "./BoardColumn";
 import TaskCard from "../TaskCard";
-import { useBoardStore } from "../../hooks/useBoardStore";
+import { useBoardStore } from "../../store/useBoardStore";
 
 type DashboardColumnsProps = {
   onAddColumn: () => void;

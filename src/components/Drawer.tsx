@@ -1,9 +1,8 @@
-import { useState } from "react";
 import { Offcanvas, ListGroup, Button, Badge } from "react-bootstrap";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
-import AddBoardModal from "./AddBoardModal";
-import { useBoardStore } from "../hooks/useBoardStore";
+import { useBoardStore } from "../store/useBoardStore";
 import { useAuth } from "../contexts/AuthContext";
+import { useUiStore } from "../store/useUiStore";
 
 type DrawerProps = {
   show: boolean;
@@ -15,21 +14,15 @@ export default function Drawer({ show, onHide }: DrawerProps) {
   const { boardId } = useParams();
   const location = useLocation();
   const isTableMode = location.pathname.startsWith("/summary/");
-  const [showCreateBoardModal, setShowCreateBoardModal] = useState(false);
-  const { boards, addBoard, boardTaskCounts } = useBoardStore();
+  const { boards, boardTaskCounts } = useBoardStore();
   const { logout } = useAuth();
+  const openCreateBoardModal = useUiStore((state) => state.openCreateBoardModal);
 
   const handleBoardSelect = (targetBoardId: string) => {
     if (targetBoardId === boardId) {
       return;
     }
     navigate(isTableMode ? `/summary/${targetBoardId}` : `/${targetBoardId}`);
-  };
-
-  const handleCreateBoard = async (title: string) => {
-    await addBoard(title);
-    setShowCreateBoardModal(false);
-    // navigate(`/${newBoardId}`);
   };
 
   return (
@@ -55,7 +48,7 @@ export default function Drawer({ show, onHide }: DrawerProps) {
           <Button
             className="w-100 fb-primary-btn"
             size="sm"
-            onClick={() => setShowCreateBoardModal(true)}
+            onClick={openCreateBoardModal}
           >
             + New board
           </Button>
@@ -120,11 +113,6 @@ export default function Drawer({ show, onHide }: DrawerProps) {
           </ListGroup>
         </div>
       </Offcanvas.Body>
-      <AddBoardModal
-        show={showCreateBoardModal}
-        onHide={() => setShowCreateBoardModal(false)}
-        onSave={handleCreateBoard}
-      />
     </Offcanvas>
   );
 }

@@ -13,7 +13,7 @@ type State = {
   cardDetails: Card | null;
   getBoardsList: () => Promise<void>;
   loadBoard: (boardId: string) => Promise<void>;
-  addBoard: (title: string) => Promise<void>;
+  addBoard: (title: string) => Promise<string | null>;
   addCard: (columnId: string, body: Partial<Card>) => Promise<void>;
   updateCard: (cardId: string, patch: Partial<Card>) => Promise<void>;
   addColumn: (boardId: string, title: string, color?: string) => Promise<void>;
@@ -203,7 +203,7 @@ export const useBoardStore = create<State>((set, get) => ({
     if (error) {
       console.error("❌ Failed to add board:", error);
       set({ loading: false });
-      return;
+      return null;
     }
 
     set((state) => ({
@@ -211,6 +211,8 @@ export const useBoardStore = create<State>((set, get) => ({
         a.title.localeCompare(b.title)
       ),
     }));
+
+    return data.id;
   },
 
   addCard: async (columnId, body) => {

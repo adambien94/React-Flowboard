@@ -6,7 +6,7 @@ import {
   ButtonGroup,
 } from "react-bootstrap";
 import { useNavigate, useLocation, useParams } from "react-router-dom";
-import { useTheme } from "../hooks/useTheme";
+import { useTheme } from "../store/useTheme";
 
 type NavbarProps = {
   onToggleDrawer?: () => void;
