@@ -1,74 +1,36 @@
-# React + TypeScript + Vite
+# Flowboard
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Flowboard is a full-stack productivity app built with React + TypeScript + Supabase.
+It combines Kanban planning, time tracking, and actionable task workflows in one polished dashboard.
 
-Currently, two official plugins are available:
+## Features That Stand Out
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- Real-time Kanban board (columns + cards) with drag-and-drop reordering.
+- Secure authentication with protected routes and session-based access.
+- Optimistic UI updates with rollback logic for smooth UX during backend operations.
+- Built-in per-task time tracking and logged-time summaries per column.
+- AI-assisted step generation via Supabase Edge Function + Gemini API.
+- URL-synced task modal/drawer state for deep-linking and better navigation behavior.
 
-## React Compiler
+## Tech Stack
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+- Frontend: React 19, TypeScript, Vite, React Router
+- State: Zustand
+- UI: Bootstrap + custom theme tokens
+- DnD: dnd-kit
+- Backend: Supabase (Postgres, Auth, Realtime, Edge Functions)
+- Testing: Jest + Testing Library
+- Quality: ESLint + GitHub Actions CI (lint + tests on PRs and pushes)
 
-## Expanding the ESLint configuration
+## Quick Start
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
-
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```bash
+npm install
+npm run dev
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+## Why Recruiters Like This Project
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
-# React-Flowboard
+- Demonstrates end-to-end product thinking (UX, data model, auth, performance, reliability).
+- Uses modern frontend patterns (lazy loading, store architecture, route protection, realtime sync).
+- Includes engineering discipline: automated tests, linting, CI pipeline, and production-ready structure.
