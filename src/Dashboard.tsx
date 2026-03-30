@@ -95,8 +95,6 @@ export default function Dashboard() {
                 onAddColumn={() => setAddColumnModalShow(true)}
               />
             ) : boards.length ? (
-              // We're on "/" and just received boards; redirect happens in an effect.
-              // Avoid flashing the init header and avoid rendering an empty board UI.
               <BoardLoader />
             ) : (
               <DashboardInitHeader />
