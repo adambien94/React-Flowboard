@@ -29,4 +29,8 @@ npm install
 npm run dev
 ```
 <img width="1727" height="1079" alt="Screenshot 2026-03-26 at 17 12 59" src="https://github.com/user-attachments/assets/cb9999a1-f884-457e-ab5a-19368ebcc140" />
-<img width="1043" height="964" alt="Screenshot 2026-03-26 at 17 13 19" src="https://github.com/user-attachments/assets/5f1f8196-0866-4eae-b093-397342c635e4" />
+<img width="1043" height="964" alt="Screenshot 2026-03-26 at 17 13 19" src="https://github.com/user-attachments/assets/5f1f8196-0866-4eae-b093-397342c635e4" /><img width="1728" height="965" alt="Screenshot 2026-04-17 at 12 14 43" src="https://github.com/user-attachments/assets/abed80f7-1176-4def-a8ab-a062d792a885" />
+<img width="1728" height="1085" alt="Screenshot 2026-04-17 at 12 14 00" src="https://github.com/user-attachments/assets/def17dc6-2d6c-4f71-b6a9-dbbb408ada34" />
+<img width="1728" height="1087" alt="Screenshot 2026-04-17 at 12 13 13" src="https://github.com/user-attachments/assets/eb74a22e-c003-44d9-acdd-f4184a5c5b12" />
+<img width="1728" height="1085" alt="Screenshot 2026-04-17 at 12 13 38" src="https://github.com/user-attachments/assets/894c2ad4-a40e-4dad-a62e-ce8b8f412e1d" />
+
